@@ -1,0 +1,19 @@
+**********Para iniciar la version backend ejecutamos la siguiente linea de codigo**
+php -S localhost:4000
+
+
+**** versiones de herramienstas**
+PHP 7.2.24-0ubuntu0.18.04.6
+psql (PostgreSQL) 13.0 (Ubuntu 13.0-1.pgdg18.04+1)
+pgAdmin III 1.22.2
+
+
+**y la podemos probar con la ruta 
+http://localhost:4000/proyectoOBI/back_end/prueba.php
+
+**para la coneccion con la basede datos
+ejecutamos la siguiente linea de codigo**
+ ejecutamos los pasos de basededatos.sql
+
+
+
