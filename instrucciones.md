@@ -70,5 +70,5 @@ que instalar sus respectivos componentes.
     ```
 
 
-   [obi url]: <https://github.com/joemccann/dillinger>
+   [obi url]: <https://olimpiada.icpc-bolivia.edu.bo/>
    
