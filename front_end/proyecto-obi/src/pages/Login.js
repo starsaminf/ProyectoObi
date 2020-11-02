@@ -43,7 +43,7 @@ class Login extends Component{
             response => {
                 console.log(md5(this.state.form.Password));
                 console.log(response);
-                if(response.data.estado==1){
+                if(response.data.estado===1){
                     var respuesta = response.data.usuario[0];
                     console.log(response.data.usuario.idusuario);
                     cookies.set('idusuario', respuesta.idusuario, {path:"/"});
@@ -73,21 +73,20 @@ class Login extends Component{
                     <h3>Iniciar Sesion</h3> 
                 </div>
                     <div className="form-group">
-                        <label>Usuario</label>
-                        <input name="UserName" type="text" className="form-control" placeholder="Usuario" onChange={this.handleChange} />
+                        <label>Nombre de usuario</label>
+                        <input name="UserName" type="text" className="form-control"  onChange={this.handleChange} />
                     </div>
 
                     <div className="form-group">
                         <label>Contraseña</label>
-                        <input name="Password" type="password" className="form-control" placeholder="Contraseña" onChange={this.handleChange} />
+                        <input name="Password" type="password" className="form-control" onChange={this.handleChange} />
                     </div>
                     {this.state.mensaje}
                     
                     <button type="submit" className="btn btn-primary btn-block" onClick={this.iniciarSesion}>Sign Up</button>
                     <p className="forgot-password text-right">
-                        Already registered <a href="#">sign in?</a>
+                        crear cuenta <a href="./crearusuario">nueva</a><br />
                     </p>
-                
             </div>
             
         );

@@ -22,6 +22,7 @@ class Menu extends Component{
             <div>
                 Menu principal
                 <br/>
+                <h1>Bienvenidooooooo   { cookies.get('username')}</h1>
                 <button onClick={this.cerrarsesion}>Cerrar sesion</button>
             </div>
         );
