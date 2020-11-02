@@ -57,7 +57,7 @@ if (!empty($_POST['_metod'])) {
 			if ($retorno) {
 		            print json_encode(
 						array(
-							'estado' => 2,
+							'estado' => 1,
 							'mensaje' => 'El usuario se Agrego correctamente')
 					);
 				} else {
@@ -77,7 +77,7 @@ if (!empty($_POST['_metod'])) {
 			if ($retorno) {
 		            print json_encode(
 						array(
-							'estado' => 2,
+							'estado' => 1,
 							'mensaje' => 'El usuario se Agrego correctamente')
 					);
 				} else {
@@ -88,12 +88,4 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
-}else{
-	print json_encode(
-		array(
-			'estado' => 2,
-			'mensaje' => 'no hya nada papu',
-			'_metod'  => $_POST['_metod']
-		)
-	);
 }

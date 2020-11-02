@@ -32,15 +32,7 @@ y React en el Fron-end.
     ```
   - Creamos las tablas e inserts nesesarios
     **ProyectoObi/Documentacion_Scrum/BasedeDatosIOI.sql**
-  - creamos un usuario admin por defecto en postgres 
-    ```sh
-    INSERT INTO USUARIO(Username, Pasword, Correo) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com');
-    ```
-  - ahora los datos del administrador sera:
-    ```sh
-    usuario:vico
-    constraseña:123456
-    ```
+
 ## Iniciamos el Back-end
 Nuestro lado Back-end esta en tornoa  php para lo cual solo iniciamos el servidor
 php con la siguiente linea de codigo en la terminal

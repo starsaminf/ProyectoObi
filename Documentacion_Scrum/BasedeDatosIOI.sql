@@ -2,7 +2,7 @@
 -- Creamos labase de datos
 -------------------------------------------------
 
-CREATE DATABASE ioidb;
+
 
 --------------------------------------------------
 -- creamos todas las tablas que necesitamos 
@@ -167,7 +167,3 @@ CREATE TABLE Participa(
 --------------------------------------------------
 -- Insertamos datos a la base de datos
 --------------------------------------------------
-
-INSERT INTO USUARIO(Username, Pasword, Correo) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com');
-INSERT INTO USUARIO(Username, Pasword, Correo) VALUES ('juan','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com');
-INSERT INTO USUARIO(Username, Pasword, Correo) VALUES ('maria','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com');

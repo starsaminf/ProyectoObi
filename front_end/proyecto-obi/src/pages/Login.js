@@ -56,6 +56,7 @@ class Login extends Component{
         )
         .catch(
             error=>{
+                this.setState({contraseña:''});
                 console.log(error);
             }
         )
