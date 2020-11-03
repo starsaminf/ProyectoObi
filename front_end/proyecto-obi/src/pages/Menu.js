@@ -1,6 +1,6 @@
 import React,{ Component } from "react";
 import Cookies from "universal-cookie";
-;
+
 const cookies = new Cookies();
 class Menu extends Component{
     cerrarsesion = e =>{
@@ -20,6 +20,7 @@ class Menu extends Component{
         console.log(cookies.get('correo'));
         return(
             <div>
+                
                 Menu principal
                 <br/>
                 <h1>Bienvenidooooooo   { cookies.get('username')}</h1>

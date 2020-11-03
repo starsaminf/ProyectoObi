@@ -81,7 +81,7 @@ class CrearUsuario extends Component{
                         <input name="Password" type="password" className="form-control" onChange={this.handleChange} />
                     </div>
                     <div className="form-group">
-                        <label>Contraseña</label>
+                        <label>Correo</label>
                         <input name="Correo" type="email" className="form-control" onChange={this.handleChange} />
                     </div>
                     {this.state.mensaje}
