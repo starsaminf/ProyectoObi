@@ -1,9 +1,9 @@
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
-import Login from '../pages/Login';
+import {BrowserRouter, Route} from 'react-router-dom';
 import Index from '../pages/Index';
 import Menu from '../pages/Menu';
 import IniciarSesion from '../pages/Login';
 import CrearCuenta from '../pages/CrearUsuario';
+import Prueba from '../pages/Prueba';
 /*
   para el inicio tenemos que mostrar en la parte de usuario
   -iniciar sesion
@@ -15,6 +15,7 @@ function Routes() {
     <BrowserRouter>
       <Route exact path="/" component={Index}/>
       <Route exact path="/menu" component={Menu}/>
+      <Route exact path="/prueba" component={Prueba}/>
       <Route exact path="/iniciarsesion" component={IniciarSesion}/>
       <Route exact path="/crearcuenta" component={CrearCuenta}/>
     </BrowserRouter>

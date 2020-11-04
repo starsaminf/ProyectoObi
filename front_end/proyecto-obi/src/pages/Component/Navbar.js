@@ -1,11 +1,10 @@
 import React from "react";
-import { AppBar, Toolbar, Typography,  makeStyles, IconButton, Button, Modal} from "@material-ui/core";
+import {  Toolbar, Typography,  makeStyles, IconButton, Button} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
-
+import AutentificarUsuario from './AutentificarUsuario';
 const useStyles = makeStyles(theme=>({    
     menuButton: {
-        
     },
     title :{
         flexGrow: 1
@@ -41,15 +40,9 @@ const Navbar = () =>{
                         <Button variant="text" color ="inherit" onClick={CrearCuenta}>
                             Crear Cuenta
                         </Button>
+                        <AutentificarUsuario transition={false}/>
                     </Hidden>
-                    
-                    
                 </Toolbar>
-                
-                <Modal>
-
-                </Modal>
-                
             </div>
             
         );
