@@ -3,7 +3,7 @@ import Index from '../pages/Index';
 import Menu from '../pages/Menu';
 import IniciarSesion from '../pages/Login';
 import CrearCuenta from '../pages/CrearUsuario';
-import Prueba from '../pages/Prueba';
+import Prueba from '../pages/Prueba3';
 /*
   para el inicio tenemos que mostrar en la parte de usuario
   -iniciar sesion

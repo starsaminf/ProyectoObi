@@ -1,5 +1,5 @@
 import React,{ Component } from "react";
-import  "../css/Login.css";
+
 import axios from 'axios';
 import md5 from "md5";
 import Cookies from "universal-cookie";
@@ -65,7 +65,6 @@ class Login extends Component{
             window.location.href="./menu";
         }
     }
-
     render(){
         return(
             <div className="containerPrincipal">
@@ -88,7 +87,6 @@ class Login extends Component{
                         crear cuenta <a href="./crearusuario">nueva</a><br />
                     </p>
             </div>
-            
         );
     }
 }

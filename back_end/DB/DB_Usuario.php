@@ -21,6 +21,14 @@ class DB_Usuario
             return false;
         }
     }
+
+
+    /**
+     * consultar usuario por Id de Usuario
+     *
+     * @param $idUsuario identificador del Usuario
+     * @return Usuario al que le pertenece el $IdUsuario
+     */
     public static function getById($idUsuario)
     {
         // Consulta de la meta
@@ -37,18 +45,29 @@ class DB_Usuario
             return false;
         }
     }
+
+
+    /**
+     * Modificar todos los datos del usuario 
+     *
+     * @param $idUsuario identificador del Usuario
+     * @param $UserName nombre de usuario
+     * @param $pasword:contraseña del usuario
+     * @param $correo electronico de autentificacion
+     * @return bool Respuesta de la eliminación
+     */
     public static function update(
         $idUsuario,
         $UserName,
-        $pasword,
-        $correo
+        $Password,
+        $Correo
     )
     {
         $consulta = "UPDATE usuario SET UserName = ?, Pasword = ?, Correo = ? WHERE idUsuario = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
-                $cmd->execute(array($Username, $Pasword,$Correo,$idUsuario));
+                $cmd->execute(array($UserName, $Password,$Correo,$idUsuario));
                 return $cmd;
             } catch (PDOException $e) {
                 

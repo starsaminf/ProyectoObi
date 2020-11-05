@@ -1,8 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import Button from '@material-ui/core/Button';
-import Login from './Component/Listas';
-import Hidden from '@material-ui/core/Hidden';
+import Login from './Component/SignIn';
 const customStyles = {
   content : {
     top                   : '50%',
@@ -25,13 +24,12 @@ export default   function Prueba(){
   
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
+    subtitle.style.color = '#000000';
   }
 
   function closeModal(){
     setIsOpen(false);
   }
-
     return (
       <div>
 
@@ -42,7 +40,6 @@ export default   function Prueba(){
               color="secondary"
               onClick={openModal}
               >
-                
               Iniciar Sesion
             </Button>
         <Modal
@@ -51,14 +48,25 @@ export default   function Prueba(){
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
+          
         >
 
           <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
           <button onClick={closeModal}>close</button>
           <div>I am a modal</div>
           <form>
-            <Login/>
+          <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={openModal}
+              >
+                
+              Iniciar Sesion
+            </Button>
           </form>
+          <div><Login/></div>
         </Modal>
       </div>
     );

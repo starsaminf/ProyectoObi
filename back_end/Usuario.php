@@ -1,16 +1,15 @@
 <?php
-error_reporting(E_ALL);
+	error_reporting(E_ALL);
   ini_set('display_errors', true);
+
 /**
  * Insertar una nueva meta en la base de datos
  */
 
-
- 
-
 if($_SERVER['REQUEST_METHOD']==='POST' && empty($_POST)) {
    $_POST = json_decode(file_get_contents('php://input'),true); 
 }
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
@@ -64,12 +63,13 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudede agregar el nuevo usuario')
+							'mensaje' => 'No se pudo agregar el nuevo usuario')
 					);
 				}
 	}
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_Usuario::Update(
+				$_POST['idUsuario'],
 				$_POST['UserName'],
 				$_POST['Password'],
 				$_POST['Correo']
@@ -78,13 +78,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'El usuario se Agrego correctamente')
+							'mensaje' => 'Los cambios se guardaron correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudede agregar el nuevo usuario')
+							'mensaje' => 'No se pudo guardar los cambios')
 					);
 				}
 	}
