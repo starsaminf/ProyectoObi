@@ -21,13 +21,13 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Olimpiada::getAll($_POST['idAdmin']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-		            $datos["OLimpiadas"] = $retorno;
+		            $datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'Error al cargar las Olimpiadas')
+							'mensaje' => 'no hay olimpiadas que mostrar')
 					);
 				}
 	}
@@ -35,28 +35,18 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Olimpiada::getAllPublic();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["olimpiadas"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las OLimpiadas')
+							'mensaje' => 'NO hay olimpiadas que mostrar')
 					);
 				}
 	}
-	/*
 
-	    Nombre          VARCHAR(50) NOT NULL,
-    Descripcion     VARCHAR(100),
-    Baner           VARCHAR(50),
-    Convocatoria    VARCHAR(50),
-    FechaIni        DATE,
-    FechaFin        DATE,
-    Estado          VARCHAR(10),
-    idAdmin         SERIAL NOT NULL,
-    */
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Olimpiada::Insert(
 				$_POST['Nombre'],
@@ -125,7 +115,7 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar la idOlimpiada')
+							'mensaje' => 'No se pudo Eliminar la Olimpiada')
 					);
 				}
 	}

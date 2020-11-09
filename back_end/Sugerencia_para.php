@@ -20,14 +20,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Sugerencia_para::getAll();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'No hay sugerencias que mostrar')
 					);
 				}
 	}
@@ -35,14 +35,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Sugerencia_para::getRecomendaciones($_POST['idNivel']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'No hay sugerencias que mostrar')
 					);
 				}
 	}
@@ -55,13 +55,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'La noticia se Agrego correctamente')
+							'mensaje' => 'La sugerencias se registro correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar la nueva Noticia')
+							'mensaje' => 'No se pudo registrar la sugerencia')
 					);
 				}
 	}
@@ -75,13 +75,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'Se elimino la noticia')
+							'mensaje' => 'Se elimino cancelo la sugerencia')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar la noticia')
+							'mensaje' => 'No se pudo cancelar la sugerencia')
 					);
 				}
 	}

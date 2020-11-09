@@ -46,13 +46,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'El usuario se Agrego correctamente')
+							'mensaje' => 'El Estudiante se Agrego correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar el nuevo usuario')
+							'mensaje' => 'No se pudo agregar el nuevo Estudiante')
 					);
 				}
 	}

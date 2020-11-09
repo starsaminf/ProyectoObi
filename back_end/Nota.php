@@ -20,14 +20,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Nota::getAll($_POST['idParticipante'],$_POST['idEtapa'],$_POST['idNivel']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'Error al cargar las notas')
 					);
 				}
 	}
@@ -44,13 +44,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'La noticia se Agrego correctamente')
+							'mensaje' => 'La nota se Agrego correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar la nueva Noticia')
+							'mensaje' => 'No se pudo agregar la nueva Nota')
 					);
 				}
 	}
@@ -88,13 +88,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'Se elimino el Colegio')
+							'mensaje' => 'Se elimino la Nota')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar el Colegio')
+							'mensaje' => 'No se pudo Eliminar la nota')
 					);
 				}
 	}

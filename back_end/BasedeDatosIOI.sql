@@ -19,7 +19,7 @@ CREATE TABLE Admin (
 CREATE TABLE Distrito(
 	idDistrito		SERIAL PRIMARY KEY,
 	Nombre			VARCHAR(30) NOT NULL,
-	Departamento	VARCHAR(5) NOT NULL,
+	Departamento	VARCHAR(15) NOT NULL,
 	idAdmin			SERIAL NOT NULL,
 	foreign   key   (idAdmin)   references  Admin ON DELETE CASCADE
 );
@@ -54,7 +54,7 @@ CREATE TABLE Olimpiada(
 	Convocatoria    VARCHAR(50),
 	FechaIni		DATE,
 	FechaFin		DATE,
-	Estado			VARCHAR(10),
+	Estado			VARCHAR(30),
 	idAdmin			SERIAL NOT NULL,
 	foreign   key   (idAdmin)   references  Admin ON DELETE CASCADE
 );
@@ -63,7 +63,7 @@ CREATE TABLE MaterialDeApoyo(
 	idMaterial		SERIAL PRIMARY KEY,
 	Titulo          VARCHAR(100),
 	SubTitulo		VARCHAR(300),
-	Tipo 			VARCHAR(10),
+	Tipo 			VARCHAR(30),
 	Archivo			VARCHAR(300),
 	Fecha 			DATE,
 	idAdmin			SERIAL NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE Etapa(
 	Descripcion		VARCHAR(100),
 	FechaIni		DATE,
 	FechaFin		DATE,
-	Tipo			VARCHAR(10),
+	Tipo			VARCHAR(30),
 	idOlimpiada		SERIAL NOT NULL,
 	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
@@ -98,10 +98,10 @@ CREATE TABLE Sugerencia_para(
 
 CREATE TABLE Tutor(
 	idTutor			SERIAL PRIMARY KEY,
-	Nombre			VARCHAR(30),
+	Nombre			VARCHAR(100),
 	ApPaterno		VARCHAR(30),
 	ApMaterno		VARCHAR(30),
-	Ci 				VARCHAR(10),
+	Ci 				VARCHAR(15),
 	Correo 			VARCHAR(50) UNIQUE,
 	Celular 		VARCHAR(10),
 	Password		VARCHAR(64)
@@ -109,12 +109,12 @@ CREATE TABLE Tutor(
 
 CREATE TABLE Estudiante(
 	Rude			VARCHAR(20) PRIMARY KEY,
-	Nombre			VARCHAR(30),
+	Nombre			VARCHAR(100),
 	ApPaterno		VARCHAR(30),
 	ApMaterno		VARCHAR(30),
 	Genero			VARCHAR(30),
 	FechaNac		DATE,
-	Ci 				VARCHAR(10),
+	Ci 				VARCHAR(15),
 	Correo 			VARCHAR(20) UNIQUE
 );
 
@@ -172,4 +172,9 @@ INSERT INTO Estudiante(Rude, Nombre, ApPaterno, ApMaterno, Genero, FechaNac, Ci,
 VALUES ('123456567890','Maria','zegarra','Alvarado','F','12-12-12','123456','mariahotmail.com');
 INSERT INTO Olimpiada (Nombre,Descripcion,Baner,Convocatoria,FechaIni,FechaFin,Estado,idAdmin)
 VALUES ('Primera OLimpiada','Prueba','BAner','Cnasas','12-12-12','12-12-12','Iniciado',1);
+INSERT (idTutor, idColegio, idOlimpiada, Rude, Fecha)
+VALUES ('1','1','1','123456567890','12-12-12');
+INSERT INTO Nivel (Nombre, Descripcion, idOlimpiada)
+VALUES ('Nivel 0','Descripcion',1);
+
 */

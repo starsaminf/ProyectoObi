@@ -26,7 +26,7 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'Error al encontrar el administrador')
+							'mensaje' => 'no hay tutores que mostrar')
 					);
 				}
 	}
@@ -37,7 +37,7 @@ if (!empty($_POST['_metod'])) {
 			);
 			if($retorno) {
 		        $datos["estado"] = 1;
-				$datos["usuario"] = $retorno;
+		        $datos["val"] = $retorno;
 				print json_encode($datos);
 			} else {
 				print json_encode(
@@ -47,21 +47,10 @@ if (!empty($_POST['_metod'])) {
 				);
 			}
 	}
-/*
-		idTutor			SERIAL PRIMARY KEY,
-	Nombre			VARCHAR(30),
-	ApPaterno		VARCHAR(30),
-	ApMaterno		VARCHAR(30),
-	Ci 				VARCHAR(10),
-	Correo 			VARCHAR(20) UNIQUE,
-	Celular 		VARCHAR(10),
-	Password		VARCHAR(64)
-*/
+
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Tutor::Insert(
 				$_POST['Nombre'],
-				$_POST['ApPaterno'],
-				$_POST['ApMaterno'],
 				$_POST['Ci'],
 				$_POST['Correo'],
 				$_POST['Celular'],
@@ -71,13 +60,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'El usuario se Agrego correctamente')
+							'mensaje' => 'El tuto se Agrego correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar el nuevo usuario')
+							'mensaje' => 'No se pudo registrar el tutor ')
 					);
 				}
 	}
@@ -85,8 +74,6 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Tutor::Update(
 				$_POST['idTutor'],
 				$_POST['Nombre'],
-				$_POST['ApPaterno'],
-				$_POST['ApMaterno'],
 				$_POST['Ci'],
 				$_POST['Correo'],
 				$_POST['Celular'],

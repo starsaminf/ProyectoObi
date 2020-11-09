@@ -20,14 +20,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Noticia::getAll($_POST['idAdmin']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["noticias"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'no hay noticias que mostrar')
 					);
 				}
 	}
@@ -35,14 +35,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Noticia::getAllPublic();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["noticias"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'no hay noticias que mostrar')
 					);
 				}
 	}

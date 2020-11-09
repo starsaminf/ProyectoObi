@@ -20,14 +20,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Participante::getAll($_POST['idTutor'],$_POST['idOlimpiada']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'no hay participantes que mostrar')
 					);
 				}
 	}
@@ -35,14 +35,13 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Participante::getAllPublico($_POST['idOlimpiada']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'No hay participantes que mostrar')
 					);
 				}
 	}
@@ -57,13 +56,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'La noticia se Agrego correctamente')
+							'mensaje' => 'el participante se registro correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar la nueva Noticia')
+							'mensaje' => 'No se pudo registrar al participante')
 					);
 				}
 	}

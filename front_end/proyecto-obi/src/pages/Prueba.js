@@ -21,53 +21,25 @@ export default   function Prueba(){
   function openModal() {
     setIsOpen(true);
   }
-  
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = '#000000';
-  }
-
   function closeModal(){
     setIsOpen(false);
   }
     return (
-      <div>
+      <>
+      <Button variant="text" color ="inherit" onClick={openModal}>
+                        Iniciar Sesion
+                    </Button>
+       
 
-        <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              onClick={openModal}
-              >
-              Iniciar Sesion
-            </Button>
         <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
-          
         >
 
-          <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
-          <button onClick={closeModal}>close</button>
-          <div>I am a modal</div>
-          <form>
-          <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              onClick={openModal}
-              >
-                
-              Iniciar Sesion
-            </Button>
-          </form>
-          <div><Login/></div>
+          <Login/>
         </Modal>
-      </div>
+      </>
     );
 }

@@ -59,26 +59,23 @@ class DB_Tutor
     public static function update(
         $idTutor,
         $Nombre,
-        $ApPaterno,
-        $ApMaterno,
         $Ci,
         $Correo,
         $Celular,
         $Password
     )
     {
-        $consulta = "UPDATE Tutor SET Nombre = ?, ApPaterno = ?, ApMaterno = ?, Ci = ?,Correo = ?, Celular = ?, Password = ? WHERE idTutor = ?;";
+        $P = encriptar($Password);
+        $consulta = "UPDATE Tutor SET Nombre = ?,  Ci = ?,Correo = ?, Celular = ?, Password = ? WHERE idTutor = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
                 $cmd->execute(array(
                     $Nombre, 
-                    $ApPaterno, 
-                    $ApMaterno, 
                     $Ci, 
                     $Correo, 
                     $Celular, 
-                    $Password, 
+                    $P, 
                     $idTutor));
                 return $cmd;
             } catch (PDOException $e) {
@@ -98,8 +95,6 @@ class DB_Tutor
      */
     public static function insert(
         $Nombre,
-        $ApPaterno,
-        $ApMaterno,
         $Ci,
         $Correo,
         $Celular,
@@ -112,20 +107,16 @@ class DB_Tutor
         // Sentencia INSERT
         $comando = "INSERT INTO Tutor ( " .
             " Nombre," .
-            " ApPaterno," .
-            " ApMaterno," .
             " Ci," .
             " Correo," .
             " Celular," .
             " Password)" .
-            " VALUES( ?,?,?,?,?,?,?)";
+            " VALUES( ?,?,?,?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
                     $Nombre,
-                    $ApPaterno,
-                    $ApMaterno,
                     $Ci,
                     $Correo,
                     $Celular,
@@ -161,7 +152,7 @@ class DB_Tutor
     public static function Login($correo, $password)
     {
         $resp= encriptar($password);
-        $consulta = "SELECT * from Tutor where  Correo = ? and Pasword = ?";
+        $consulta = "SELECT idTutor, Correo, Nombre from Tutor where  Correo = ? and Password = ?";
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             $comando->execute(array($correo, $resp));

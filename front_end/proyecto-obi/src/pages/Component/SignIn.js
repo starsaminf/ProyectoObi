@@ -44,7 +44,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} Validate>
+        <form className={classes.form} >
           <TextField
             variant="outlined"
             margin="normal"
@@ -91,9 +91,7 @@ export default function SignIn() {
             </Grid>
             
           </Grid>
-          
-              <Copyright />
-          
+          <Copyright />
         </form>
 
       </div>

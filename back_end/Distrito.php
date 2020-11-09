@@ -20,7 +20,7 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Distrito::getAll();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["distrito"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(

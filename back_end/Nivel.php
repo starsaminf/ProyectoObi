@@ -20,7 +20,7 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Nivel::getAll($_POST['idOlimpiada']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["nivel"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(

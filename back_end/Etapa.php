@@ -19,7 +19,7 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Etapa::getAll($_POST['idOlimpiada']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["nivel"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
@@ -42,7 +42,7 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'LA etapa se agrego correctamente')
+							'mensaje' => 'La etapa se agrego correctamente')
 					);
 				} else {
 					print json_encode(
@@ -97,13 +97,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'Se elimino el Nivel')
+							'mensaje' => 'Se elimino la etapa')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar el Nivel')
+							'mensaje' => 'No se pudo eliminar la etapa')
 					);
 				}
 	}

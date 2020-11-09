@@ -20,7 +20,7 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Colegio::getAll();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["distrito"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
@@ -34,13 +34,13 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Colegio::getAllDistrito($_POST['idDistrito']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["distrito"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'Error al encontrar loscolegios del distrito')
+							'mensaje' => 'Error al encontrar los colegios del distrito')
 					);
 				}
 	}

@@ -1,5 +1,5 @@
 import {BrowserRouter, Route} from 'react-router-dom';
-import Index from '../pages/Index';
+import Index from '../views/Public.js';
 import Menu from '../pages/Menu';
 import IniciarSesion from '../pages/Login';
 import CrearCuenta from '../pages/CrearUsuario';

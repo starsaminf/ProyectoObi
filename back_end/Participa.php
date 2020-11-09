@@ -20,14 +20,13 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Participa::getAll();
 			if ($retorno) {
 		            $datos["estado"] = 1;
-					$datos["MaterialdeApoyo"] = $retorno;
+					$datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'no hay participacion que mostrar')
 					);
 				}
 	}
@@ -35,14 +34,14 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Participa::getEstudianteParticipa($_POST['idParticipante']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
-		            $datos["MaterialdeApoyo"] = $retorno;
+		            $datos["val"] = $retorno;
 					print json_encode($datos);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
 							'error' => $retorno,
-							'mensaje' => 'Error al cargar las noticias')
+							'mensaje' => 'no hya participacion que mostrar')
 					);
 				}
 	}
@@ -56,13 +55,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'La noticia se Agrego correctamente')
+							'mensaje' => 'La participacion se registro correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar la nueva Noticia')
+							'mensaje' => 'No se pudo registrar la participacion')
 					);
 				}
 	}
@@ -76,13 +75,13 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'Se elimino la noticia')
+							'mensaje' => 'Se elimino la participacion')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar la noticia')
+							'mensaje' => 'No se pudo Eliminar la participacion')
 					);
 				}
 	}
