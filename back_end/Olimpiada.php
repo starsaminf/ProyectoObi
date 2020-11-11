@@ -50,12 +50,8 @@ if (!empty($_POST['_metod'])) {
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Olimpiada::Insert(
 				$_POST['Nombre'],
-				$_POST['Baner'],
 				$_POST['Descripcion'],
-				$_POST['Convocatoria'],
-				$_POST['FechaIni'],
-				$_POST['FechaFin'],
-				$_POST['Estado'],
+				'pre',//estado = pre
 				$_POST['idAdmin']
 			);
 			if ($retorno) {
@@ -74,7 +70,7 @@ if (!empty($_POST['_metod'])) {
 	}
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_Olimpiada::Update(
-				$_POST['idOLimpiada'],
+				$_POST['idOlimpiada'],
 				$_POST['Nombre'],
 				$_POST['Baner'],
 				$_POST['Descripcion'],
@@ -82,6 +78,27 @@ if (!empty($_POST['_metod'])) {
 				$_POST['FechaIni'],
 				$_POST['FechaFin'],
 				$_POST['Estado'],
+				$_POST['idAdmin']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'mensaje' => 'Los cambios se guardaron correctamente')
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo guardar los cambios')
+					);
+				}
+	}
+	if($_POST['_metod']=='UpdateSimple'){
+			$retorno = DB_Olimpiada::UpdateSimple(
+				$_POST['idOlimpiada'],
+				$_POST['Nombre'],
+				$_POST['Descripcion'],
 				$_POST['idAdmin']
 			);
 			if ($retorno) {
@@ -115,7 +132,45 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar la Olimpiada')
+							'mensaje' => 'No se pudo Eliminar la Olimpiada: puede que este en uso')
+					);
+				}
+	}
+
+
+	if($_POST['_metod']=='getById'){
+			$retorno = DB_Olimpiada::getById(
+				$_POST['idOlimpiada']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'val' => $retorno)
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo Encontrar la Olimpiada')
+					);
+				}
+	}
+		if($_POST['_metod']=='CrearEtapas'){
+			$retorno = DB_Olimpiada::CrearEtapas(
+				$_POST['idOlimpiada']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'mensaje' => 'Las etapas se agregaron correctamente')
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo agregar las etapas')
 					);
 				}
 	}

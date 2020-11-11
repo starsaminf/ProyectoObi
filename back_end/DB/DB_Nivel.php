@@ -119,9 +119,13 @@ class DB_Nivel
      */
     public static function delete($idNivel)
     {
-        $comando = "DELETE FROM Nivel WHERE idNivel=?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idNivel));
+        try {
+            $comando = "DELETE FROM Nivel WHERE idNivel=?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idNivel));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

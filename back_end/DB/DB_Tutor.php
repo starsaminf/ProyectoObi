@@ -138,10 +138,16 @@ class DB_Tutor
      */
     public static function delete($idTutor)
     {
+
         $comando = "DELETE FROM Tutor WHERE idTutor=?";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idTutor));
-    }
+        try{
+            return $sentencia->execute(array($idTutor));
+            }catch (PDOException $e) {
+                return false;
+            }
+        }
+    
 
     /**
      * Verifica si el usuario y la contraseña para el inicio de sesion

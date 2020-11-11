@@ -40,7 +40,8 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'El Distrito se Agrego correctamente')
+							'$retorno '=> $retorno,
+							'mensaje' => 'El Distritooo se Agrego correctamente')
 					);
 				} else {
 					print json_encode(
@@ -88,7 +89,7 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo Eliminar el distrito')
+							'mensaje' => 'No se pudo Eliminar el distrito porque esta en uso')
 					);
 				}
 	}

@@ -59,6 +59,7 @@ if (!empty($_POST['_metod'])) {
 		            print json_encode(
 						array(
 							'estado' => 1,
+							'r'=>$retorno,
 							'mensaje' => 'El Colegio se Agrego correctamente')
 					);
 				} else {

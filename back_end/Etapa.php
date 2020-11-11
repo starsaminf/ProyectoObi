@@ -29,29 +29,6 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
-	if($_POST['_metod']=='Insert'){
-			$retorno = DB_Etapa::Insert(
-				$_POST['Nombre'],
-				$_POST['Descripcion'],
-				$_POST['FechaIni'],
-				$_POST['FechaFin'],
-				$_POST['Tipo'],
-				$_POST['idOlimpiada']
-			);
-			if ($retorno) {
-		            print json_encode(
-						array(
-							'estado' => 1,
-							'mensaje' => 'La etapa se agrego correctamente')
-					);
-				} else {
-					print json_encode(
-						array(
-							'estado' => 2,
-							'mensaje' => 'No se pudo crear la Etapa')
-					);
-				}
-	}
 
 //SIEMPRE SERA POST
     /*
@@ -71,8 +48,7 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Nombre'],
 				$_POST['Descripcion'],
 				$_POST['FechaIni'],
-				$_POST['FechaFin'],
-				$_POST['Tipo']
+				$_POST['FechaFin']
 			);
 			if ($retorno) {
 		            print json_encode(
@@ -85,6 +61,26 @@ if (!empty($_POST['_metod'])) {
 						array(
 							'estado' => 2,
 							'mensaje' => 'No se pudo guardar los cambios')
+					);
+				}
+	}
+
+	if($_POST['_metod']=='getById'){
+			$retorno = DB_Etapa::getById(
+				$_POST['tipo'],
+				$_POST['idOlimpiada']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'val' => $retorno)
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO se encontro la Etapa')
 					);
 				}
 	}

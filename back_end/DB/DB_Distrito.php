@@ -10,7 +10,7 @@ class DB_Distrito
 
     public static function getAll()
     {
-        $consulta = "SELECT * from Distrito";
+        $consulta = "select * from Distrito order by idDistrito desc";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -122,9 +122,14 @@ class DB_Distrito
      */
     public static function delete($idDistrito,$idAdmin)
     {
-        $comando = "DELETE FROM Distrito WHERE idDistrito=? AND idAdmin = ?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idDistrito, $idAdmin));
+        try{
+            $comando = "DELETE FROM Distrito WHERE idDistrito=? AND idAdmin = ?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idDistrito, $idAdmin));
+        }catch(PDOException $e){
+            return false;
+        }
+        
     }
 }
 ?>

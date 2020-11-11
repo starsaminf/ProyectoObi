@@ -28,8 +28,8 @@ CREATE TABLE Colegio(
 	idColegio		SERIAL PRIMARY KEY,
 	Sie 			VARCHAR(30)	NOT NULL UNIQUE,
 	Nombre          VARCHAR(30) NOT NULL,
-	Zona 			VARCHAR(30),
-	Direccion 		VARCHAR(30),
+	Zona 			VARCHAR(100),
+	Direccion 		VARCHAR(100),
 	Latitud			DOUBLE PRECISION,
 	Longitud		DOUBLE PRECISION,
 	idDistrito		SERIAL NOT NULL,
@@ -38,8 +38,8 @@ CREATE TABLE Colegio(
 
 CREATE TABLE Noticia (
 	idNoticia		SERIAL PRIMARY KEY,
-	Titulo			VARCHAR(50),
-	SubTitulo		VARCHAR(50),
+	Titulo			VARCHAR(200),
+	SubTitulo		VARCHAR(200),
 	Contenido		TEXT,
 	Fecha    		DATE,
 	idAdmin			SERIAL NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE MaterialDeApoyo(
 CREATE TABLE Nivel(
 	idNivel			SERIAL PRIMARY KEY,
 	Nombre			VARCHAR(100),
-	Descripcion		VARCHAR(100),
+	Descripcion		TEXT,
 	idOlimpiada		SERIAL NOT NULL,
 	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
@@ -147,8 +147,8 @@ CREATE TABLE Nota(
 	Observaciones	VARCHAR(30),
 	Puesto			INTEGER,
 	foreign   key   (idParticipante)   references  Participante ,
-	foreign   key   (idEtapa)   references  Etapa ,
-	foreign   key   (idNivel)   references  Nivel 
+	foreign   key   (idEtapa)   references  Etapa ON DELETE CASCADE,
+	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE
 );
 
 

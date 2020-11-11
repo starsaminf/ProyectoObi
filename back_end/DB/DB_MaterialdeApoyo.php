@@ -160,9 +160,13 @@ class DB_MaterialdeApoyo
      */
     public static function delete($idMaterialdeApoyo,$idAdmin)
     {
-        $comando = "DELETE FROM MaterialdeApoyo WHERE idMaterial=? AND idAdmin = ?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idMaterialdeApoyo, $idAdmin));
+        try {
+            $comando = "DELETE FROM MaterialdeApoyo WHERE idMaterial=? AND idAdmin = ?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idMaterialdeApoyo, $idAdmin));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

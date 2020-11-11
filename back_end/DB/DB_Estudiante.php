@@ -150,9 +150,13 @@ class DB_Estudiante
      */
     public static function delete($Rude)
     {
-        $comando = "DELETE FROM Estudiante WHERE Rude=?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($Rude));
+        try {
+            $comando = "DELETE FROM Estudiante WHERE Rude=?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($Rude));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
     /**

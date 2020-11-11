@@ -17,66 +17,82 @@
 */
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
+import AtrazIcon from "@material-ui/icons/Backspace";
 import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
-import SupervisedUserCircle from "@material-ui/icons/SupervisedUserCircle";
+import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
-import DashboardPage from "../views/Admin/Dashboard.js";
+import Atraz from "../views/Admin/Dashboard.js";
+import DashboardPage from "../views/Admin/Olimpiada.js";
 import Salir from "../views/Admin/Salir.js";
-import Noticias from "../views/Admin/Noticias.js";
-import Distritos from "../views/Admin/Distritos.js";
-import Colegios from "../views/Admin/Colegios.js";
-import Olimpiadas from "../views/Admin/Olimpiada.js";
+import Olimpiada from "../views/Olimpiada/Olimpiada.js";
+import Niveles from "../views/Olimpiada/Nivel.js";
+import Etapa1 from "../views/Olimpiada/Etapa1.js";
 // core components/views for RTL layout
 
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
-    name: "Inicio",
-    icon: Dashboard,
+    path: "/olimpiada",
+    name: "volver atras",
+    icon: AtrazIcon,
     component: DashboardPage,
     layout: "/admin"
   },
   {
-    path: "/olimpiada",
+    path: "/dashboard",
     name: "OLimpiada",
     icon: Dashboard,
-    component: Olimpiadas,
-    layout: "/admin"
+    component: Olimpiada,
+    layout: "/olimpiada"
   },
+   
   {
-    path: "/noticias",
-    name: "Noticias",
+    path: "/niveles",
+    name: "Niveles",
     icon: Dashboard,
-    component: Noticias,
-    layout: "/admin"
-  },
+    component: Niveles,
+    layout: "/olimpiada"
+  }, 
   {
-    path: "/colegios",
-    name: "Colegios",
+    path: "/1",
+    name: "1 etapa - Inscripciones",
     icon: Dashboard,
-    component: Colegios,
-    layout: "/admin"
-  },
+    component: Etapa1,
+    layout: "/olimpiada"
+  }, 
   {
-    path: "/distritos",
-    name: "Distritos",
+    path: "/2",
+    name: "2 etapa - Distrital",
     icon: Dashboard,
-    component: Distritos,
-    layout: "/admin"
-  },
+    component: DashboardPage,
+    layout: "/olimpiada"
+  }, 
   {
-    path: "/salir",
-    name: "Salir",
+    path: "/3",
+    name: "3 etapa - Departamental",
     icon: Dashboard,
     component: Salir,
-    layout: "/admin"
-  },
+    layout: "/olimpiada"
+  }, 
+  {
+    path: "/4",
+    name: "4 etapa - Nacional",
+    icon: Dashboard,
+    component: Salir,
+    layout: "/olimpiada"
+  }, 
+  {
+    path: "/estudiantes",
+    name: "Estudiantes",
+    icon: Dashboard,
+    component: Salir,
+    layout: "/olimpiada"
+  }
   
 ];
 

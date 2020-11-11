@@ -10,7 +10,7 @@ class DB_Noticia
 
     public static function getAll($idAdmin)
     {
-        $consulta = "SELECT * from Noticia where idAdmin = ?";
+        $consulta = "SELECT * from Noticia where idAdmin = ? ORDER BY idNoticia DESC";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -24,7 +24,7 @@ class DB_Noticia
 
     public static function getAllPublic()
     {
-        $consulta = "SELECT * from Noticia ";
+        $consulta = "SELECT * from Noticia ORDER BY idNoticia ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -145,9 +145,13 @@ class DB_Noticia
      */
     public static function delete($idNoticia,$idAdmin)
     {
-        $comando = "DELETE FROM Noticia WHERE idNoticia=? AND idAdmin = ?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idNoticia, $idAdmin));
+        try {
+            $comando = "DELETE FROM Noticia WHERE idNoticia=? AND idAdmin = ?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idNoticia, $idAdmin));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

@@ -5,7 +5,6 @@ import {Modal, TextField,Container} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Copyright from './Copyright';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Alert from 'react-bootstrap/Alert'
@@ -15,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import md5 from "md5";
 import Cookies from "universal-cookie";
-import HOST from "../variables/general.js";
+import HOST from "../../variables/general.js";//../../variables/general.js";
 const baseUrl = HOST.Url+"Tutor.php";
 
 const cookies = new Cookies();
@@ -208,7 +207,7 @@ export default   function LoginUsuario(){
     )
     .then(
         response => {
-          console.log(response);
+          //console.log(response);
           consoleSeleccionada.mensaje=response.data.mensaje;
             if(response.data.estado===1){
               handleModalNuevo();
@@ -241,36 +240,8 @@ export default   function LoginUsuario(){
   }
 
     return (
-      <>
-        <Button variant="text" color ="inherit" onClick={handleModalIniciar}>
-            Iniciar Sesion
-        </Button>
-        <Button variant="text" color ="inherit" onClick={handleModalNuevo}>
-            Crear Cuenta
-        </Button>
-
-
-
-
-
-        {/***  modal para iniciar Sesion  ***/}
-        <Modal
-          open={openModalIniciar}
-          onClose={handleModalIniciar}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div style={modalStyle} className={classes.paper}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <center>
-                <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <h3 id="simple-modal-title">Iniciar Sesión</h3>
-              </center>
-            
-            <form onSubmit={handleSubmitIniciar}>
+      <div >
+        <form onSubmit={handleSubmitIniciar}>
               <TextField
                   variant="outlined"
                   margin="normal"
@@ -319,128 +290,7 @@ export default   function LoginUsuario(){
                     </Link>
                   </Grid>
                 </Grid>
-                <Copyright />
             </form>
-          </Container>
-          </div>
-        </Modal>
-
-
-        <Modal
-          open={openModalNuevo}
-          onClose={handleModalNuevo}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div style={modalStyle} className={classes.paper2}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <center>
-                <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <h3 id="simple-modal-title">Crear cuenta de Tutor</h3>
-                <br/>
-              </center>
-            
-            <form onSubmit={handleSubmitCrear} autoComplete="off">
-            <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                onChange={handleChangle}
-                id="username"
-                label="Nombre y Apellidos"
-                name="username"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="ci"
-                label="ci"
-                type="ci"
-                id="ci"
-                onChange={handleChangle}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                onChange={handleChangle}
-                fullWidth
-                id="celular"
-                label="celular"
-                name="celular"
-                autoComplete="celular"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="correo"
-                label="Correo Electronico"
-                name="correo"
-                onChange={handleChangle}
-                autoComplete="correo"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Contraseña"
-                type="password"
-                id="password"
-                onChange={handleChangle}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              
-            <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password2"
-                label="Repetir contraseña"
-                type="password"
-                id="password2"
-                onChange={handleChangle}
-              />
-            </Grid>
-          </Grid>
-          <Alert show={viewAlert} variant="danger" >
-            {consoleSeleccionada.mensaje}
-          </Alert>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Crear cuenta
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link  variant="body2" onClick={()=>{handleModalNuevo();handleModalIniciar()}}>
-              ¿Ya tienes una cuenta? Iniciar
-              </Link>
-            </Grid>
-          </Grid>
-                <Copyright />
-            </form>
-          </Container>
-          </div>
-        </Modal>
-      </>
+      </div>
     );
 }

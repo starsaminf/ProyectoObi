@@ -88,9 +88,13 @@ class DB_Participa
      */
     public static function delete($idNivel,$idParticipante)
     {
-        $comando = "DELETE FROM Participa WHERE idNivel = ? AND idParticipante = ?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idNivel, $idParticipante));
+        try {
+            $comando = "DELETE FROM Participa WHERE idNivel = ? AND idParticipante = ?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idNivel, $idParticipante));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

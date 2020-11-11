@@ -11,6 +11,7 @@ import Iniciar from "./layouts/Login/Iniciar.js";
 import IniciarAdmin from "./layouts/Login/IniciarAdmin.js";
 import Crear from "./layouts/Login/Crear.js";
 import Salir from "./layouts/Login/Salir.js";
+import Olimpiada from "./layouts/Olimpiada.js";
 const hist = createBrowserHistory();
 
 ReactDOM.render(
@@ -22,6 +23,7 @@ ReactDOM.render(
       <Route path="/tutor" component={Tutor} />
       <Route path="/crear" component={Crear} />
       <Route path="/salir" component={Salir} />
+      <Route path="/olimpiada" component ={Olimpiada}/>
       <Route path="/" component={Index} />
     </Switch>
   </Router>,

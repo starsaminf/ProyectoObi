@@ -10,7 +10,7 @@ class DB_Colegio
 
     public static function getAll()
     {
-        $consulta = "SELECT * from Colegio";
+        $consulta = "select c.*, d.nombre as nd, d.departamento as dd from Colegio c, Distrito d where c.idDistrito = d.idDistrito order by c.idColegio desc";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -80,7 +80,7 @@ class DB_Colegio
         $idDistrito
     )
     {
-        $consulta = "UPDATE Colegio SET Sie = ?,Nombre = ?, Zona = ?, Direccion = ?, Latitud = ?, Longitud = ?  WHERE idColegio = ? and idDistrito = ?";
+        $consulta = "UPDATE Colegio SET Sie = ?,Nombre = ?, Zona = ?, Direccion = ?, Latitud = ?, Longitud = ?,idDistrito = ?  WHERE idColegio = ? ";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
@@ -91,8 +91,8 @@ class DB_Colegio
                             $Direccion,
                             $Latitud,
                             $Longitud,
-                            $idColegio,
-                            $idDistrito
+                            $idDistrito,
+                            $idColegio
                 ));
                 return $cmd;
             } catch (PDOException $e) {
@@ -148,7 +148,7 @@ class DB_Colegio
             
             return $sentencia;
         }catch (PDOException $e) {
-            return false;
+            return $e;
         }
     }
 
@@ -160,9 +160,13 @@ class DB_Colegio
      */
     public static function delete($idColegio)
     {
-        $comando = "DELETE FROM Colegio WHERE idColegio=? ";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idColegio));
+        try {
+            $comando = "DELETE FROM Colegio WHERE idColegio=? ";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idColegio));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

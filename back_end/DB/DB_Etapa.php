@@ -29,16 +29,16 @@ class DB_Etapa
      * @param $idUsuario identificador del Usuario
      * @return Usuario al que le pertenece el $IdUsuario
      */
-    public static function getById($idEtapa)
+    public static function getById($tipo,$idOlimpiada)
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Etapa
-                             WHERE idEtapa = ?";
+                             WHERE tipo = ? and idOlimpiada = ?";
 
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($idEtapa));
+            $comando->execute(array($tipo,$idOlimpiada));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
@@ -61,11 +61,10 @@ class DB_Etapa
         $Nombre,
         $Descripcion,
         $FechaIni,
-        $FechaFin,
-        $Tipo
+        $FechaFin
     )
     {
-        $consulta = "UPDATE Etapa SET Nombre = ?, Descripcion = ?, FechaIni = ?, FechaFin = ?, Tipo = ?  WHERE idEtapa = ? ;";
+        $consulta = "UPDATE Etapa SET Nombre = ?, Descripcion = ?, FechaIni = ?, FechaFin = ? WHERE idEtapa = ? ;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 $cmd->execute(array(
@@ -73,13 +72,12 @@ class DB_Etapa
                     $Descripcion,
                     $FechaIni,
                     $FechaFin,
-                    $Tipo,
                     $idEtapa
                 ));
                 return $cmd;
             } catch (PDOException $e) {
                 
-                return false;
+                return $e;
             }
         
     }
@@ -138,9 +136,13 @@ class DB_Etapa
      */
     public static function delete($idEtapa)
     {
-        $comando = "DELETE FROM Etapa WHERE idEtapa=?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idEtapa));
+        try {
+            $comando = "DELETE FROM Etapa WHERE idEtapa=?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idEtapa));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

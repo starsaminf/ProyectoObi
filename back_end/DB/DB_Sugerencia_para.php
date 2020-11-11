@@ -91,9 +91,13 @@ class DB_Sugerencia_para
      */
     public static function delete($idEtapa,$idNivel)
     {
-        $comando = "DELETE FROM Etapa WHERE idEtapa=? AND idNivel";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idEtapa, $idNivel));
+        try {
+            $comando = "DELETE FROM Etapa WHERE idEtapa=? AND idNivel";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(array($idEtapa, $idNivel));
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>
