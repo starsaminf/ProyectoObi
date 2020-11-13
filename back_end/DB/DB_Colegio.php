@@ -21,6 +21,19 @@ class DB_Colegio
             return false;
         }
     }
+    public static function getAllSimple()
+    {
+        $consulta = "select c.nombre, c.sie, d.nombre as nd, d.departamento as dd from Colegio c, Distrito d where c.idDistrito = d.idDistrito order by c.idColegio desc";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute();
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
     public static function getAllDistrito($idDistrito)
     {
         $consulta = "SELECT * from Colegio where idDistrito = ?";

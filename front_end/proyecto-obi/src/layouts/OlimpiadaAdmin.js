@@ -10,7 +10,7 @@ import Navbar from "../components/Navbars/Navbar.js";
 import Footer from "../components/Footer/Footer.js";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 
-import routes from "../routes/routesOlimpiada.js";
+import routes from "../routes/routesOlimpiadaAdmin.js";
 
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
@@ -22,7 +22,7 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      if (prop.layout === "/olimpiada") {
+      if (prop.layout === "/olimpiadaAdmin") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -33,7 +33,7 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/admin" to="/admin/dashboard" />
+    <Redirect from="/olimpiadaAdmin" to="/olimpiadaAdmin/dashboard" />
   </Switch>
 );
 

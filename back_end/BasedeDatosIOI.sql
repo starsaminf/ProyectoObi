@@ -12,7 +12,7 @@ CREATE DATABASE ioidb;
 CREATE TABLE Admin (
 	idAdmin         SERIAL PRIMARY KEY,
 	UserName		VARCHAR(30) NOT NULL UNIQUE,
-	Password			VARCHAR(60) NOT NULL,
+	Password		VARCHAR(60) NOT NULL,
 	Correo			VARCHAR(64) NOT NULL
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE Colegio(
 
 CREATE TABLE Noticia (
 	idNoticia		SERIAL PRIMARY KEY,
-	Titulo			VARCHAR(200),
+	Titulo			TEXT,
 	SubTitulo		VARCHAR(200),
 	Contenido		TEXT,
 	Fecha    		DATE,
@@ -49,7 +49,7 @@ CREATE TABLE Noticia (
 CREATE TABLE Olimpiada(
 	idOlimpiada		SERIAL PRIMARY KEY,
 	Nombre          VARCHAR(50) NOT NULL,
-	Descripcion     VARCHAR(100),
+	Descripcion     TEXT,
 	Baner           VARCHAR(50),
 	Convocatoria    VARCHAR(50),
 	FechaIni		DATE,
@@ -61,7 +61,7 @@ CREATE TABLE Olimpiada(
 
 CREATE TABLE MaterialDeApoyo(
 	idMaterial		SERIAL PRIMARY KEY,
-	Titulo          VARCHAR(100),
+	Titulo          VARCHAR(200),
 	SubTitulo		VARCHAR(300),
 	Tipo 			VARCHAR(30),
 	Archivo			VARCHAR(300),
@@ -81,7 +81,7 @@ CREATE TABLE Nivel(
 CREATE TABLE Etapa(
 	idEtapa			SERIAL PRIMARY KEY,
 	Nombre			VARCHAR(100),
-	Descripcion		VARCHAR(100),
+	Descripcion		TEXT,
 	FechaIni		DATE,
 	FechaFin		DATE,
 	Tipo			VARCHAR(30),

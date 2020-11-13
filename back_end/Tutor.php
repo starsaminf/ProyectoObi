@@ -76,14 +76,31 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Nombre'],
 				$_POST['Ci'],
 				$_POST['Correo'],
-				$_POST['Celular'],
-				$_POST['Password']
+				$_POST['Celular']
 			);
 			if ($retorno) {
 		            print json_encode(
 						array(
 							'estado' => 1,
 							'mensaje' => 'Los cambios se guardaron correctamente')
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo guardar los cambios')
+					);
+				}
+	}
+	if($_POST['_metod']=='getById'){
+			$retorno = DB_Tutor::getById(
+				$_POST['idTutor']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'val' => $retorno)
 					);
 				} else {
 					print json_encode(

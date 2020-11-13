@@ -145,7 +145,7 @@ export default   function LoginUsuario(){
               cookies.set('correo', respuesta.correo, {path:"/"});
               cookies.set('tipo', 'tutor', {path:"/"});
               //console.log("Usuario guardadooo weee");
-              window.location.href="./tutor";
+              window.location.href="./bienvenida";
           }else{
             consoleSeleccionada.mensaje=response.data.mensaje;
             handleAlertMensaje(true);
@@ -166,11 +166,6 @@ export default   function LoginUsuario(){
   const handleSubmitCrear = async(event) =>{
     event.preventDefault();
     handleAlertMensaje(false);
-    //console.log(consoleSeleccionada.correo);
-    //console.log(consoleSeleccionada.password);
-    //console.log(consoleSeleccionada.password2);
-    //console.log("A donde muchachote");
-    //ejecutamos el axios
     var alerta = false;
     var mensaje ="";
     if(!(consoleSeleccionada.password===consoleSeleccionada.password2)){
@@ -178,16 +173,7 @@ export default   function LoginUsuario(){
       alerta= true;
     }
 
-/**
- *          * $_POST['Nombre'],
-				$_POST['ApPaterno'],
-				$_POST['ApMaterno'],
-				$_POST['Ci'],
-				$_POST['Correo'],
-				$_POST['Celular'],
-				$_POST['Password']
- */
-    ///verificamos si es valido o no
+    
     if(!alerta){
       //console.log("valido weeeee listo pára el axios");
       await axios.post(baseUrl,

@@ -10,7 +10,7 @@ class DB_Participante
 
     public static function getAll($idTutor,$idOlimpiada)
     {
-        $consulta = "SELECT * from Participante where idTutor = ? and idOlimpiada = ?";
+        $consulta = "SELECT p.*, e.nombre as nom_est,c.nombre as nom_col  from Participante p ,Estudiante e, Colegio c where (p.rude = e.rude AND c.idColegio = p.idColegio) AND(p.idTutor = ? and p.idOlimpiada = ?) ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);

@@ -22,6 +22,26 @@ class DB_Estudiante
         }
     }
 
+    public static function getAllSimple($idOlimpiada)
+    {
+        $consulta = "select e.rude, (e.appaterno||' '||e.apmaterno||' '||e.nombre)as nombre, e.ci,
+CASE 
+    WHEN p.idparticipante IS NULL THEN false
+    ELSE true
+  END AS participa
+from estudiante e LEFT JOIN participante p
+on (e.rude=p.rude AND p.idOlimpiada = ?)";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idOlimpiada));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 
     /**
      * consultar usuario por Id de Usuario

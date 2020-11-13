@@ -30,6 +30,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllSimple'){
+			$retorno = DB_Colegio::getAllSimple();
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO se encontro ningun colegio')
+					);
+				}
+	}
 	if($_POST['_metod']=='getAllDistrito'){
 			$retorno = DB_Colegio::getAllDistrito($_POST['idDistrito']);
 			if ($retorno) {

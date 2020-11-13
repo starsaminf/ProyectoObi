@@ -24,7 +24,7 @@ class DB_Olimpiada
 
     public static function getAllPublic()
     {
-        $consulta = "SELECT * from Olimpiada ";
+        $consulta = "SELECT idOlimpiada,nombre,descripcion,FechaIni,FechaFin from Olimpiada ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);

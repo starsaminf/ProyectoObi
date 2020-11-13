@@ -32,7 +32,7 @@ class DB_Tutor
     public static function getById($idTutor)
     {
         // Consulta de la meta
-        $consulta = "SELECT *
+        $consulta = "SELECT nombre,correo,ci,celular
                              FROM Tutor
                              WHERE idTutor = ?";
 
@@ -61,12 +61,10 @@ class DB_Tutor
         $Nombre,
         $Ci,
         $Correo,
-        $Celular,
-        $Password
+        $Celular
     )
     {
-        $P = encriptar($Password);
-        $consulta = "UPDATE Tutor SET Nombre = ?,  Ci = ?,Correo = ?, Celular = ?, Password = ? WHERE idTutor = ?;";
+        $consulta = "UPDATE Tutor SET Nombre = ?,  Ci = ?,Correo = ?, Celular = ? WHERE idTutor = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
@@ -75,7 +73,6 @@ class DB_Tutor
                     $Ci, 
                     $Correo, 
                     $Celular, 
-                    $P, 
                     $idTutor));
                 return $cmd;
             } catch (PDOException $e) {

@@ -30,6 +30,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllSimple'){
+			$retorno = DB_Estudiante::getAllSimple($_POST['idOlimpiada']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO hay Estudiantes')
+					);
+				}
+	}
 
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Estudiante::Insert(

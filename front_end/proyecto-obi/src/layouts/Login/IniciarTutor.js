@@ -40,7 +40,6 @@ class IniciarTutor extends Component {
   handleSubmit = event =>{
     event.preventDefault();
     this.iniciarSesion();
-    //ejecutamos el axios
   }
   iniciarSesion=async()=>{
     await axios.post(baseUrl,
@@ -59,17 +58,6 @@ class IniciarTutor extends Component {
     .then(
         response => {
             console.log(response);
-            /*if(response.data.estado===1){
-                var respuesta = response.data.usuario[0];
-                console.log(respuesta.idadmin);
-                cookies.set('idusuario', respuesta.idadmin, {path:"/"});
-                cookies.set('username', respuesta.username, {path:"/"});
-                cookies.set('correo', respuesta.correo, {path:"/"});
-                cookies.set('tipo', 'admin', {path:"/"});
-                console.log("Usuario guardadooo weee");
-                window.location.href="./Admin";
-            }else
-              this.setState({alertShow:true});*/
         }
     )
     .catch(
@@ -81,7 +69,7 @@ class IniciarTutor extends Component {
 componentDidMount = () => {
     if(cookies.get('username')){
       if(cookies.get('tipo')==='tutor'){
-        window.location.href="./tutor";
+        window.location.href="./bienvenida";
       }else{
         window.location.href="./admin";
       }

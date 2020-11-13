@@ -29,9 +29,9 @@ import Language from "@material-ui/icons/Language";
 import Atraz from "../views/Admin/Dashboard.js";
 import DashboardPage from "../views/Admin/Olimpiada.js";
 import Salir from "../views/Admin/Salir.js";
-import Olimpiada from "../views/Olimpiada/Olimpiada.js";
-import Niveles from "../views/Olimpiada/Nivel.js";
-import Etapa1 from "../views/Olimpiada/Etapa1.js";
+import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
+import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
+import Etapa1 from "../views/OlimpiadaAdmin/Etapa1.js";
 // core components/views for RTL layout
 
 
@@ -48,7 +48,7 @@ const dashboardRoutes = [
     name: "OLimpiada",
     icon: Dashboard,
     component: Olimpiada,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   },
    
   {
@@ -56,42 +56,42 @@ const dashboardRoutes = [
     name: "Niveles",
     icon: Dashboard,
     component: Niveles,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }, 
   {
     path: "/1",
     name: "1 etapa - Inscripciones",
     icon: Dashboard,
     component: Etapa1,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }, 
   {
     path: "/2",
     name: "2 etapa - Distrital",
     icon: Dashboard,
     component: DashboardPage,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }, 
   {
     path: "/3",
     name: "3 etapa - Departamental",
     icon: Dashboard,
     component: Salir,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }, 
   {
     path: "/4",
     name: "4 etapa - Nacional",
     icon: Dashboard,
     component: Salir,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }, 
   {
     path: "/estudiantes",
     name: "Estudiantes",
     icon: Dashboard,
     component: Salir,
-    layout: "/olimpiada"
+    layout: "/olimpiadaAdmin"
   }
   
 ];
