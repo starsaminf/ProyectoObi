@@ -34,6 +34,8 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Nivel::Insert(
 				$_POST['Nombre'],
 				$_POST['Descripcion'],
+				$_POST['LimiteEdad'],
+				$_POST['Tipo'],
 				$_POST['idOlimpiada']
 			);
 			if ($retorno) {
@@ -62,7 +64,9 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Nivel::Update(
 				$_POST['idNivel'],
 				$_POST['Nombre'],
-				$_POST['Descripcion']
+				$_POST['Descripcion'],
+				$_POST['LimiteEdad'],
+				$_POST['Tipo']
 			);
 			if ($retorno) {
 		            print json_encode(

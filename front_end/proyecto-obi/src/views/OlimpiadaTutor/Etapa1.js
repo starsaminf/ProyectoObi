@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Radio from '@material-ui/core/Radio';
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
 import {Edit,Delete, SupervisedUserCircle} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from 'axios';
+//radiooooo
+
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 // host variables
 const baseUrl_participante = HOST.Url+'Participante.php';
 const baseUrl_estudiante   = HOST.Url+'Estudiante.php';
+const baseUrl_nivel   = HOST.Url+'Nivel.php';
 const baseUrl_distrito     = HOST.Url+'Distrito.php';
 const baseUrl_colegio      = HOST.Url+'Colegio.php';
 //"../../variables/general.js";
@@ -32,7 +38,15 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    width: 600,
+    width: '80%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  paper2: {
+    position: 'absolute',
+    width: 400,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -58,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 200,
   },
+  
 }));
 function header(){
   return {
@@ -72,6 +87,11 @@ export default function SimpleModal() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
+  const [value, setValue] = useState('femenino');
+
+  const handleChangeRadio = (event) => {
+    setValue(event.target.value);
+  };
   const [modalStyle] = useState(getModalStyle);
   const [openModalInsert,   setOpenInsert]    = useState(false);
   const [openModalUpdate,   setOpenUpdate]    = useState(false);
@@ -79,40 +99,21 @@ export default function SimpleModal() {
   const [openModalMensaje,  setOpenMensaje]   = useState(false);
   const [participante,      setParticipante]  =useState([]);
   const [participante2,     setParticipante2] =useState([]);
-  const [estudiante,        setEstudiante]    =useState([]);
-  const [estudiante2,        setEstudiante2]  =useState([]);
-  const [estudiante3,        setEstudiante3]  =useState([
-    { rude:'1', nombre:'a',ci:'9110020',participa:true },
-    { rude:'2', nombre:'a',ci:'9110020',participa:false },
-    { rude:'3', nombre:'a',ci:'9110020',participa:true },
-    { rude:'4', nombre:'a',ci:'9110020',participa:false },
-    { rude:'5', nombre:'a',ci:'9110020',participa:true },
-    { rude:'6', nombre:'a',ci:'9110020',participa:false },
-    { rude:'7', nombre:'a' },
-    { rude:'8', nombre:'a' },
-    { rude:'9', nombre:'a' },
-    { rude:'11', nombre:'a' },
-    { rude:'12', nombre:'a' },
-    { rude:'13', nombre:'a' },
-    { rude:'14', nombre:'a' },
-    { rude:'15', nombre:'a' },
-    { rude:'16', nombre:'a' },
-    { rude:'17', nombre:'a' },
-    { rude:'18', nombre:'a' },
-    { rude:'19', nombre:'a' },
-    { rude:'20', nombre:'a' },
-
-  ]);
-  const [colegio,           setColegio]       =useState([]);
-  const [colegio2,           setColegio2]     =useState([]);
+  const [colegios,      setColegio]  =useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idolimpiada:'',
+    appaterno:'',
+    apmaterno:'',
     nombre:'',
-    descripcion:'',
-    convocatoria:'',
-    fechaini:'',
-    fechafin:'',
-    estado:''
+    rude:'',
+    carnet:'',
+    celular:'',
+    correo:'',
+    fechaNac:'',
+    genero:'',
+    sie:'',
+    colegio:'',
+    colegiovalido:false,
+    mensaje:''
   })
   const handleChangle = e => {
     const {name, value}= e.target;
@@ -121,11 +122,43 @@ export default function SimpleModal() {
       [name]:value
     }))
   }
-  const handleChangleBuscador = e => {
-    var search = participante.filter(item=>{
+  const buscarColegio = e => {
+    var search = colegios.filter(item=>{
       //p.*, e.nombre as nom_est,c.nombre as nom_col
-      var cad= item.idparticipante+item.rude+item.nom_est+item.nom_col; 
-      if(cad.includes(e.target.value))
+      var cad= item.sie; 
+      if(cad===e.target.value){
+        return item.nombre;
+      }
+    });
+    var estado="no existe el colegio";
+    var idcol='';
+    var b=false;
+    if(search.length===1){
+      estado = search[0].nombre;
+      idcol = search[0].sie;
+      b=true;
+    }
+    setConsolaSeleccionada(prevState=>({
+      ...prevState,
+      ['colegio']:""+estado
+    }))
+    setConsolaSeleccionada(prevState=>({
+      ...prevState,
+      ['sie']:idcol
+    }))
+    setConsolaSeleccionada(prevState=>({
+      ...prevState,
+      ['colegiovalido']:b
+    }))
+  
+    //if(search)
+    //setParticipante2(search);
+  }
+  const handleChangleBuscador = e => {
+    e=(e.target.value).toLowerCase();
+    var search = participante.filter(item=>{
+      var cad= (item.rude+item.ci+item.nombre+item.appaterno+item.apmaterno+item.sie+item.correo+item.celular+buscarNombreDECol(item.sie)).toString().toLowerCase(); 
+      if(cad.includes(e))
         return item;
     });
     setParticipante2(search);
@@ -143,14 +176,14 @@ export default function SimpleModal() {
     setOpenMensaje(!openModalMensaje);
   };
     //*** detenemos submit de formulario */
-    const handleSubmit = event =>{
+    const handleSubmitInsert = event =>{
       event.preventDefault();
       //Insert();
       //ejecutamos el axios
     }
     const handleSubmitUpdate = event =>{
       event.preventDefault();
-      //Update();
+      UpdateEstudiante();
       //ejecutamos el axios
     }
   //*** seleccionar consola */
@@ -167,71 +200,213 @@ const seleccionarConsola =(consola,caso)=>{
         }
     }
 };
+const AlistarParticipante = event => {
+  event.preventDefault();//cancelamos los eventos 
+  if(consoleSeleccionada.colegiovalido){
+    console.log("Colegio vALIDO");
+    getVerificar();
+    //Buscamos si yaes participante devolvemos si esta registrado y si esta participando
+    //true:mostramos que ya tiene tutor
+    //else:creamos o modificamos estudiante 
+  }else{
+    setConsolaSeleccionada(prevState=>({
+      ...prevState,
+      ['mensaje']:"Ingrese el Sie de un Colegio Valido"
+    }))
+    handleModalMensaje();
+  }
+};
 
-//******  getAll Participantes
-  const getAllParticipantes=async()=>{
-    console.log("getAll Participantes");
-      await axios.post(baseUrl_participante,{
-        _metod: 'getAll',
-        idTutor     :cookies.get('idusuario'),
-        idOlimpiada :cookies.get('idolimpiada')
-      },header()
-    ).then(
-      response => {
-        console.log(response);
-        if(response.data.estado===1){
-          setParticipante(response.data.val);
-          setParticipante2(response.data.val);
-        }
+//******  getAll Colegio
+const getAllColegios=async()=>{
+  console.log("getAll Colegio");
+    await axios.post(baseUrl_colegio,{
+      _metod: 'getAllSimple'
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      if(response.data.estado===1){
+        setColegio(response.data.val);
       }
-    ).catch(
-      error=>{
-        setParticipante2(participante);
+    }
+  ).catch(
+    error=>{
+      alert(error);
+      setColegio([]);
+    }
+  )
+};
+const getAll_Por_Tutor_y_Olimpiada=async()=>{
+  console.log("getAll estudiantes por tutor y olimpiada");
+    await axios.post(baseUrl_estudiante,{
+      _metod:       'getAll_Por_Tutor_y_Olimpiada',
+      idOlimpiada:  cookies.get('idolimpiada'),
+      idTutor:      cookies.get('idusuario')
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      if(response.data.estado===1){
+        setParticipante(response.data.val);
+        setParticipante2(response.data.val);
       }
-    )
-  };
-  //******  getAll Colegios
-  const getAllColegios=async()=>{
-    console.log("getAll Colegios");
-      await axios.post(baseUrl_colegio,{
-        _metod: 'getAllSimple'
-      },header()
-    ).then(
-      response => {
-        console.log(response);
-        if(response.data.estado===1){
-          setColegio(response.data.val);
-          setColegio2(response.data.val);
-        }
+    }
+  ).catch(
+    error=>{
+      alert(error);
+    }
+  )
+};
+/*
+				$_POST['idTutor'],
+				$_POST['idColegio'],
+				$_POST['idOlimpiada'],
+				$_POST['Rude'],
+				$_POST['Nombre'],
+				$_POST['ApPaterno'],
+				$_POST['ApMaterno'],
+				$_POST['Celular'],
+				$_POST['FechaNac'],
+				$_POST['Genero'],
+				$_POST['Ci'],
+				$_POST['Correo']
+*/
+const InsertEstudiante=async()=>{
+  
+  handleModalInsert();
+  console.log("Colegio = "+consoleSeleccionada.idcolegio);
+    await axios.post(baseUrl_estudiante,{
+      _metod: 'Insert',      
+      idTutor:        cookies.get('idusuario'),
+      Sie:            consoleSeleccionada.sie,
+      idOlimpiada:    cookies.get('idolimpiada'),
+      Rude:           consoleSeleccionada.rude,
+      Nombre:         consoleSeleccionada.nombre,
+      ApPaterno:      consoleSeleccionada.appaterno,
+      ApMaterno:      consoleSeleccionada.apmaterno,
+      Celular:        consoleSeleccionada.celular,
+      FechaNac:       consoleSeleccionada.fechanac,
+      Genero:         value,
+      Ci:             consoleSeleccionada.ci,
+      Correo:         consoleSeleccionada.correo,
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      consoleSeleccionada.mensaje = response.data.mensaje;
+      handleModalMensaje();
+      if(response.data.estado===1){
+        getAll_Por_Tutor_y_Olimpiada();
+        //setData(response.data.admin);
+        //getAll();
       }
-    ).catch(
-      error=>{
-        setParticipante2(participante);
+    }
+  ).catch(
+    error=>{
+      alert(error+"");
+    }
+  )
+};
+const UpdateEstudiante=async()=>{
+  
+  handleModalUpdate(consoleSeleccionada.idestudiante);
+    console.log();
+    await axios.post(baseUrl_estudiante,{
+      _metod: 'Update',  
+      idEstudiante:   consoleSeleccionada.idestudiante,    
+      idTutor:        cookies.get('idusuario'),
+      Sie:            consoleSeleccionada.sie,
+      idOlimpiada:    cookies.get('idolimpiada'),
+      Rude:           consoleSeleccionada.rude,
+      Nombre:         consoleSeleccionada.nombre,
+      ApPaterno:      consoleSeleccionada.appaterno,
+      ApMaterno:      consoleSeleccionada.apmaterno,
+      Celular:        consoleSeleccionada.celular,
+      FechaNac:       consoleSeleccionada.fechanac,
+      Genero:         value,
+      Ci:             consoleSeleccionada.ci,
+      Correo:         consoleSeleccionada.correo,
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      consoleSeleccionada.mensaje = response.data.mensaje;
+      handleModalMensaje();
+      if(response.data.estado===1){
+        getAll_Por_Tutor_y_Olimpiada();
+        //setData(response.data.admin);
+        //getAll();
       }
-    )
-  };
+    }
+  ).catch(
+    error=>{
+      alert(error+"");
+    }
+  )
+};
+const getVerificar=async()=>{
+  //handleModalInsert();
+    await axios.post(baseUrl_estudiante,{
+      _metod: 'getVerificar',      
+      idOlimpiada:        cookies.get('idolimpiada'),
+      idTutor:            cookies.get('idusuario'),
+      Rude:               consoleSeleccionada.rude
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      if(response.data.estado===2){
+        //en este caso el estudinate esta habilitado para ser agregado
+        console.log("Agregamos al Estudiante");
+        InsertEstudiante();
+      }else{
+        consoleSeleccionada.mensaje = "El estudiante ya esta registrado con otro Tutor";
+        handleModalMensaje();
+      }
+    }
+  ).catch(
+    error=>{
+      alert(error+"");
+    }
+  )
+};
+const buscarNombreDECol= (e)=>{
+  var search = colegios.filter(item=>{
+    //p.*, e.nombre as nom_est,c.nombre as nom_col 
+    if(item.sie===e){
+      return item.nombre;
+    }
+  });
 
-  //******  getAll Estudiantes
-  const getAllEstudiantes=async()=>{
-    console.log("getAll Estudiantes");
-      await axios.post(baseUrl_estudiante,{
-        _metod: 'getAllSimple',
-        idOlimpiada:cookies.get('idolimpiada')
-      },header()
-    ).then(
-      response => {
-        console.log(response);
-        if(response.data.estado===1){
-          setEstudiante(response.data.val);
-          setEstudiante2(response.data.val);
-        }
+  if(search.length===1){
+    return search[0].nombre;
+  }
+  return "Indefinido";
+}
+const Eliminar=async()=>{
+  handleModalDelete();
+  
+    await axios.post(baseUrl_estudiante,{
+      _metod: 'Delete',
+        idEstudiante: consoleSeleccionada.idestudiante
+    },header()
+  ).then(
+    response => {
+      console.log(response);
+      consoleSeleccionada.mensaje = response.data.mensaje;
+      handleModalMensaje();
+      if(response.data.estado===1){
+        //setData(response.data.admin);
+        getAll_Por_Tutor_y_Olimpiada();
       }
-    ).catch(
-      error=>{
-        setEstudiante2(participante);
-      }
-    )
-  };
+    }
+  ).catch(
+    error=>{
+      alert(error+"");
+    }
+  )
+};
   //*****   Insert */
   /*const Insert=async()=>{
     handleModalInsert();
@@ -309,26 +484,18 @@ const Eliminar=async()=>{
 
 //******  se ejecuta cuando inicia el Componente
   useEffect(async()=>{
-    
-    getAllParticipantes();
     getAllColegios();
-    getAllEstudiantes();
+    getAll_Por_Tutor_y_Olimpiada();
+    //getAllEstudiantes();
   },[]);
 
 
   return (
     <div>
       <div>
-      <div>Saludos tutor hdp<br/>
-      usuario:  {cookies.get('idusuario')}<br/>
-      Olimpiada: {cookies.get('idolimpiada')}<br/>
-      tipo: {cookies.get('tipo')} <br/>
-    </div>
-    </div>
-      <div>
         <Toolbar>
           <Typography variant="h2" noWrap className={classes.title}>
-            Etapa de Inscripcion
+            Mis Estudiantes
           </Typography>
           <TextField
             variant="outlined"
@@ -346,30 +513,22 @@ const Eliminar=async()=>{
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell><strong >RUDE</strong></TableCell>
-              <TableCell><strong >Nombre / Carnet</strong></TableCell>
-              <TableCell><strong >Correo Electronico</strong></TableCell>
-              <TableCell><strong >Nivel</strong></TableCell>
-              <TableCell><strong >Acciones</strong></TableCell>
+              <TableCell><strong >RUDE/Ci</strong></TableCell>
+              <TableCell><strong >Nombre</strong></TableCell>
+              <TableCell><strong >Email/celular</strong></TableCell>
+              <TableCell><strong ><center>Colegio</center></strong></TableCell>
+              <TableCell><center><strong >Acciones</strong></center></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {participante2.map(console =>(
-              <TableRow key={console.idparticipante}>
-                <TableCell>{console.idparticipante}</TableCell>
-                <TableCell><strong >{console.nom_est}</strong><br/><i>{console.descripcion}</i></TableCell>
-                <TableCell><strong >{console.nom_col}</strong><br/><i>{console.convocatoria}</i></TableCell>
-                <TableCell><strong >{console.fechaini}</strong><br/><i>{console.fechafin}</i></TableCell>
+              <TableRow key={console.idestudiante}>
+                <TableCell><strong >Rude: </strong>{console.rude}<br/><strong >Ci: </strong>{console.ci}</TableCell>
+                <TableCell>{console.nombre}<br/><i>{console.appaterno}</i><br/><i>{console.apmaterno}</i></TableCell>
+                <TableCell>{console.correo}<br/><i>{console.celular}</i></TableCell>
+            <TableCell><strong >Nombre: </strong><i>{buscarNombreDECol(console.sie)}<br/><strong >Sie: </strong>{console.sie}</i></TableCell>
                 <TableCell>
                   <center>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Admin')}}
-                    >
-                      <SupervisedUserCircle/>
-                  </Button><br/>
                   <Button
                     variant="contained"
                     color="default"
@@ -377,7 +536,7 @@ const Eliminar=async()=>{
                     onClick={()=>{seleccionarConsola(console,'Editar')}}
                     >
                       <Edit/>
-                  </Button><br/>
+                  </Button>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -403,64 +562,72 @@ const Eliminar=async()=>{
           aria-describedby="simple-modal-description"
         >
           <div style={modalStyle} className={classes.paper}>
-              <h3 id="simple-modal-title">Agregar Estudiante</h3>
-              Complete el Siguiente Formulario
-              <form onSubmit={handleSubmitUpdate}>
+              <h3 id="simple-modal-title">Seleccionar mis Estudiantes</h3>
+              <div >
+              <form  onSubmit={AlistarParticipante}>
                   <GridContainer >
                       <GridItem xs={12} sm={12} md={4}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Ap. Paterno"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
+                        <TextField variant="outlined"  margin="normal" fullWidth name='appaterno' required label="Ap. Paterno"  onChange={handleChangle}  />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Ap. MAterno"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
+                        <TextField variant="outlined"  margin="normal" fullWidth name='apmaterno' required label="Ap. MAterno"  onChange={handleChangle}  />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Nombres"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
+                        <TextField variant="outlined"  margin="normal" fullWidth name='nombre' required label="Nombres"  onChange={handleChangle} />
                       </GridItem>
                   </GridContainer>
                   <GridContainer >
-                      <GridItem xs={12} sm={12} md={6}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Rude" type="number" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='rude' required label="Rude" type="number" onChange={handleChangle}  />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={6}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Carnet"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='ci' required label="Carnet"  onChange={handleChangle}  />
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='correo' required label="Correo"  type="email" onChange={handleChangle}/>
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='celular' required label="Celular"  onChange={handleChangle}  />
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={6} sm={6} md={6}>
+                        Colegio:{consoleSeleccionada.colegio}
+                        <TextField variant="outlined" margin="normal"   fullWidth name='sie' required  label="Codigo SIE del Colegio" type="number" onChange={buscarColegio }  />
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={3}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='fechanac' required label="fechaNac"  type="date" InputLabelProps={{shrink:true}} onChange={handleChangle}  />
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={3}>
+                        <FormControl component="fieldset">
+                          <FormLabel component="legend">genero</FormLabel>
+                          <RadioGroup aria-label="gender" name="genero" value={value} onChange={handleChangeRadio}>
+                            <FormControlLabel value="femenino" control={<Radio />} label="Femenino" />
+                            <FormControlLabel value="masculino" control={<Radio />} label="Masculino" />
+                          </RadioGroup>
+                        </FormControl>
                       </GridItem>
                   </GridContainer>
                   <GridContainer >
                       <GridItem xs={12} sm={12} md={12}>
-                        <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Correo"  type="email" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
-                      </GridItem>
-                  </GridContainer>
-                  <TextField variant="outlined"  margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Codigo SIE del Colegio" type="number" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <FormControlLabel value="female" control={<Radio />} label="Femalesadasdasdasdasdddddddddddddddddddddddddddddddddd" />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer >
-                      <GridItem xs={12} sm={12} md={6}>
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={3}>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={3}>
+                        <Toolbar>
+                          <Typography variant="h2" noWrap className={classes.title}>
+                          </Typography>
+                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                          &nbsp;&nbsp;&nbsp;
                           <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                        </Toolbar> 
                       </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    
                   </GridContainer>
 
               
               </form>
+              </div>
             </div>
           
         </Modal>
@@ -472,23 +639,69 @@ const Eliminar=async()=>{
           aria-describedby="simple-modal-description"
         >
           <div style={modalStyle} className={classes.paper}>
-              <h3 id="simple-modal-title">Agregar Nueva Olimpiada</h3>
-              <form onSubmit={handleSubmitUpdate}>
-                
-                  <TextField variant="outlined" margin="normal" fullWidth name='nombre' required className={classes.nombre} label="Nombre del OLimpiada"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
-                  
-                  <TextField variant="outlined"  multiline={true} rows={5} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion del nivel"  onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.descripcion} />
-                  
+              <h3 id="simple-modal-title">Editar datos de Estudiante</h3>
+              <form  onSubmit={handleSubmitUpdate}>
                   <GridContainer >
-                      <GridItem xs={12} sm={12} md={3}>
+                      <GridItem xs={12} sm={12} md={4}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='appaterno' required label="Ap. Paterno"  onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.appaterno} />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='apmaterno' required label="Ap. MAterno"  onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.apmaterno} />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
-                          <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                      <GridItem xs={12} sm={12} md={4}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='nombre' required label="Nombres"  onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.nombre}/>
                       </GridItem>
                   </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='rude' required label="Rude" type="number" onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.rude}disabled />
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='ci' required label="Carnet"  onChange={handleChangle}  value={consoleSeleccionada&&consoleSeleccionada.ci}/>
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='correo' required label="Correo"  type="email" onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.correo}/>
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={6}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='celular' required label="Celular"  onChange={handleChangle} value={consoleSeleccionada&&consoleSeleccionada.celular} />
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={6} sm={6} md={6}>
+                        Colegio:{buscarNombreDECol(consoleSeleccionada.sie)}
+                        <TextField variant="outlined" margin="normal"   fullWidth name='sie' required  label="Codigo SIE del Colegio" type="number" onChange={buscarColegio }  value={consoleSeleccionada&&consoleSeleccionada.sie}disabled/>
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={3}>
+                        <TextField variant="outlined"  margin="normal" fullWidth name='fechanac' required label="fechaNac"  type="date" InputLabelProps={{shrink:true}} onChange={handleChangle}  value={consoleSeleccionada&&consoleSeleccionada.fechanac}/>
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={3}>
+                        <FormControl component="fieldset">
+                          <FormLabel component="legend">genero</FormLabel>
+                          <RadioGroup aria-label="gender" name="genero"  onChange={handleChangeRadio}value={consoleSeleccionada&&consoleSeleccionada.genero}>
+                            <FormControlLabel value="femenino" control={<Radio />} label="Femenino" />
+                            <FormControlLabel value="masculino" control={<Radio />} label="Masculino" />
+                          </RadioGroup>
+                        </FormControl>
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer >
+                      <GridItem xs={12} sm={12} md={12}>
+                        <Toolbar>
+                          <Typography variant="h2" noWrap className={classes.title}>
+                          </Typography>
+                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                          &nbsp;&nbsp;&nbsp;
+                          <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                        </Toolbar> 
+                      </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    
+                  </GridContainer>
+
+              
               </form>
             </div>
         </Modal>
@@ -500,12 +713,16 @@ const Eliminar=async()=>{
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <div style={modalStyle} className={classes.paper}>
+          <div style={modalStyle} className={classes.paper2}>
             <h1 id="simple-modal-title"><strong>Eliminar:</strong></h1>
                 <br/>
                 <GridContainer >
                     <GridItem xs={12} sm={12} md={12}>
-                        En realidad desea eliminar la OLimpiada: <strong >{consoleSeleccionada.nombre}</strong>?
+                        En realidad desea eliminar al Estudiante: <br/>
+                        <strong >Rude:       </strong>{consoleSeleccionada.rude}<br/>
+                        <strong >nombre:     </strong>{consoleSeleccionada.nombre} {consoleSeleccionada.appaterno} {consoleSeleccionada.apmaterno}<br/>
+                        <strong >Carnet:     </strong>{consoleSeleccionada.ci}<br/>
+                        <strong >Colegio:    </strong>{buscarNombreDECol(consoleSeleccionada.sie)}<br/>
                     </GridItem>
                 </GridContainer>
                 <br/>
@@ -516,7 +733,7 @@ const Eliminar=async()=>{
                         <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={4}>
-                        <Button type="submit" variant="contained" color="primary"  >Eliminar</Button>
+                        <Button type="submit" variant="contained" color="primary"  onClick={Eliminar}>Eliminar</Button>
                     </GridItem>
                 </GridContainer>
           </div>

@@ -10,7 +10,7 @@ class DB_Colegio
 
     public static function getAll()
     {
-        $consulta = "select c.*, d.nombre as nd, d.departamento as dd from Colegio c, Distrito d where c.idDistrito = d.idDistrito order by c.idColegio desc";
+        $consulta = "select c.*, d.nombre as nd, d.departamento as dd from Colegio c, Distrito d where c.idDistrito = d.idDistrito order by c.Sie desc";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -23,7 +23,7 @@ class DB_Colegio
     }
     public static function getAllSimple()
     {
-        $consulta = "select c.nombre, c.sie, d.nombre as nd, d.departamento as dd from Colegio c, Distrito d where c.idDistrito = d.idDistrito order by c.idColegio desc";
+        $consulta = "select c.sie,(c.nombre||'('||d.nombre ||'-'|| d.departamento||')') as nombre from Colegio  c, Distrito d where c.idDistrito = d.idDistrito";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -55,16 +55,16 @@ class DB_Colegio
      * @param $idUsuario identificador del Usuario
      * @return Usuario al que le pertenece el $IdUsuario
      */
-    public static function getById($idColegio)
+    public static function getById($Sie)
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Colegio
-                             WHERE idColegio = ?";
+                             WHERE Sie = ?";
 
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($idColegio));
+            $comando->execute(array($Sie));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
@@ -83,29 +83,23 @@ class DB_Colegio
      * @return bool Respuesta de la eliminación
      */
     public static function update(
-        $idColegio,
         $Sie,
         $Nombre,
         $Zona,
         $Direccion,
-        $Latitud,
-        $Longitud,
         $idDistrito
     )
     {
-        $consulta = "UPDATE Colegio SET Sie = ?,Nombre = ?, Zona = ?, Direccion = ?, Latitud = ?, Longitud = ?,idDistrito = ?  WHERE idColegio = ? ";
+        $consulta = "UPDATE Colegio SET Nombre = ?, Zona = ?, Direccion = ?,idDistrito = ?  WHERE Sie = ? ";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
                 $cmd->execute(array(
-                            $Sie,
                             $Nombre,
                             $Zona,
                             $Direccion,
-                            $Latitud,
-                            $Longitud,
                             $idDistrito,
-                            $idColegio
+                            $Sie
                 ));
                 return $cmd;
             } catch (PDOException $e) {
@@ -128,8 +122,6 @@ class DB_Colegio
         $Nombre,
         $Zona,
         $Direccion,
-        $Latitud,
-        $Longitud,
         $idDistrito
     )
     {
@@ -141,10 +133,8 @@ class DB_Colegio
             " Nombre," .
             " Zona," .
             " Direccion," .
-            " Latitud," .
-            " Longitud," .
             " idDistrito)" .
-            " VALUES( ?,?,?,?,?,?,?)";
+            " VALUES( ?,?,?,?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
@@ -153,8 +143,6 @@ class DB_Colegio
                     $Nombre,
                     $Zona,
                     $Direccion,
-                    $Latitud,
-                    $Longitud,
                     $idDistrito
                 )
             );
@@ -171,12 +159,12 @@ class DB_Colegio
      * @param $idPunto identificador del Punto
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($idColegio)
+    public static function delete($Sie)
     {
         try {
-            $comando = "DELETE FROM Colegio WHERE idColegio=? ";
+            $comando = "DELETE FROM Colegio WHERE Sie=? ";
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
-            return $sentencia->execute(array($idColegio));
+            return $sentencia->execute(array($idSie));
         } catch (PDOException $e) {
             return false;
         }

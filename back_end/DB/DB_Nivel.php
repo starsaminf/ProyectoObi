@@ -59,13 +59,15 @@ class DB_Nivel
     public static function update(
         $idNivel,
         $Nombre,
-        $Descripcion
+        $Descripcion,
+        $LimiteEdad,
+        $Tipo
     )
     {
-        $consulta = "UPDATE Nivel SET Nombre = ?, Descripcion = ?  WHERE idNivel = ? ;";
+        $consulta = "UPDATE Nivel SET Nombre = ?, Descripcion = ?,LimiteEdad = ?,Tipo = ?  WHERE idNivel = ? ;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
-                $cmd->execute(array($Nombre, $Descripcion,  $idNivel));
+                $cmd->execute(array($Nombre, $Descripcion, $LimiteEdad, $Tipo,$idNivel));
                 return $cmd;
             } catch (PDOException $e) {
                 
@@ -85,6 +87,8 @@ class DB_Nivel
     public static function insert(
         $Nombre,
         $Descripcion,
+        $LimiteEdad,
+        $Tipo,
         $idOlimpiada
     )
     {
@@ -94,14 +98,18 @@ class DB_Nivel
         $comando = "INSERT INTO Nivel ( " .
             " Nombre," .
             " Descripcion," .
+            " LimiteEdad," .
+            " Tipo," .
             " idOLimpiada)" .
-            " VALUES( ?,?,?)";
+            " VALUES( ?,?,?,?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
                     $Nombre,
                     $Descripcion,
+                    $LimiteEdad,
+                    $Tipo,
                     $idOlimpiada
                 )
             );

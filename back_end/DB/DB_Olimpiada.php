@@ -24,12 +24,19 @@ class DB_Olimpiada
 
     public static function getAllPublic()
     {
-        $consulta = "SELECT idOlimpiada,nombre,descripcion,FechaIni,FechaFin from Olimpiada ";
+        date_default_timezone_set('America/La_Paz');
+        $Fecha = date('Y/m/d h:i:s a', time());
+
+        $consulta = "SELECT idOlimpiada,nombre,descripcion,FechaIni,FechaFin, case  when (fechaIni <= ? and fechaFin >= ?) then 'En Curso'
+                when (fechaIni > ?) then 'falta para enpezar'
+                when (fechaFin < ?) then 'termino'
+                else 'En Planificacion'
+            End  as estado from Olimpiada ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute();
+            $comando->execute(array($Fecha, $Fecha, $Fecha, $Fecha));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return false;
@@ -75,17 +82,18 @@ where o.idolimpiada = p.idolimpiada and o.idolimpiada=?";
     public static function update(
         $idOlimpiada,
         $Nombre,
-        $Descripcion,
         $Baner,
+        $Descripcion,
         $Convocatoria,
         $FechaIni,
         $FechaFin,
+        $FechaLimiteEdad,
         $Estado,
         $idAdmin
     )
     {
 
-        $consulta = "UPDATE Olimpiada SET Nombre = ?, Descripcion = ?, Baner = ?,Convocatoria = ?,FechaIni = ?,FechaFin= ?,Estado= ? WHERE idOlimpiada = ?  AND idAdmin = ?;";
+        $consulta = "UPDATE Olimpiada SET Nombre = ?, Descripcion = ?, Baner = ?,Convocatoria = ?,FechaIni = ?,FechaFin= ?,FechaLimiteEdad= ?,Estado= ? WHERE idOlimpiada = ?  AND idAdmin = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
@@ -96,6 +104,7 @@ where o.idolimpiada = p.idolimpiada and o.idolimpiada=?";
                     $Convocatoria,
                     $FechaIni,
                     $FechaFin,
+                    $FechaLimiteEdad,
                     $Estado,
                     $idOlimpiada, 
                     $idAdmin

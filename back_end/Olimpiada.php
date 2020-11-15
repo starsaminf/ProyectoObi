@@ -77,6 +77,7 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Convocatoria'],
 				$_POST['FechaIni'],
 				$_POST['FechaFin'],
+				$_POST['FechaLimiteEdad'],
 				$_POST['Estado'],
 				$_POST['idAdmin']
 			);

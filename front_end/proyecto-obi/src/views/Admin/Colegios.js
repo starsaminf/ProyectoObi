@@ -182,10 +182,7 @@ const Update=async()=>{
       Nombre:       consoleSeleccionada.nombre,
       Zona:         consoleSeleccionada.zona,
       Direccion:    consoleSeleccionada.direccion,
-      Latitud:      consoleSeleccionada.latitud,
-      Longitud:     consoleSeleccionada.longitud,
-      idDistrito:   consoleSeleccionada.iddistrito,
-      idColegio:    consoleSeleccionada.idcolegio
+      idDistrito:   consoleSeleccionada.iddistrito
     },header()
   ).then(
     response => {
@@ -268,21 +265,17 @@ const Eliminar=async()=>{
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell><strong >id</strong></TableCell>
+              <TableCell><strong >Sie</strong></TableCell>
               <TableCell><strong >nombre / direccion</strong></TableCell>
-              <TableCell><strong >SIE</strong></TableCell>
-              <TableCell><strong >Ubicacion</strong></TableCell>
               <TableCell><strong >Distrito</strong></TableCell>
               <TableCell><strong >Acciones</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data2.map(console =>(
-              <TableRow key={console.idcolegio}>
-                <TableCell>{console.idcolegio}</TableCell>
-                <TableCell><strong >{console.nombre}</strong><br/><i>{console.zona}</i></TableCell>
+              <TableRow key={console.sie}>
                 <TableCell>{console.sie}</TableCell>
-                <TableCell><strong >Latitud:</strong>{console.latitud}<br/><strong>longitud:</strong>{console.longitud}</TableCell>
+                <TableCell><strong >{console.nombre}</strong><br/><i>{console.zona}</i></TableCell>
                 <TableCell><strong >{console.nd}</strong><br/><i>{console.dd}</i></TableCell>
                 <TableCell>
                   <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
@@ -316,9 +309,6 @@ const Eliminar=async()=>{
                 <br/>
                 <TextField name='direccion'  className={classes.inputMaterial} label="direccion" onChange={handleChangle} />
                 <br/>
-                <TextField name='latitud'  className={classes.inputMaterial} label="latitud" onChange={handleChangle}  value={0} />
-                <br/>
-                <TextField name='longitud'  className={classes.inputMaterial} label="longitud" onChange={handleChangle} value={0}/>
                 
                 
                 <br/>
@@ -354,19 +344,14 @@ const Eliminar=async()=>{
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Editar colegio</h3>
             <form  onSubmit={Update}>
-                <TextField name='idcolegio' disabled={true} className={classes.inputMaterial} label="idcolegio"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.idcolegio}/>
+                <TextField name='sie' disabled={true} className={classes.inputMaterial} label="Sie"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.sie}/>
                 <br/>
                 <TextField name='nombre' required className={classes.inputMaterial} label="nombre"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
-                <br/>
-                <TextField name='sie' required className={classes.inputMaterial} label="sie" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.sie}/>
                 <br/>
                 <TextField name='zona' required className={classes.inputMaterial} label="zona" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.zona}/>
                 <br/>
                 <TextField name='direccion'  className={classes.inputMaterial} label="direccion" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.direccion}/>
                 <br/>
-                <TextField name='latitud'  className={classes.inputMaterial} label="latitud" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.latitud}/>
-                <br/>
-                <TextField name='longitud'  className={classes.inputMaterial} label="longitud" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.longitud}/>
                 
                 <br/>
                 <br/>
@@ -394,7 +379,7 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Eliminar...</h3>
-            <h4>En realidad desea eliminar la noticia?</h4>
+            <h4>En realidad desea eliminar el Colegio?</h4>
             <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
               &nbsp;

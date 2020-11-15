@@ -25,13 +25,10 @@ CREATE TABLE Distrito(
 );
 
 CREATE TABLE Colegio(
-	idColegio		SERIAL PRIMARY KEY,
-	Sie 			VARCHAR(30)	NOT NULL UNIQUE,
+	Sie 			VARCHAR(30)	PRIMARY KEY,
 	Nombre          VARCHAR(30) NOT NULL,
 	Zona 			VARCHAR(100),
 	Direccion 		VARCHAR(100),
-	Latitud			DOUBLE PRECISION,
-	Longitud		DOUBLE PRECISION,
 	idDistrito		SERIAL NOT NULL,
 	foreign   key   (idDistrito)   references  Distrito ON DELETE CASCADE
 );
@@ -54,6 +51,7 @@ CREATE TABLE Olimpiada(
 	Convocatoria    VARCHAR(50),
 	FechaIni		DATE,
 	FechaFin		DATE,
+	FechaLimiteEdad	DATE,
 	Estado			VARCHAR(30),
 	idAdmin			SERIAL NOT NULL,
 	foreign   key   (idAdmin)   references  Admin ON DELETE CASCADE
@@ -74,6 +72,8 @@ CREATE TABLE Nivel(
 	idNivel			SERIAL PRIMARY KEY,
 	Nombre			VARCHAR(100),
 	Descripcion		TEXT,
+	LimiteEdad		INTEGER,
+	Tipo			VARCHAR(10),	/*Grupal o Individual*/
 	idOlimpiada		SERIAL NOT NULL,
 	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
@@ -108,45 +108,40 @@ CREATE TABLE Tutor(
 );
 
 CREATE TABLE Estudiante(
-	Rude			VARCHAR(20) PRIMARY KEY,
-	Nombre			VARCHAR(100),
-	ApPaterno		VARCHAR(30),
-	ApMaterno		VARCHAR(30),
-	Genero			VARCHAR(30),
-	FechaNac		DATE,
-	Ci 				VARCHAR(15),
-	Correo 			VARCHAR(20) UNIQUE
-);
-
-CREATE TABLE Participante(
-	idParticipante 	SERIAL PRIMARY KEY,
+	idEstudiante 	SERIAL PRIMARY KEY,
 	idTutor 		SERIAL,
-	idColegio		SERIAL,
+	Sie	  			VARCHAR(30),
 	idOlimpiada		SERIAL,
 	Rude			VARCHAR(20),
-	Fecha 			DATE,
+	Nombre			VARCHAR(100),
+	ApPaterno		VARCHAR(50),
+	ApMaterno		VARCHAR(50),
+	Celular			VARCHAR(50),
+	FechaNac		DATE,
+	Genero			VARCHAR(50),
+	Ci 				VARCHAR(50),
+	Correo 			VARCHAR(50),
 	foreign   key   (idTutor)   references  Tutor ON DELETE CASCADE,
-	foreign   key   (idColegio)   references  Colegio ON DELETE CASCADE,
-	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE,
-	foreign   key   (Rude)   references  Estudiante ON DELETE CASCADE
+	foreign   key   (Sie)   references  Colegio ON DELETE CASCADE,
+	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
 
 CREATE TABLE Participa(
 	idNivel			SERIAL NOT NULL,
-	idParticipante 	SERIAL NOT NULL,
+	idEstudiante 	SERIAL NOT NULL,
 	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE,
-	foreign   key   (idParticipante)   references  Participante 
+	foreign   key   (idEstudiante)   references  Estudiante 
 );
 
 CREATE TABLE Nota(
 	idNota			SERIAL PRIMARY KEY,
-	idParticipante 	SERIAL NOT NULL,
+	idEstudiante 	SERIAL NOT NULL,
 	idEtapa  	 	SERIAL NOT NULL,
 	idNivel		 	SERIAL NOT NULL,
 	Nota 			DOUBLE	PRECISION,
 	Observaciones	VARCHAR(30),
 	Puesto			INTEGER,
-	foreign   key   (idParticipante)   references  Participante ,
+	foreign   key   (idEstudiante)   references  Estudiante ,
 	foreign   key   (idEtapa)   references  Etapa ON DELETE CASCADE,
 	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE
 );

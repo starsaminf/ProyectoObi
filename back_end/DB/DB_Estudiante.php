@@ -21,51 +21,39 @@ class DB_Estudiante
             return false;
         }
     }
-
-    public static function getAllSimple($idOlimpiada)
+    public static function getAll_Por_Tutor_y_Olimpiada($idOlimpiada, $idTutor)
     {
-        $consulta = "select e.rude, (e.appaterno||' '||e.apmaterno||' '||e.nombre)as nombre, e.ci,
-CASE 
-    WHEN p.idparticipante IS NULL THEN false
-    ELSE true
-  END AS participa
-from estudiante e LEFT JOIN participante p
-on (e.rude=p.rude AND p.idOlimpiada = ?)";
+        $consulta = "SELECT * from Estudiante where idOlimpiada= ? AND idTutor= ? ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($idOlimpiada));
+            $comando->execute(array($idOlimpiada, $idTutor));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return false;
         }
     }
-
-
-    /**
-     * consultar usuario por Id de Usuario
-     *
-     * @param $idUsuario identificador del Usuario
-     * @return Usuario al que le pertenece el $IdUsuario
-     */
-    public static function getById($Rude)
+     public static function getVerificar(
+        $idOlimpiada,
+        $idTutor,
+        $Rude
+    )
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Estudiante
-                             WHERE Rude = ?";
+                             WHERE idTutor = ? and idOlimpiada = ? and Rude =?";
 
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($idEstudiante));
+            $comando->execute(array($idTutor, $idOlimpiada, $Rude));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
             return false;
         }
     }
-
 
     /**
      * Modificar todos los datos del usuario 
@@ -77,29 +65,47 @@ on (e.rude=p.rude AND p.idOlimpiada = ?)";
      * @return bool Respuesta de la eliminación
      */
     public static function update(
+        $idEstudiante,
+        $Sie,
         $Rude,
         $Nombre,
         $ApPaterno,
-        $ApMaterno,
-        $Genero,
-        $FechaNac,
-        $Ci,
-        $Correo
+        $ApMaterno,      
+        $Celular,
+        $FechaNac,        
+        $Genero,         
+        $Ci,             
+        $Correo 
     )
     {
-        $consulta = "UPDATE Estudiante SET Nombre = ?, ApPaterno = ?, ApMaterno = ?,Genero = ?,FechaNac = ?, Ci = ?,Correo = ? WHERE Rude = ?;";
+
+        $consulta = "UPDATE Estudiante SET ";
+        $consulta = $consulta ." Sie = ?,";
+        $consulta = $consulta ." Rude = ?,";
+        $consulta = $consulta ." Nombre = ?,";
+        $consulta = $consulta ." ApPaterno = ?,";
+        $consulta = $consulta ." ApMaterno = ?,";
+        $consulta = $consulta ." Celular = ?,";
+        $consulta = $consulta ." FechaNac = ?,";
+        $consulta = $consulta ." Genero = ?,";
+        $consulta = $consulta ." Ci = ?,";
+        $consulta = $consulta ." Correo = ? ";
+        $consulta = $consulta ." WHERE idEstudiante = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
                 $cmd->execute(array(
+                    $Sie,
+                    $Rude,
                     $Nombre,
                     $ApPaterno,
                     $ApMaterno,
-                    $Genero,
+                    $Celular,
                     $FechaNac,
+                    $Genero,
                     $Ci,
                     $Correo,
-                    $Rude));
+                    $idEstudiante));
                 return $cmd;
             } catch (PDOException $e) {
                 
@@ -117,14 +123,18 @@ on (e.rude=p.rude AND p.idOlimpiada = ?)";
      * @return bool Respuesta de la eliminación
      */
     public static function insert(
+        $idTutor,
+        $Sie,
+        $idOlimpiada,
         $Rude,
         $Nombre,
         $ApPaterno,
-        $ApMaterno,
-        $Genero,
-        $FechaNac,
-        $Ci,
-        $Correo
+        $ApMaterno,      
+        $Celular,
+        $FechaNac,        
+        $Genero,         
+        $Ci,             
+        $Correo  
     )
     {
         //encriptamos la contraseña para guardar en la base de datos
@@ -132,26 +142,34 @@ on (e.rude=p.rude AND p.idOlimpiada = ?)";
 
         // Sentencia INSERT
         $comando = "INSERT INTO Estudiante ( " .
+            " idTutor," .
+            " Sie," .
+            " idOLimpiada," .
             " Rude," .
             " Nombre," .
             " ApPaterno," .
             " ApMaterno," .
-            " Genero," .
+            " Celular," .
             " FechaNac," .
+            " Genero," .
             " Ci," .
             " Correo)" .
-            " VALUES( ?,?,?,?,?,?,?,?)";
+            " VALUES( ?,?,?,?,?,?,?,?,?,?,?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
+                    $idTutor,
+                    $Sie,
+                    $idOlimpiada,
                     $Rude,
                     $Nombre,
                     $ApPaterno,
-                    $ApMaterno,
-                    $Genero,
-                    $FechaNac,
-                    $Ci,
+                    $ApMaterno,      
+                    $Celular,
+                    $FechaNac,        
+                    $Genero,         
+                    $Ci,             
                     $Correo
                 )
             );
@@ -162,18 +180,12 @@ on (e.rude=p.rude AND p.idOlimpiada = ?)";
         }
     }
 
-    /**
-     * Eliminar el punto con el identificador especificado
-     *
-     * @param $idPunto identificador del Punto
-     * @return bool Respuesta de la eliminación
-     */
-    public static function delete($Rude)
+    public static function delete($idEstudiante)
     {
         try {
-            $comando = "DELETE FROM Estudiante WHERE Rude=?";
+            $comando = "DELETE FROM Estudiante WHERE idEstudiante=?";
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
-            return $sentencia->execute(array($Rude));
+            return $sentencia->execute(array($idEstudiante));
         } catch (PDOException $e) {
             return false;
         }

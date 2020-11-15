@@ -2,7 +2,7 @@ import React ,{ useEffect, useState }from "react";
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField} from '@material-ui/core';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, Input} from '@material-ui/core';
+import {Modal} from '@material-ui/core';
 
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
@@ -92,6 +92,7 @@ export default function OLimpiada() {
     baner:'',
     fechaini:'',
     fechafin:'',
+    fecha_limite_edad:'',
     estado:'',
     mensaje:''
   })
@@ -113,7 +114,6 @@ const getbyId=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
       if(response.data.estado===1){
         const v = response.data.val;
         consoleSeleccionada.nombre =""+v.nombre;
@@ -122,6 +122,7 @@ const getbyId=async()=>{
         consoleSeleccionada.convocatoria =""+v.convocatoria;
         consoleSeleccionada.fechaini =""+v.fechaini;
         consoleSeleccionada.fechafin =""+v.fechafin;
+        consoleSeleccionada.fecha_limite_edad= ""+v.fechalimiteedad;
         setConsolaSeleccionada(prevState=>({
           ...prevState,
           ['estado']:""+v.estado
@@ -167,6 +168,7 @@ const Update=async()=>{
         Convocatoria:   consoleSeleccionada.convocatoria,
         FechaIni:       consoleSeleccionada.fechaini,
         FechaFin:       consoleSeleccionada.fechafin,
+        FechaLimiteEdad:consoleSeleccionada.fecha_limite_edad,
         Estado:         consoleSeleccionada.estado,       
         idAdmin:        cookies.get('idusuario')
     },header()
@@ -224,7 +226,7 @@ useEffect(async()=>{
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
-                  <GridItem xs={12} sm={12} md={6}>
+                  <GridItem xs={12} sm={4} md={4}>
                     <TextField
                       variant="outlined"
                       margin="normal"
@@ -235,11 +237,13 @@ useEffect(async()=>{
                       name="fechaini"
                       type="date"
                       InputLabelProps={{shrink:true}}
+                    
                       value={consoleSeleccionada.fechaini}
                       onChange={handleChangle}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
+                  
+                  <GridItem xs={12} sm={4} md={4}>
                     <TextField
                       variant="outlined"
                       margin="normal"
@@ -251,6 +255,21 @@ useEffect(async()=>{
                       type="date"
                       InputLabelProps={{shrink:true}}
                       value={consoleSeleccionada.fechafin}
+                      onChange={handleChangle}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={4} md={4}>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="fecha_limite_edad"
+                      name="fecha_limite_edad"
+                      label="Fecha Limite para cumplir edad"
+                      type="date"
+                      InputLabelProps={{shrink:true}}
+                      value={consoleSeleccionada.fecha_limite_edad}
                       onChange={handleChangle}
                     />
                   </GridItem>

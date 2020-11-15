@@ -26,12 +26,12 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'NO hay Estudiantes')
+							'mensaje' => 'no hay Estudiantes que mostrar')
 					);
 				}
 	}
-	if($_POST['_metod']=='getAllSimple'){
-			$retorno = DB_Estudiante::getAllSimple($_POST['idOlimpiada']);
+	if($_POST['_metod']=='getAll_Por_Tutor_y_Olimpiada'){
+			$retorno = DB_Estudiante::getAll_Por_Tutor_y_Olimpiada($_POST['idOlimpiada'], $_POST['idTutor']);
 			if ($retorno) {
 		            $datos["estado"] = 1;
 		            $datos["val"] = $retorno;
@@ -40,44 +40,65 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'NO hay Estudiantes')
+							'mensaje' => 'no hay Estudiantes que mostrar')
 					);
 				}
 	}
-
+	if($_POST['_metod']=='getVerificar'){
+			$retorno = DB_Estudiante::getVerificar($_POST['idOlimpiada'], $_POST['idTutor'], $_POST['Rude']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no hay Estudiantes que mostrar')
+					);
+				}
+	}
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Estudiante::Insert(
+				$_POST['idTutor'],
+				$_POST['Sie'],
+				$_POST['idOlimpiada'],
 				$_POST['Rude'],
 				$_POST['Nombre'],
 				$_POST['ApPaterno'],
 				$_POST['ApMaterno'],
-				$_POST['Genero'],
+				$_POST['Celular'],
 				$_POST['FechaNac'],
+				$_POST['Genero'],
 				$_POST['Ci'],
 				$_POST['Correo']
+
 			);
 			if ($retorno) {
 		            print json_encode(
 						array(
 							'estado' => 1,
-							'mensaje' => 'El Estudiante se Agrego correctamente')
+							'mensaje' => 'El estudiante se Agrego correctamente')
 					);
 				} else {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo agregar el nuevo Estudiante')
+							'mensaje' => 'No se pudo registrar el Estudiante')
 					);
 				}
 	}
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_Estudiante::Update(
+				$_POST['idEstudiante'],
+				$_POST['Sie'],
 				$_POST['Rude'],
 				$_POST['Nombre'],
 				$_POST['ApPaterno'],
 				$_POST['ApMaterno'],
-				$_POST['Genero'],
+				$_POST['Celular'],
 				$_POST['FechaNac'],
+				$_POST['Genero'],
 				$_POST['Ci'],
 				$_POST['Correo']
 			);
@@ -95,9 +116,27 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getById'){
+			$retorno = DB_Estudiante::getById(
+				$_POST['idEstudiante']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'val' => $retorno)
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo guardar los cambios')
+					);
+				}
+	}
 	if($_POST['_metod']=='Delete'){
 			$retorno = DB_Estudiante::Delete(
-				$_POST['Rude']
+				$_POST['idEstudiante']
 			);
 			if ($retorno) {
 		            print json_encode(

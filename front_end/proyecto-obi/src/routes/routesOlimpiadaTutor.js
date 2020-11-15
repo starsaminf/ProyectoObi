@@ -27,7 +27,7 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import Atraz from "../layouts/Tutor.js";
-import DashboardPage from "../views/Tutor/Dashboard.js";
+import DashboardPage from "../views/OlimpiadaTutor/Dashboard.js";
 import enBlanco from "../views/Tutor/enBlanco.js"
 import Etapa1 from "../views/OlimpiadaTutor/Etapa1.js";//../views/olimpiadaTutor/Etapa1.js"
 // core components/views for RTL layout

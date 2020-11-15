@@ -65,8 +65,6 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Nombre'],
 				$_POST['Zona'],
 				$_POST['Direccion'],
-				$_POST['Latitud'],
-				$_POST['Longitud'],
 				$_POST['idDistrito']
 			);
 			if ($retorno) {
@@ -87,13 +85,10 @@ if (!empty($_POST['_metod'])) {
 
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_Colegio::Update(
-				$_POST['idColegio'],
 				$_POST['Sie'],
 				$_POST['Nombre'],
 				$_POST['Zona'],
 				$_POST['Direccion'],
-				$_POST['Latitud'],
-				$_POST['Longitud'],
 				$_POST['idDistrito']
 			);
 			if ($retorno) {

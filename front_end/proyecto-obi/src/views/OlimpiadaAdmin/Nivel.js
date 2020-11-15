@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Radio} from '@material-ui/core';
 import {Edit,Delete, Transform} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,12 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
+//radiooooo
+
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 // host components
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
@@ -63,6 +69,11 @@ export default function SimpleModal() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
+  const [value, setValue] = useState('individual');
+
+  const handleChangeRadio = (event) => {
+    setValue(event.target.value);
+  };
   const [modalStyle] = useState(getModalStyle);
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
@@ -74,6 +85,7 @@ export default function SimpleModal() {
     idnivel:'',
     nombre:'',
     descripcion:'',
+    limiteedad:'',
     idAdmin:''
   })
   const handleChangle = e => {
@@ -145,21 +157,21 @@ const seleccionarConsola =(consola,caso)=>{
   const Insert=async()=>{
     handleModalInsert();
       await axios.post(baseUrl,{
-        _metod: 'Insert',
-        Nombre:         consoleSeleccionada.nombre,
-        Descripcion:   consoleSeleccionada.descripcion,
-        idOlimpiada:        cookies.get('idolimpiada')
+        _metod:           'Insert',
+        Nombre:           consoleSeleccionada.nombre,
+        Descripcion:      consoleSeleccionada.descripcion,
+        LimiteEdad:       consoleSeleccionada.limiteedad,
+        Tipo:             value,
+        idOlimpiada:      cookies.get('idolimpiada')
       },header()
     ).then(
       response => {
+        console.log(response);
         consoleSeleccionada.mensaje = response.data.mensaje;
         handleModalMensaje();
         if(response.data.estado===1){
           //setData(response.data.admin);
           getAll();
-          consoleSeleccionada.idnivel = '';
-          consoleSeleccionada.nombre = '';
-          consoleSeleccionada.descripcion = '';
         }
       }
     ).catch(
@@ -172,11 +184,13 @@ const seleccionarConsola =(consola,caso)=>{
 const Update=async()=>{
   handleModalUpdate();
     await axios.post(baseUrl,{
-      _metod: 'Update',
-      idNivel:     consoleSeleccionada.idnivel,
-      Nombre:         consoleSeleccionada.nombre,
-      Descripcion:   consoleSeleccionada.descripcion,
-      idOlimpiada:        cookies.get('idolimpiada')
+      _metod:           'Update',
+      idNivel:          consoleSeleccionada.idnivel,
+      Nombre:           consoleSeleccionada.nombre,
+      Descripcion:      consoleSeleccionada.descripcion,
+      LimiteEdad:       consoleSeleccionada.limiteedad,
+      Tipo:             value,
+      idOlimpiada:      cookies.get('idolimpiada')
     },header()
   ).then(
     response => {
@@ -209,9 +223,6 @@ const Eliminar=async()=>{
       if(response.data.estado===1){
         //setData(response.data.admin);
         getAll();
-        consoleSeleccionada.idolimpiada = '';
-        consoleSeleccionada.nombre = '';
-        consoleSeleccionada.descripcion = '';
       }
     }
   ).catch(
@@ -251,20 +262,26 @@ const Eliminar=async()=>{
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell><strong >id</strong></TableCell>
+              <TableCell><strong ><center>id</center></strong></TableCell>
               <TableCell><strong >Nombre / descripcion</strong></TableCell>
-              <TableCell><strong >Acciones</strong></TableCell>
+              <TableCell><strong ><center>Edad Maxima</center></strong></TableCell>
+              <TableCell><strong ><center>Modo</center></strong></TableCell>
+              <TableCell><strong ><center>Acciones</center></strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data2.map(console =>(
               <TableRow key={console.idnivel}>
-                <TableCell>{console.idnivel}</TableCell>
+                <TableCell><center>{console.idnivel}</center></TableCell>
                 <TableCell><strong >{console.nombre}</strong><br/><i>{console.descripcion}</i></TableCell>
+                <TableCell><center>{console.limiteedad}</center></TableCell>
+                <TableCell><center>{console.tipo}</center></TableCell>
                 <TableCell>
-                  <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
-                    &nbsp;&nbsp;&nbsp;
-                  <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
+                  <center>
+                    <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
+                      &nbsp;&nbsp;&nbsp;
+                    <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
+                  </center>
                 </TableCell>
               </TableRow>
             ))}
@@ -289,14 +306,39 @@ const Eliminar=async()=>{
                   
                   <TextField variant="outlined"  multiline={true} rows={5} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion del nivel"  onChange={handleChangle} />
                   
+        
+                  <GridContainer>
+                    <GridItem  xs={4} sm={4} md={4}>
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">Tipo de Nivel</FormLabel>
+                        <RadioGroup aria-label="gender" name="tipo" value={value} onChange={handleChangeRadio}>
+                          <FormControlLabel value="individual" control={<Radio/>} label="Individual" />
+                          <FormControlLabel value="grupal" control={<Radio />} label="Grupal" />
+                        </RadioGroup>
+                      </FormControl>
+                    </GridItem>
+                    <GridItem  xs={8} sm={8} md={8}>
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="limiteedad"
+                        label="Maxima edad de Participantes"
+                        name="limiteedad"
+                        type="number"
+                        onChange={handleChangle}
+                      />
+                    </GridItem>
+                  </GridContainer>
                   <GridContainer >
                       <GridItem xs={12} sm={12} md={3}>
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                          <Button type="submit" fullWidth variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
                       </GridItem>
                       <GridItem xs={12} sm={12} md={5}>
-                          <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                          <Button type="submit" fullWidth variant="contained" color="primary"  >Guardar</Button>
                       </GridItem>
                   </GridContainer>
               </form>
@@ -320,6 +362,34 @@ const Eliminar=async()=>{
                 
                 <TextField variant="outlined"  multiline={true} rows={5} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion del nivel" value={consoleSeleccionada&&consoleSeleccionada.descripcion} onChange={handleChangle} />
                 
+                
+
+                <GridContainer>
+                    <GridItem  xs={4} sm={4} md={4}>
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">Tipo de Nivel</FormLabel>
+                        <RadioGroup aria-label="gender" name="tipo" defaultValue={consoleSeleccionada&&consoleSeleccionada.tipo} onChange={handleChangeRadio}>
+                          <FormControlLabel value="individual" control={<Radio/>} label="Individual" />
+                          <FormControlLabel value="grupal" control={<Radio />} label="Grupal" />
+                        </RadioGroup>
+                      </FormControl>
+                    </GridItem>
+                    <GridItem  xs={8} sm={8} md={8}>
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="limiteedad"
+                        label="Maxima edad de Participantes"
+                        name="limiteedad"
+                        type="number"
+                        value={consoleSeleccionada&&consoleSeleccionada.limiteedad}
+                        onChange={handleChangle}
+                      />
+                    </GridItem>
+                  </GridContainer>
+
                 <GridContainer >
                     <GridItem xs={12} sm={12} md={1}>
                     </GridItem>

@@ -99,7 +99,7 @@ const getbyId=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       if(response.data.estado===1){
         const v = response.data.val;
         consoleSeleccionada.nombre =""+v.nombre;
@@ -125,7 +125,7 @@ const getbyId=async()=>{
       },header()
     ).then(
       response => {
-        console.log(response);
+        //console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
         }
@@ -153,7 +153,7 @@ const Update=async()=>{
     },header()
   ).then(
     response => {
-        console.log(response);
+        //console.log(response);
       setConsolaSeleccionada(prevState=>({
         ...prevState,
         ['mensaje']:response.data.mensaje
@@ -168,7 +168,7 @@ const Update=async()=>{
 };
 //** Seleccionamos consola */
 const seleccionarConsola =(consola)=>{
-  console.log(consola.idolimpiada)
+  //console.log(consola.idolimpiada)
   //en esta parte abrimos el admin de tutor con el id =console.logidOLimpiada
   cookies.set('idolimpiada', consola.idolimpiada, {path:"/"});
   window.location.href="../olimpiadaTutor/dashboard";
@@ -176,7 +176,7 @@ const seleccionarConsola =(consola)=>{
 //POr defecto al entrar
   const handleSubmitUpdate = event =>{
     event.preventDefault();
-    console.log("Editamos");
+    //console.log("Editamos");
     Update();
     //ejecutamos el axios
   }
@@ -246,8 +246,8 @@ const seleccionarConsola =(consola)=>{
             <TableRow>
               <TableCell><strong >id</strong></TableCell>
               <TableCell><strong >nombre/ descripcion</strong></TableCell>
-              <TableCell><strong >Fechas</strong></TableCell>
-              <TableCell><strong >Acciones</strong></TableCell>
+              <TableCell><strong ><center>Fechas</center></strong></TableCell>
+              <TableCell><strong ><center>Acciones</center></strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -256,8 +256,12 @@ const seleccionarConsola =(consola)=>{
                 <TableCell>{console.idolimpiada}</TableCell>
                 <TableCell><strong >{console.nombre}</strong><br/><i>{console.descripcion}</i></TableCell>
                 <TableCell><strong >Inicio:</strong>{console.fechaini}<br/><strong>final:</strong>{console.fechafin}</TableCell>
-                <TableCell>
-                  <Button color= "primary"onClick={()=>{seleccionarConsola(console)}}> Inicar</Button>
+                <TableCell><center>
+                  {(console.estado === "En Curso")?
+                    <Button color= "primary"onClick={()=>{seleccionarConsola(console)}}> Iniciar</Button>
+                    : console.estado
+                  }
+                  </center>
                 </TableCell>
               </TableRow>
             ))}
