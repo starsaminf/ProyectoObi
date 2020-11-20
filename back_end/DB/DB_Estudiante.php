@@ -21,6 +21,31 @@ class DB_Estudiante
             return false;
         }
     }
+    public static function getAllEstudiantesDeTutor(
+        $idOlimpiada,
+        $idTutor
+    ){
+        $consulta = "select a.idEstudiante,a.rude, (a.apPaterno||' '||a.apMaterno||' '||a.Nombre) as nombre,(date_part('year',age(o.FechaLimiteEdad, a.fechaNac))::int) as edad, a.m as ngrupos
+            from (select e.*,COALESCE(n.c,0) as m
+            from Estudiante e
+            left join (select p.idEstudiante,count(p.idgrupo) as c
+                from integrante_de p
+                group by p.idEstudiante
+            ) n on n.idEstudiante= e.idEstudiante
+            ) a, Olimpiada o
+            where a.idOlimpiada = ? and a.idtutor =?
+            and o.idOlimpiada=a.idOlimpiada;
+        ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idOlimpiada,$idTutor));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
     public static function getAll_Por_Tutor_y_Olimpiada($idOlimpiada, $idTutor)
     {
         $consulta = "SELECT * from Estudiante where idOlimpiada= ? AND idTutor= ? ";

@@ -6,35 +6,8 @@
 require 'Coneccion/Database.php';
 require 'Coneccion/cripto.php';
 
-class DB_Participa
+class DB_Integrante_de
 {
-
-    public static function getAll()
-    {
-        $consulta = "SELECT * from Participa";
-        try {
-            // Preparar sentencia
-            $comando = Database::getInstance()->getDb()->prepare($consulta);
-            // Ejecutar sentencia preparada
-            $comando->execute();
-            return $comando->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return false;
-        }
-    }
-    public static function getEstudianteParticipa($idParticipante)
-    {
-        $consulta = "SELECT n.* from Participa p , Nivel  n where p.idParticipante = ? and n.idNivel = p.idNivel ";
-        try {
-            // Preparar sentencia
-            $comando = Database::getInstance()->getDb()->prepare($consulta);
-            // Ejecutar sentencia preparada
-            $comando->execute(array($idParticipante));
-            return $comando->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return false;
-        }
-    }
 
     /**
      * Modificar todos los datos del usuario 
@@ -56,27 +29,27 @@ class DB_Participa
      */
     public static function insert(
         $idNivel,
-        $idParticipante
+        $idEstudiante
     )
     {
         //encriptamos la contraseña para guardar en la base de datos
         //$pasword = substr( md5(microtime()), 1, 20);
         // Sentencia INSERT
-        $comando = "INSERT INTO Participa ( " .
-            " idNivel," .
-            " idParticipante)" .
+        $comando = "INSERT INTO Integrante_de( " .
+            " idGrupo," .
+            " idEstudiante)" .
             " VALUES( ?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
                     $idNivel,
-                    $idParticipante
+                    $idEstudiante
                 )
             );
             return $sentencia;
         }catch (PDOException $e) {
-            return $e;
+            return false;
         }
     }
 
@@ -86,14 +59,14 @@ class DB_Participa
      * @param $idPunto identificador del Punto
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($idNivel,$idParticipante)
+    public static function delete($idGrupo,$idEstudiante)
     {
         try {
-            $comando = "DELETE FROM Participa WHERE idNivel = ? AND idParticipante = ?";
+            $comando = "DELETE FROM Integrante_de WHERE idGrupo = ? AND idEstudiante = ?";
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
-            return $sentencia->execute(array($idNivel, $idParticipante));
+            return $sentencia->execute(array($idGrupo, $idEstudiante));
         } catch (PDOException $e) {
-            return false;
+            return $e;
         }
     }
 }

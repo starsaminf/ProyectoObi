@@ -1,22 +1,26 @@
 import React ,{ useEffect, useState }from "react";
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField} from '@material-ui/core';
+import {Divider, TextField} from '@material-ui/core';
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, Input} from '@material-ui/core';
 
 // core components
-import GridItem from "../../components/Grid/GridItem.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
-import Button from "../../components/CustomButtons/Button.js";
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardBody from "../../components/Card/CardBody.js";
+import GridItem from "../../../components/Grid/GridItem.js";
+import GridContainer from "../../../components/Grid/GridContainer.js";
+import Button from "../../../components/CustomButtons/Button.js";
 
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
-import HOST from "../../variables/general.js";
+import HOST from "../../../variables/general.js";
 import axios from 'axios';
-
+//**  EXPANDIBLE */
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
+import ReactMarkdown from 'react-markdown';
 const baseUrl=HOST.Url+'Etapa.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -77,19 +81,23 @@ const useStyles = makeStyles((theme) => ({
   },
   inputMaterial:{
     width:'100%'
-  }
+  },
+  root: {
+    width: '100%',
+  },
 }));
 
 //const useStyles = makeStyles(styles);
 
-export default function OLimpiada() {
+export default function DescripcionEtapa(props) {
   const classes = useStyles();
   const [data,setData]=useState([]);
   const [modalStyle] = useState(getModalStyle);
   const [openModalMensaje, setOpenMensaje] = useState(false);
+  const [value,   setValue]    = useState(false);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
     idolimpiada:cookies.get('idolimpiada'),
-    idetapa:'',
+    idetapa:props.idetapa,
     tipo:'1',//enesta parte describimos el nivel 
     nombre:'',
     descripcion:'',
@@ -102,7 +110,7 @@ export default function OLimpiada() {
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
       ...prevState,
-      [name]:value
+      [name]:(value===null)?'':value
     }))
   }
   const handleModalMensaje = () => {
@@ -110,25 +118,22 @@ export default function OLimpiada() {
   };
   //**      GETBYID  */
 const getbyId=async()=>{
-  console.log("GTEbYiD");
     await axios.post(baseUrl,{
         _metod:         'getById',
-        tipo:           consoleSeleccionada.tipo,
+        idEtapa:        consoleSeleccionada.idetapa,
         idOlimpiada:    consoleSeleccionada.idolimpiada
     },header()
   ).then(
     response => {
       console.log(response);
       if(response.data.estado===1){
-        const v = response.data.val;
-        consoleSeleccionada.idetapa =""+v.idetapa;
-        consoleSeleccionada.nombre =""+v.nombre;
-        consoleSeleccionada.descripcion =""+v.descripcion;
-        consoleSeleccionada.fechaini =""+v.fechaini;
-        consoleSeleccionada.fechafin =""+v.fechafin;
+        consoleSeleccionada.nombre=(response.data.val.nombre===null)?"":response.data.val.nombre;
+        consoleSeleccionada.descripcion=(response.data.val.descripcion===null)?"":response.data.val.descripcion;
+        consoleSeleccionada.fechaini=(response.data.val.fechaini===null)?"":response.data.val.fechaini;
+        consoleSeleccionada.fechafin=(response.data.val.fechafin===null)?"":response.data.val.fechafin;
         setConsolaSeleccionada(prevState=>({
           ...prevState,
-          ['estado']:""+v.estado
+          ['mensaje']:""
         }))
       }
     }
@@ -154,7 +159,6 @@ const Update=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
       setConsolaSeleccionada(prevState=>({
         ...prevState,
         ['mensaje']:response.data.mensaje
@@ -172,21 +176,28 @@ const handleSubmit = event =>{
   Update();
   //ejecutamos el axios
 }
+const ClickAccion = () =>{
+  if(!value){
+    getbyId();
+    setValue(!value);
+  }
+}
 useEffect(async()=>{
-    
-  getbyId();
 },[]);
 
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Detalles de la Etapa</h4>
-            </CardHeader>
-            <CardBody>
-              <form onSubmit={handleSubmit}>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          onClick={ClickAccion}
+          >
+            <Typography className={classes.heading}>Detalles de etapa</Typography>
+          </AccordionSummary>
+          <AccordionDetails  >         
+              <form onSubmit={handleSubmit} className={classes.root}>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <TextField variant="outlined" margin="normal" fullWidth name='nombre' required className={classes.nombre} label="Nombre de  Etapa" value={consoleSeleccionada.nombre} onChange={handleChangle}/>
@@ -229,30 +240,15 @@ useEffect(async()=>{
                     />
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={8}>
-
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <Button type="submit" fullWidth variant="contained" color="primary" >Guardar Cambios</Button>
-                  </GridItem>
-                </GridContainer>
+                <Divider/>
+                <AccordionActions>
+                  <Button type="submit"variant="contained" color="primary" >Guardar Cambios</Button>
+                  
+                </AccordionActions>
               </form>
-            </CardBody>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Estudiantes</h4>
-              <p className={classes.cardCategoryWhite}>Estudiantes aprobados</p>
-            </CardHeader>
-            <CardBody>
-              Aqui van los estudiantes weeee
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
+              
+      </AccordionDetails>
+                          </Accordion>
       <Modal
           open={openModalMensaje}
           onClose={handleModalMensaje}

@@ -35,7 +35,7 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Nombre'],
 				$_POST['Descripcion'],
 				$_POST['LimiteEdad'],
-				$_POST['Tipo'],
+				$_POST['LimitePorGrupo'],
 				$_POST['idOlimpiada']
 			);
 			if ($retorno) {
@@ -66,7 +66,7 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Nombre'],
 				$_POST['Descripcion'],
 				$_POST['LimiteEdad'],
-				$_POST['Tipo']
+				$_POST['LimitePorGrupo']
 			);
 			if ($retorno) {
 		            print json_encode(

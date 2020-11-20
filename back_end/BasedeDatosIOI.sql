@@ -73,7 +73,7 @@ CREATE TABLE Nivel(
 	Nombre			VARCHAR(100),
 	Descripcion		TEXT,
 	LimiteEdad		INTEGER,
-	Tipo			VARCHAR(10),	/*Grupal o Individual*/
+	LimitePorGrupo	INTEGER,	/*Grupal o Individual*/
 	idOlimpiada		SERIAL NOT NULL,
 	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
@@ -126,26 +126,32 @@ CREATE TABLE Estudiante(
 	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
 
-CREATE TABLE Participa(
-	idNivel			SERIAL NOT NULL,
-	idEstudiante 	SERIAL NOT NULL,
+CREATE TABLE Grupo(
+	idGrupo			SERIAL PRIMARY KEY,
+	idNivel 		SERIAL NOT NULL,
+	idTutor 		SERIAL NOT NULL,
+	Nombre			Varchar(50),
 	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE,
-	foreign   key   (idEstudiante)   references  Estudiante 
+	foreign   key   (idTutor)   references  Tutor ON DELETE CASCADE
+);
+
+CREATE TABLE Integrante_de(
+	idEstudiante  	SERIAL NOT NULL,
+	idGrupo			SERIAL NOT NULL,
+	foreign   key   (idEstudiante)   references  Estudiante ,
+	foreign   key   (idGrupo)   references  Grupo ON DELETE CASCADE
 );
 
 CREATE TABLE Nota(
 	idNota			SERIAL PRIMARY KEY,
-	idEstudiante 	SERIAL NOT NULL,
 	idEtapa  	 	SERIAL NOT NULL,
-	idNivel		 	SERIAL NOT NULL,
+	idGrupo			SERIAL NOT NULL,
 	Nota 			DOUBLE	PRECISION,
 	Observaciones	VARCHAR(30),
 	Puesto			INTEGER,
-	foreign   key   (idEstudiante)   references  Estudiante ,
-	foreign   key   (idEtapa)   references  Etapa ON DELETE CASCADE,
-	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE
+	foreign   key   (idEtapa)   references  Etapa ,
+	foreign   key   (idGrupo)   references  Grupo ON DELETE CASCADE
 );
-
 
 --------------------------------------------------
 -- Insertamos datos a la base de datos

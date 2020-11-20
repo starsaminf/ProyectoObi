@@ -86,6 +86,7 @@ export default function SimpleModal() {
     nombre:'',
     descripcion:'',
     limiteedad:'',
+    limiteporgrupo:'',
     idAdmin:''
   })
   const handleChangle = e => {
@@ -144,6 +145,9 @@ const seleccionarConsola =(consola,caso)=>{
         if(response.data.estado===1){
           setData(response.data.val);
           setData2(response.data.val);
+        }else{
+          setData([]);
+          setData2([]);
         }
       }
     ).catch(
@@ -161,12 +165,12 @@ const seleccionarConsola =(consola,caso)=>{
         Nombre:           consoleSeleccionada.nombre,
         Descripcion:      consoleSeleccionada.descripcion,
         LimiteEdad:       consoleSeleccionada.limiteedad,
-        Tipo:             value,
+        LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
         idOlimpiada:      cookies.get('idolimpiada')
       },header()
     ).then(
       response => {
-        console.log(response);
+        //console.log(response);
         consoleSeleccionada.mensaje = response.data.mensaje;
         handleModalMensaje();
         if(response.data.estado===1){
@@ -189,7 +193,7 @@ const Update=async()=>{
       Nombre:           consoleSeleccionada.nombre,
       Descripcion:      consoleSeleccionada.descripcion,
       LimiteEdad:       consoleSeleccionada.limiteedad,
-      Tipo:             value,
+      LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
       idOlimpiada:      cookies.get('idolimpiada')
     },header()
   ).then(
@@ -218,6 +222,9 @@ const Eliminar=async()=>{
     },header()
   ).then(
     response => {
+      
+      //console.log("asaasas");
+      //console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){
@@ -265,7 +272,7 @@ const Eliminar=async()=>{
               <TableCell><strong ><center>id</center></strong></TableCell>
               <TableCell><strong >Nombre / descripcion</strong></TableCell>
               <TableCell><strong ><center>Edad Maxima</center></strong></TableCell>
-              <TableCell><strong ><center>Modo</center></strong></TableCell>
+              <TableCell><strong ><center>Maximo por grupo</center></strong></TableCell>
               <TableCell><strong ><center>Acciones</center></strong></TableCell>
             </TableRow>
           </TableHead>
@@ -275,7 +282,7 @@ const Eliminar=async()=>{
                 <TableCell><center>{console.idnivel}</center></TableCell>
                 <TableCell><strong >{console.nombre}</strong><br/><i>{console.descripcion}</i></TableCell>
                 <TableCell><center>{console.limiteedad}</center></TableCell>
-                <TableCell><center>{console.tipo}</center></TableCell>
+                <TableCell><center>{console.limiteporgrupo}</center></TableCell>
                 <TableCell>
                   <center>
                     <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
@@ -308,16 +315,20 @@ const Eliminar=async()=>{
                   
         
                   <GridContainer>
-                    <GridItem  xs={4} sm={4} md={4}>
-                      <FormControl component="fieldset">
-                        <FormLabel component="legend">Tipo de Nivel</FormLabel>
-                        <RadioGroup aria-label="gender" name="tipo" value={value} onChange={handleChangeRadio}>
-                          <FormControlLabel value="individual" control={<Radio/>} label="Individual" />
-                          <FormControlLabel value="grupal" control={<Radio />} label="Grupal" />
-                        </RadioGroup>
-                      </FormControl>
+                    <GridItem  xs={6} sm={6} md={6}>
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="limiteporgrupo"
+                        label="Numero de Integrantes por grupo"
+                        name="limiteporgrupo"
+                        type="number"
+                        onChange={handleChangle}
+                      />
                     </GridItem>
-                    <GridItem  xs={8} sm={8} md={8}>
+                    <GridItem  xs={6} sm={6} md={6}>
                       <TextField
                         variant="outlined"
                         margin="normal"
@@ -365,16 +376,21 @@ const Eliminar=async()=>{
                 
 
                 <GridContainer>
-                    <GridItem  xs={4} sm={4} md={4}>
-                      <FormControl component="fieldset">
-                        <FormLabel component="legend">Tipo de Nivel</FormLabel>
-                        <RadioGroup aria-label="gender" name="tipo" defaultValue={consoleSeleccionada&&consoleSeleccionada.tipo} onChange={handleChangeRadio}>
-                          <FormControlLabel value="individual" control={<Radio/>} label="Individual" />
-                          <FormControlLabel value="grupal" control={<Radio />} label="Grupal" />
-                        </RadioGroup>
-                      </FormControl>
+                    <GridItem  xs={6} sm={6} md={6}>
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="limiteporgrupo"
+                        label="Numero de Integrantes por grupo"
+                        name="limiteporgrupo"
+                        type="number"
+                        value={consoleSeleccionada&&consoleSeleccionada.limiteporgrupo}
+                        onChange={handleChangle}
+                      />
                     </GridItem>
-                    <GridItem  xs={8} sm={8} md={8}>
+                    <GridItem  xs={6} sm={6} md={6}>
                       <TextField
                         variant="outlined"
                         margin="normal"

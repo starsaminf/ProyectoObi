@@ -12,6 +12,7 @@ import CardAvatar from "../components/Card/CardAvatar.js";
 import CardBody from "../components/Card/CardBody.js";
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
 import CardFooter from "../components/Card/CardFooter.js";
+import ReactMarkdown from 'react-markdown';
 import avatar from "../assets/img/faces/marc.jpg";
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js";
 // wiservise y coneecciones
@@ -73,6 +74,7 @@ export default function UserProfile() {
     correo:'',
     celular:'',
     carnet:'',
+    fechalimiteedad:'',
     v:[],
     idolimpiada:''
   })
@@ -105,6 +107,7 @@ const getbyId=async()=>{
         consoleSeleccionada.nombre =""+v.nombre;
         consoleSeleccionada.correo =""+v.correo;
         consoleSeleccionada.celular =""+v.celular;
+        consoleSeleccionada.fechalimiteedad=""+v.fechalimiteedad;
         setConsolaSeleccionada(prevState=>({
           ...prevState,
           ['carnet']:""+v.ci
@@ -171,6 +174,7 @@ const seleccionarConsola =(consola)=>{
   //console.log(consola.idolimpiada)
   //en esta parte abrimos el admin de tutor con el id =console.logidOLimpiada
   cookies.set('idolimpiada', consola.idolimpiada, {path:"/"});
+  cookies.set('fechalimiteedad', consola.fechalimiteedad, {path:"/"});
   window.location.href="../olimpiadaTutor/dashboard";
 };
 //POr defecto al entrar
@@ -254,7 +258,7 @@ const seleccionarConsola =(consola)=>{
             {data.map(console =>(
               <TableRow key={console.idolimpiada}>
                 <TableCell>{console.idolimpiada}</TableCell>
-                <TableCell><strong >{console.nombre}</strong><br/><i>{console.descripcion}</i></TableCell>
+                <TableCell><strong >{console.nombre}</strong><br/><i><ReactMarkdown>{(console.descripcion.length>400)?console.descripcion.substring(0,400)+"...":console.descripcion}</ReactMarkdown></i></TableCell>
                 <TableCell><strong >Inicio:</strong>{console.fechaini}<br/><strong>final:</strong>{console.fechafin}</TableCell>
                 <TableCell><center>
                   {(console.estado === "En Curso")?

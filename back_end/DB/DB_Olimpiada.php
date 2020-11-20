@@ -27,7 +27,7 @@ class DB_Olimpiada
         date_default_timezone_set('America/La_Paz');
         $Fecha = date('Y/m/d h:i:s a', time());
 
-        $consulta = "SELECT idOlimpiada,nombre,descripcion,FechaIni,FechaFin, case  when (fechaIni <= ? and fechaFin >= ?) then 'En Curso'
+        $consulta = "SELECT idOlimpiada,nombre,descripcion,FechaIni,FechaFin,FechaLimiteEdad, case  when (fechaIni <= ? and fechaFin >= ?) then 'En Curso'
                 when (fechaIni > ?) then 'falta para enpezar'
                 when (fechaFin < ?) then 'termino'
                 else 'En Planificacion'

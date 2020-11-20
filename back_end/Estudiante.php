@@ -29,6 +29,22 @@ if (!empty($_POST['_metod'])) {
 							'mensaje' => 'no hay Estudiantes que mostrar')
 					);
 				}
+	}if($_POST['_metod']=='getAllEstudiantesDeTutor'){
+			$retorno = DB_Estudiante::getAllEstudiantesDeTutor(
+				$_POST['idOlimpiada'],
+				$_POST['idTutor']
+			);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no hay Estudiantes que mostrar')
+					);
+				}
 	}
 	if($_POST['_metod']=='getAll_Por_Tutor_y_Olimpiada'){
 			$retorno = DB_Estudiante::getAll_Por_Tutor_y_Olimpiada($_POST['idOlimpiada'], $_POST['idTutor']);

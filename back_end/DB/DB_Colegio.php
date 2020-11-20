@@ -149,7 +149,7 @@ class DB_Colegio
             
             return $sentencia;
         }catch (PDOException $e) {
-            return $e;
+            return false;
         }
     }
 

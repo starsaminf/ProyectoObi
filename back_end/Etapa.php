@@ -29,6 +29,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllTutor'){
+			$retorno = DB_Etapa::getAllTutor($_POST['idOlimpiada']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no se encontro ninguna etapa')
+					);
+				}
+	}
 
 //SIEMPRE SERA POST
     /*
@@ -67,7 +81,7 @@ if (!empty($_POST['_metod'])) {
 
 	if($_POST['_metod']=='getById'){
 			$retorno = DB_Etapa::getById(
-				$_POST['tipo'],
+				$_POST['idEtapa'],
 				$_POST['idOlimpiada']
 			);
 			if ($retorno) {

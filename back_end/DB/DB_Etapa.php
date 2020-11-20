@@ -11,12 +11,30 @@ class DB_Etapa
 
     public static function getAll($idOlimpiada)
     {
-        $consulta = "SELECT * from Etapa where idOlimpiada = ?";
+        $consulta = "SELECT * from Etapa where idOlimpiada = ?  order by tipo";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
             $comando->execute(array($idOlimpiada));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    public static function getAllTutor($idOlimpiada){
+        date_default_timezone_set('America/La_Paz');
+        $Fecha = date('Y/m/d h:i:s a', time());
+        $consulta = "SELECT * , case  when (fechaIni <= ? and fechaFin >= ?) then '2'
+                when (fechaIni > ?) then '1'
+                when (fechaFin < ?) then '3'
+                else '4'
+            End  as es from Etapa where idOlimpiada = ?  order by tipo";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Fecha,$Fecha,$Fecha,$Fecha,$idOlimpiada));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return false;
@@ -29,16 +47,16 @@ class DB_Etapa
      * @param $idUsuario identificador del Usuario
      * @return Usuario al que le pertenece el $IdUsuario
      */
-    public static function getById($tipo,$idOlimpiada)
+    public static function getById($idEtapa,$idOlimpiada)
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Etapa
-                             WHERE tipo = ? and idOlimpiada = ?";
+                             WHERE idEtapa = ? and idOlimpiada = ?";
 
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($tipo,$idOlimpiada));
+            $comando->execute(array($idEtapa, $idOlimpiada));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {

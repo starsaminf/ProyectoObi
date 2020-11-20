@@ -203,7 +203,7 @@ const seleccionarConsola =(consola,caso)=>{
 const AlistarParticipante = event => {
   event.preventDefault();//cancelamos los eventos 
   if(consoleSeleccionada.colegiovalido){
-    console.log("Colegio vALIDO");
+    //console.log("Colegio vALIDO");
     getVerificar();
     //Buscamos si yaes participante devolvemos si esta registrado y si esta participando
     //true:mostramos que ya tiene tutor
@@ -219,13 +219,13 @@ const AlistarParticipante = event => {
 
 //******  getAll Colegio
 const getAllColegios=async()=>{
-  console.log("getAll Colegio");
+  //console.log("getAll Colegio");
     await axios.post(baseUrl_colegio,{
       _metod: 'getAllSimple'
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       if(response.data.estado===1){
         setColegio(response.data.val);
       }
@@ -238,7 +238,7 @@ const getAllColegios=async()=>{
   )
 };
 const getAll_Por_Tutor_y_Olimpiada=async()=>{
-  console.log("getAll estudiantes por tutor y olimpiada");
+  //console.log("getAll estudiantes por tutor y olimpiada");
     await axios.post(baseUrl_estudiante,{
       _metod:       'getAll_Por_Tutor_y_Olimpiada',
       idOlimpiada:  cookies.get('idolimpiada'),
@@ -246,7 +246,7 @@ const getAll_Por_Tutor_y_Olimpiada=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       if(response.data.estado===1){
         setParticipante(response.data.val);
         setParticipante2(response.data.val);
@@ -275,7 +275,7 @@ const getAll_Por_Tutor_y_Olimpiada=async()=>{
 const InsertEstudiante=async()=>{
   
   handleModalInsert();
-  console.log("Colegio = "+consoleSeleccionada.idcolegio);
+  //console.log("Colegio = "+consoleSeleccionada.idcolegio);
     await axios.post(baseUrl_estudiante,{
       _metod: 'Insert',      
       idTutor:        cookies.get('idusuario'),
@@ -293,7 +293,7 @@ const InsertEstudiante=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){
@@ -311,7 +311,7 @@ const InsertEstudiante=async()=>{
 const UpdateEstudiante=async()=>{
   
   handleModalUpdate(consoleSeleccionada.idestudiante);
-    console.log();
+    //console.log();
     await axios.post(baseUrl_estudiante,{
       _metod: 'Update',  
       idEstudiante:   consoleSeleccionada.idestudiante,    
@@ -330,7 +330,7 @@ const UpdateEstudiante=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){
@@ -355,10 +355,10 @@ const getVerificar=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       if(response.data.estado===2){
         //en este caso el estudinate esta habilitado para ser agregado
-        console.log("Agregamos al Estudiante");
+        //console.log("Agregamos al Estudiante");
         InsertEstudiante();
       }else{
         consoleSeleccionada.mensaje = "El estudiante ya esta registrado con otro Tutor";
@@ -393,7 +393,7 @@ const Eliminar=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){

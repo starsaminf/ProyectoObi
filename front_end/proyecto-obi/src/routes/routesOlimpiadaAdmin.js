@@ -31,7 +31,7 @@ import DashboardPage from "../views/Admin/Olimpiada.js";
 import Salir from "../views/Admin/Salir.js";
 import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
 import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
-import Etapa1 from "../views/OlimpiadaAdmin/Etapa1.js";
+import Etapa from "../views/OlimpiadaAdmin/Etapa.js";
 // core components/views for RTL layout
 
 
@@ -60,30 +60,9 @@ const dashboardRoutes = [
   }, 
   {
     path: "/1",
-    name: "1 etapa - Inscripciones",
+    name: "Etapas",
     icon: Dashboard,
-    component: Etapa1,
-    layout: "/olimpiadaAdmin"
-  }, 
-  {
-    path: "/2",
-    name: "2 etapa - Distrital",
-    icon: Dashboard,
-    component: DashboardPage,
-    layout: "/olimpiadaAdmin"
-  }, 
-  {
-    path: "/3",
-    name: "3 etapa - Departamental",
-    icon: Dashboard,
-    component: Salir,
-    layout: "/olimpiadaAdmin"
-  }, 
-  {
-    path: "/4",
-    name: "4 etapa - Nacional",
-    icon: Dashboard,
-    component: Salir,
+    component: Etapa,
     layout: "/olimpiadaAdmin"
   }, 
   {
