@@ -76,9 +76,6 @@ if (!empty($_POST['_metod'])) {
 	}
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Estudiante::Insert(
-				$_POST['idTutor'],
-				$_POST['Sie'],
-				$_POST['idOlimpiada'],
 				$_POST['Rude'],
 				$_POST['Nombre'],
 				$_POST['ApPaterno'],
@@ -106,8 +103,6 @@ if (!empty($_POST['_metod'])) {
 	}
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_Estudiante::Update(
-				$_POST['idEstudiante'],
-				$_POST['Sie'],
 				$_POST['Rude'],
 				$_POST['Nombre'],
 				$_POST['ApPaterno'],
@@ -134,7 +129,8 @@ if (!empty($_POST['_metod'])) {
 	}
 	if($_POST['_metod']=='getById'){
 			$retorno = DB_Estudiante::getById(
-				$_POST['idEstudiante']
+				$_POST['idOlimpiada'],
+				$_POST['Rude']
 			);
 			if ($retorno) {
 		            print json_encode(
@@ -146,7 +142,7 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'mensaje' => 'No se pudo guardar los cambios')
+							'mensaje' => 'No se Encontrol al Estudiante')
 					);
 				}
 	}

@@ -29,15 +29,15 @@ class DB_Nota
      * @param $idUsuario identificador del Usuario
      * @return Usuario al que le pertenece el $IdUsuario
      */
-    public static function getById($idParticipante)
+    public static function getById($idGrupo,$idEtapa)
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Nota
-                             WHERE idParticipante = ?";
+                             WHERE idGrupo = ? AND idEtapa= ?";
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($idParticipante));
+            $comando->execute(array($idGrupo,$idEtapa));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
@@ -138,6 +138,53 @@ class DB_Nota
             
             return $sentencia;
         }catch (PDOException $e) {
+            return false;
+        }
+    }
+    public static function InsertAll(
+        $idNivel,
+        $idEtapa,
+        $datos
+    ){
+         try {
+            $comando = "DELETE FROM Nota WHERE idEtapa=? AND idNivel = ?";
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            $sentencia->execute(array($idEtapa, $idNivel));
+            $pieces = explode(";", $datos);
+            //recorremos el vector
+             $comando = "INSERT INTO Nota ( " .
+            " idEtapa," .
+            " idNivel," .
+            " idGrupo," .
+            " puesto," .
+            " estado," .
+            " Observaciones)" .
+            " VALUES";
+            $sw=1;
+            foreach ($pieces as $valor){
+                $pieces2 = explode(",", $valor);
+                
+                if($sw==1){
+                    
+                    
+                }else{
+                    
+                    if($sw==2){
+                        if(count($pieces2)==4)
+                        $comando = $comando . "(".$idEtapa.",".$idNivel.",".$pieces2[0].",".$pieces2[1].",'".$pieces2[2]."','".$pieces2[3]."')";
+                    }else{
+                        if(count($pieces2)==4)
+                            $comando = $comando . ",(".$idEtapa.",".$idNivel.",".$pieces2[0].",".$pieces2[1].",'".$pieces2[2]."','".$pieces2[3]."')";
+                    }
+                    
+                }
+                $sw=$sw+1;
+
+            }
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute();
+            
+        } catch (PDOException $e) {
             return false;
         }
     }

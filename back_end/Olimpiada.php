@@ -72,9 +72,7 @@ if (!empty($_POST['_metod'])) {
 			$retorno = DB_Olimpiada::Update(
 				$_POST['idOlimpiada'],
 				$_POST['Nombre'],
-				$_POST['Baner'],
 				$_POST['Descripcion'],
-				$_POST['Convocatoria'],
 				$_POST['FechaIni'],
 				$_POST['FechaFin'],
 				$_POST['FechaLimiteEdad'],

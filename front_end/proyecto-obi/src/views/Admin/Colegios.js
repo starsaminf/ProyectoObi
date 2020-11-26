@@ -301,13 +301,13 @@ const Eliminar=async()=>{
           <div style={modalStyle} className={classes.paper}>
               <h3 id="simple-modal-title">Agregar Nuevo Colegio</h3>
               <form  onSubmit={Insert}>
-                <TextField name='nombre' required className={classes.inputMaterial} label="nombre"onChange={handleChangle} />
+                <TextField name='nombre'margin="normal"variant="outlined" required className={classes.inputMaterial} label="nombre"onChange={handleChangle} />
                 <br/>
-                <TextField name='sie' required className={classes.inputMaterial} label="sie" onChange={handleChangle} />
+                <TextField name='sie'margin="normal"variant="outlined" required className={classes.inputMaterial} label="sie" onChange={handleChangle} />
                 <br/>
-                <TextField name='zona' required className={classes.inputMaterial} label="zona" onChange={handleChangle} />
+                <TextField name='zona'margin="normal" variant="outlined"required className={classes.inputMaterial} label="zona" onChange={handleChangle} />
                 <br/>
-                <TextField name='direccion'  className={classes.inputMaterial} label="direccion" onChange={handleChangle} />
+                <TextField name='direccion'margin="normal" variant="outlined" className={classes.inputMaterial} label="direccion" onChange={handleChangle} />
                 <br/>
                 
                 
@@ -344,13 +344,13 @@ const Eliminar=async()=>{
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Editar colegio</h3>
             <form  onSubmit={Update}>
-                <TextField name='sie' disabled={true} className={classes.inputMaterial} label="Sie"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.sie}/>
+                <TextField name='sie'margin="normal"variant="outlined" disabled={true} className={classes.inputMaterial} label="Sie"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.sie}/>
                 <br/>
-                <TextField name='nombre' required className={classes.inputMaterial} label="nombre"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
+                <TextField name='nombre'margin="normal"variant="outlined" required className={classes.inputMaterial} label="nombre"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
                 <br/>
-                <TextField name='zona' required className={classes.inputMaterial} label="zona" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.zona}/>
+                <TextField name='zona'margin="normal" variant="outlined"required className={classes.inputMaterial} label="zona" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.zona}/>
                 <br/>
-                <TextField name='direccion'  className={classes.inputMaterial} label="direccion" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.direccion}/>
+                <TextField name='direccion'margin="normal"variant="outlined"  className={classes.inputMaterial} label="direccion" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.direccion}/>
                 <br/>
                 
                 <br/>

@@ -28,8 +28,8 @@ class DB_Integrante_de
      * @return bool Respuesta de la eliminación
      */
     public static function insert(
-        $idNivel,
-        $idEstudiante
+        $idGrupo,
+        $Rude
     )
     {
         //encriptamos la contraseña para guardar en la base de datos
@@ -37,14 +37,14 @@ class DB_Integrante_de
         // Sentencia INSERT
         $comando = "INSERT INTO Integrante_de( " .
             " idGrupo," .
-            " idEstudiante)" .
+            " Rude)" .
             " VALUES( ?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
-                    $idNivel,
-                    $idEstudiante
+                    $idGrupo,
+                    $Rude
                 )
             );
             return $sentencia;
@@ -59,12 +59,12 @@ class DB_Integrante_de
      * @param $idPunto identificador del Punto
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($idGrupo,$idEstudiante)
+    public static function delete($idGrupo,$Rude)
     {
         try {
-            $comando = "DELETE FROM Integrante_de WHERE idGrupo = ? AND idEstudiante = ?";
+            $comando = "DELETE FROM Integrante_de WHERE idGrupo = ? AND rude = ?";
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
-            return $sentencia->execute(array($idGrupo, $idEstudiante));
+            return $sentencia->execute(array($idGrupo, $Rude));
         } catch (PDOException $e) {
             return $e;
         }

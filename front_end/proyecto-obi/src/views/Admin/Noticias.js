@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
+import GridItem from "../../components/Grid/GridItem.js";
+import GridContainer from "../../components/Grid/GridContainer.js";
+import ReactMarkdown from 'react-markdown';
 const baseUrl=HOST.Url+'Noticia.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -24,6 +27,14 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
     width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  paper2: {
+    position: 'absolute',
+    width: 1200,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -57,6 +68,7 @@ export default function SimpleModal() {
   //const idAdmin='1';
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
+  const [mensaje,setMensaje]=useState('');
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
   const [openModalDelete, setOpenDelete] = useState(false);
@@ -67,14 +79,17 @@ export default function SimpleModal() {
     idnoticia:'',
     titulo:'',
     subtitulo:'',
-    contenido:''
+    contenido:'',
+    mensaje:''
   })
   const handleChangle = e => {
+    
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
       ...prevState,
       [name]:value
     }))
+   
   }
   const handleChangleBuscador = e => {
     
@@ -105,6 +120,16 @@ const seleccionarConsola =(consola,caso)=>{
   setConsolaSeleccionada(consola);
   (caso==='Editar')?handleModalUpdate():handleModalDelete();
 };
+const Visual = () =>{
+  var  c = "";
+  c+="# "+ consoleSeleccionada.titulo+"\n";
+  c+="## "+ consoleSeleccionada.subtitulo+"\n";
+  c+= consoleSeleccionada.contenido;
+  setConsolaSeleccionada(prevState=>({
+    ...prevState,
+    ["mensaje"]:c
+  }))
+}
 
 //******  getAll
   const getAll=async()=>{
@@ -218,7 +243,6 @@ const Eliminar=async()=>{
 
 //******  se ejecuta cuando inicia el Componente
   useEffect(async()=>{
-    
     getAll();
   },[]);
 
@@ -281,14 +305,45 @@ const Eliminar=async()=>{
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <div style={modalStyle} className={classes.paper}>
+          <div style={modalStyle} className={classes.paper2}>
             <h3 id="simple-modal-title">Agregar Nueva Noticia</h3>
-            <TextField name='titulo' required className={classes.inputMaterial} label="titulo"onChange={handleChangle} />
-            <br/>
-            <TextField name='subtitulo' required className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} />
-            <br/>
-            <TextField name='contenido' required className={classes.inputMaterial} label="contenido" onChange={handleChangle} />
-            <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <GridContainer >
+              <GridItem xs={6} sm={6} md={6}>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='titulo'variant="outlined" required margin="normal" className={classes.inputMaterial} label="titulo"onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='subtitulo'variant="outlined"  required  className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>                
+                  <TextField
+                    id="filled-multiline-static"
+                    label="Contenido"
+                    multiline
+                    rows={6}
+                    name='contenido'
+                    defaultValue=""
+                    margin="normal" className={classes.inputMaterial}
+                    variant="outlined"
+                    onChange={handleChangle}
+                  />
+                </GridItem>
+              </GridContainer>
+              </GridItem>
+              <GridItem xs={6} sm={6} md={6}>
+                <article>
+                  <ReactMarkdown>{"# "+consoleSeleccionada.titulo+"\n## "+consoleSeleccionada.subtitulo+"\n"+consoleSeleccionada.contenido}</ReactMarkdown>
+                </article>
+                
+              </GridItem>
+            </GridContainer>
+            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
               &nbsp;
               <Button type="submit" variant="contained" color="primary" onClick={Insert} >Guardar</Button>
@@ -307,13 +362,14 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Editar Noticia</h3>
-            <TextField name='idnoticia' disabled={true} className={classes.inputMaterial} label="idnoticia"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.idnoticia}/>
+              <TextField name='idnoticia'variant="outlined" margin="normal" disabled={true} className={classes.inputMaterial} label="idnoticia"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.idnoticia}/>
             <br/>
-            <TextField name='titulo' required className={classes.inputMaterial} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.titulo}/>
+            <TextField name='titulo'variant="outlined"  margin="normal"required className={classes.inputMaterial} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.titulo}/>
             <br/>
-            <TextField name='subtitulo' required className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.subtitulo}/>
+            <TextField name='subtitulo'variant="outlined" margin="normal" required className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.subtitulo}/>
             <br/>
-            <TextField name='contenido' required className={classes.inputMaterial} label="contenido" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.contenido}/>
+            <TextField name='contenido'variant="outlined" multiline
+          rowsMax={4} margin="normal" required className={classes.inputMaterial} label="contenido" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.contenido}/>
             <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
               &nbsp;
@@ -337,8 +393,6 @@ const Eliminar=async()=>{
               <Button type="submit" variant="contained" color="primary" onClick={Eliminar} >Eliminar</Button>
           </div>
         </Modal>
-
-
 
         <Modal
           open={openModalMensaje}

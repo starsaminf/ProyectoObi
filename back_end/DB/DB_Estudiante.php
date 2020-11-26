@@ -56,7 +56,7 @@ class DB_Estudiante
             $comando->execute(array($idOlimpiada, $idTutor));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return false;
+            return $e;
         }
     }
      public static function getVerificar(
@@ -89,9 +89,8 @@ class DB_Estudiante
      * @param $correo electronico de autentificacion
      * @return bool Respuesta de la eliminación
      */
+
     public static function update(
-        $idEstudiante,
-        $Sie,
         $Rude,
         $Nombre,
         $ApPaterno,
@@ -105,8 +104,6 @@ class DB_Estudiante
     {
 
         $consulta = "UPDATE Estudiante SET ";
-        $consulta = $consulta ." Sie = ?,";
-        $consulta = $consulta ." Rude = ?,";
         $consulta = $consulta ." Nombre = ?,";
         $consulta = $consulta ." ApPaterno = ?,";
         $consulta = $consulta ." ApMaterno = ?,";
@@ -115,13 +112,11 @@ class DB_Estudiante
         $consulta = $consulta ." Genero = ?,";
         $consulta = $consulta ." Ci = ?,";
         $consulta = $consulta ." Correo = ? ";
-        $consulta = $consulta ." WHERE idEstudiante = ?;";
+        $consulta = $consulta ." WHERE Rude = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
                 $cmd->execute(array(
-                    $Sie,
-                    $Rude,
                     $Nombre,
                     $ApPaterno,
                     $ApMaterno,
@@ -130,13 +125,37 @@ class DB_Estudiante
                     $Genero,
                     $Ci,
                     $Correo,
-                    $idEstudiante));
+                    $Rude));
                 return $cmd;
             } catch (PDOException $e) {
                 
                 return false;
             }
         
+    }
+    public static function getById($idOlimpiada, $rude)
+    {
+        // Consulta de la meta
+        $consulta = "select a.*
+            from (select e.*,COALESCE(n.c,0) as m
+            from Estudiante e
+            left join (select p.rude,count(p.idgrupo) as c
+                from integrante_de p, Grupo ol
+                where ol.idGrupo=p.idGrupo AND ol.idOLimpiada = ?
+                group by p.rude
+            ) n on n.rude= e.rude
+            ) a
+            where a.rude = ?
+";
+
+        try {
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            $comando->execute(array($idOlimpiada,$rude));
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
     /**
@@ -147,10 +166,8 @@ class DB_Estudiante
      * @param $Correo identificador del correo del usuario
      * @return bool Respuesta de la eliminación
      */
+
     public static function insert(
-        $idTutor,
-        $Sie,
-        $idOlimpiada,
         $Rude,
         $Nombre,
         $ApPaterno,
@@ -159,7 +176,7 @@ class DB_Estudiante
         $FechaNac,        
         $Genero,         
         $Ci,             
-        $Correo  
+        $Correo 
     )
     {
         //encriptamos la contraseña para guardar en la base de datos
@@ -167,9 +184,6 @@ class DB_Estudiante
 
         // Sentencia INSERT
         $comando = "INSERT INTO Estudiante ( " .
-            " idTutor," .
-            " Sie," .
-            " idOLimpiada," .
             " Rude," .
             " Nombre," .
             " ApPaterno," .
@@ -179,14 +193,11 @@ class DB_Estudiante
             " Genero," .
             " Ci," .
             " Correo)" .
-            " VALUES( ?,?,?,?,?,?,?,?,?,?,?,?)";
+            " VALUES( ?,?,?,?,?,?,?,?,?)";
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
         try{
             $sentencia->execute(
                 array(
-                    $idTutor,
-                    $Sie,
-                    $idOlimpiada,
                     $Rude,
                     $Nombre,
                     $ApPaterno,
@@ -195,7 +206,7 @@ class DB_Estudiante
                     $FechaNac,        
                     $Genero,         
                     $Ci,             
-                    $Correo
+                    $Correo 
                 )
             );
             

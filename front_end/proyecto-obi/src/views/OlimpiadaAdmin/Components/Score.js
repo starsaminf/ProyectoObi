@@ -5,11 +5,11 @@ import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal,
 import {Edit,Delete, Transform} from '@material-ui/icons';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
-import HOST from "../../variables/general.js";
+import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
-
+import PublicarNota from './PublicarNota.js';
 
 const baseUrl_Grupos=HOST.Url+'Grupo.php';
 //"../../variables/general.js";
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-function PaguinaResultados(props) {
+function Score(props) {
     const classes = useStyles();
     const [data,setData]=useState([]);
 
@@ -91,8 +91,7 @@ const getGrupoConNotasCondicionado = async()=>{
   await axios.post(baseUrl_Grupos,{
     _metod: 'getGrupoConNotasCondicionado',
     idNivel:        props.idnivel,     
-    idEtapa:        props.idetapa,
-    idTutor:        cookies.get('idusuario')
+    idEtapa:        props.idetapa
   },header()
   ).then(
   response => {
@@ -169,4 +168,4 @@ const getGrupoConNotasCondicionado = async()=>{
   );
 }
 
-export default PaguinaResultados;
+export default Score;

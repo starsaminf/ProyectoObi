@@ -30,6 +30,8 @@ import CardBody from "../../components/Card/CardBody.js";
 import ReactMarkdown from 'react-markdown';
 import Button from '@material-ui/core/Button';
 import GrupoEtapa from './Components/GrupoEtapa.js';
+import Notas_Y_Obserbaciones from './Components/Notas_Y_Obserbaciones.js';
+import TablaDePosiciones from './Components/TablaDePosiciones.js';
 import { Divider } from '@material-ui/core';
 const baseUrl=HOST.Url+'Etapa.php';
 //"../../variables/general.js";
@@ -143,9 +145,14 @@ export default function SimpleTabs() {
                       <Step key={console.idetapa}>
                         <StepLabel><strong>{console.nombre}</strong><br/></StepLabel>
                         <StepContent>
+                        <Divider/>
                               <DescripEtapa idetapa={console.idetapa} />
                               <Divider/>
-                              <GrupoEtapa idetapa={console.idetapa} />
+                              <GrupoEtapa idetapa={console.idetapa} tipo={console.tipo}/>
+                              <Divider/>
+                              <Notas_Y_Obserbaciones idetapa={console.idetapa} tipo={console.tipo}/>
+                              <Divider/>
+                              <TablaDePosiciones idetapa={console.idetapa} tipo={console.tipo}/>
                               <br/>
                         <div className={classes.actionsContainer}>
                           <div>

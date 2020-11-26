@@ -6,16 +6,18 @@ import { Alert } from '@material-ui/lab';
 import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
+import {Table,  TableCell, TableBody, TableRow, TableHead, Divider} from '@material-ui/core';
+
 //**  EXPANDIBLE */
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';
+import ListIcon from '@material-ui/icons/List';
+import GridItem from "../../../components/Grid/GridItem.js";
+import GridContainer from "../../../components/Grid/GridContainer.js";
 const baseUrl_grupo   = HOST.Url+'Grupo.php';
 const cookies = new Cookies();
 function getModalStyle() {
@@ -82,44 +84,22 @@ function getModalStyle() {
     }
   };
   
-function ListarEstudiantes(props) {
+function GestionDeIntegrante(props) {
     const classes = useStyles();
 
-    const [modalStyle] = useState(getModalStyle);
-    const [openModalInsert,   setOpenInsert]    = useState(false);
-    const [openModalUpdate,   setOpenUpdate]    = useState(false);
-    const [openModalDelete,   setOpenDelete]    = useState(false);
-    const [openModalMensaje,  setOpenMensaje]   = useState(false);
     const [openAcordeon,  setOpenAcordeon]   = useState(true);
     const [data,  setData]   = useState([]);
-    const [estudiantes,  setEstudiantes]   = useState([]);
-    const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-        rude:''
-      })
-      const handleChangle = e => {
-        const {name, value}= e.target;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          [name]:value
-        }))
-      }
-      const handleModalInsert = () => {
-        setOpenInsert(!openModalInsert);
-      };
-      const handleModalUpdate = () => {
-        setOpenUpdate(!openModalUpdate);
-      };
-      const handleModalDelete = () => {
-        setOpenDelete(!openModalDelete);
-      };
-      const handleModalMensaje = () => {
-        setOpenMensaje(!openModalMensaje);
-      };
+
+
+      const [value, setValue] = useState('femenino');
+
       const handleAcordeon = () => {
         setOpenAcordeon(!openAcordeon);
       };
         //*** detenemos submit de formulario */
     
+      //*** seleccionar consola */
+
 
 //***   GET ALL Estudiants inscritos en cada grupo  */
 const getAllEstudiantesDeGrupo=async()=>{
@@ -129,9 +109,12 @@ const getAllEstudiantesDeGrupo=async()=>{
       },header()
     ).then(
       response => {
-        console.log(response);
+        //console.log("datos*******************************");
+        //console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
+          //setConsolaSeleccionada(response.data.val);
+          
         }else{
           setData([]);
         }
@@ -143,6 +126,7 @@ const getAllEstudiantesDeGrupo=async()=>{
     )
   };
   
+//***   GET ALL Estudiantes de cada tutor en la olimpiada  */
 
 
 const ClickAcordeon= () =>{
@@ -151,7 +135,22 @@ const ClickAcordeon= () =>{
     handleAcordeon();
   }
 }
+
+function calcularEdad(fecha) {
+  var hoy = new Date(cookies.get('fechalimiteedad'));
+  var cumpleanos = new Date(fecha);
+  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+  var m = hoy.getMonth() - cumpleanos.getMonth();
+
+  if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+      edad--;
+  }
+
+  return edad;
+}
 useEffect(async()=>{
+  //console.log(props);
+  //console.log(calcularEdad('1990-08-02'));
 },[]);
   return (
     <div>
@@ -162,61 +161,56 @@ useEffect(async()=>{
             id="panel1a-header"
             onClick={ClickAcordeon}
             >
-            <Typography className={classes.heading}>Estudiantes</Typography>
+            <Typography className={classes.heading}><ListIcon color="primary"/>     Estudiantes</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-            {(data.length===0)?<Alert severity="error">Este grupo no tiene integrantes!</Alert>:''}
             <div className={classes.content}>
+            {(data.length===0&&data)?<Alert  severity="error">No se agrego Estudiantes a este grupo!</Alert>:
+                
             <Table>
-            <TableBody>
-                {data.map(console =>(
+              <TableHead>
+              
+              {data.map(console =>(
                 <TableRow key={console.rude}>
-                    <TableCell>{console.appaterno} {console.apmaterno} {console.nombre}<br/><strong>Rude:</strong>{console.rude}</TableCell>
-                    
+                  
+                  <TableCell><FaceTwoToneIcon color="secondary"/></TableCell>
+                  <TableCell>
+                    <GridContainer >
+                        <GridItem xs={12} sm={12} md={3}>
+                          <strong>nombre:</strong>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={9}>
+                        {console.appaterno} {console.apmaterno} {console.nombre}
+                        </GridItem>
+                    </GridContainer>
+                    <GridContainer >
+                        <GridItem xs={12} sm={12} md={3}>
+                          <strong>Rude:</strong>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={9}>
+                          {console.rude}
+                        </GridItem>
+                    </GridContainer>
+                    <GridContainer >
+                        <GridItem xs={12} sm={12} md={3}>
+                          <strong>Carnet:</strong>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={9}>
+                          {console.ci}
+                        </GridItem>
+                    </GridContainer>
+                  </TableCell>
+                   
                 </TableRow>
                 ))}
-            </TableBody>
+              </TableHead>
+              
             </Table>
-        
+            }
+
         </div>
-            </AccordionDetails>
         </Accordion>
-    
-    
-    
-    
-        <Modal
-          open={openModalInsert}
-          onClose={handleModalInsert}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div style={modalStyle} className={classes.paper2}>
-            <h3 id="simple-modal-title">Agregar Estudiante al Grupo</h3>
-            <div className={classes.content}>
-              <Table>
-                <TableBody>
-                    {estudiantes.map(console =>(
-                    <TableRow key={console.rude}>
-                        <TableCell><strong>Nombre:</strong>{console.appaterno} {console.apmaterno} {console.nombre}<br/><strong>Rude:</strong>{console.rude}<br/>{console.edad}</TableCell>
-                        
-                    </TableRow>
-                    ))}
-                    {(estudiantes.length===0)?<Alert severity="error">Usted no tiene ningun estudiante para agregar a este grupo, para seleccionar sus estudiantes dirijase a la pestaña <strong>Mis estudiantes</strong> del lado izquierdo y seleccione <strong>+ AGREGAR</strong> estudiante!</Alert>:''}
-                <br/>
-                </TableBody>
-              </Table>
-            <div/>
-          </div>
-          </div>
-        </Modal>
-    
-    
-    
-    
-    
     </div>
   );
 }
 
-export default ListarEstudiantes;
+export default GestionDeIntegrante;

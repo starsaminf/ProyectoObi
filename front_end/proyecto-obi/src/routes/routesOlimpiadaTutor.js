@@ -20,11 +20,11 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import AtrazIcon from "@material-ui/icons/Backspace";
 // core components/views for Admin layout
 import Atraz from "../layouts/Tutor.js";
-import DashboardPage from "../views/OlimpiadaTutor/Convocatoria.js";
-import enBlanco from "../views/Tutor/enBlanco.js"
+import Convocatoria from "../views/OlimpiadaTutor/Convocatoria.js";
 import Etapa from "../views/OlimpiadaTutor/Etapa.js";
-import MisEstudiantes from "../views/OlimpiadaTutor/MisEstudiantes.js";
-import enBlanco2 from "../views/Tutor/enBlanco2.js"
+import GruposyESt from "../views/OlimpiadaTutor/Grupos y Estudiantes.js";
+import enBlanco2 from "../views/OlimpiadaTutor/Paguina"
+import DashboardPage from "../views/OlimpiadaTutor/Dashboard"
 
 
 const dashboardRoutes = [
@@ -37,6 +37,13 @@ const dashboardRoutes = [
   },
   {
     path: "/dashboard",
+    name: "dashboard",
+    icon: Dashboard,
+    component: DashboardPage,
+    layout: "/olimpiadaTutor"
+  },
+  {
+    path: "/Etapa",
     name: "Etapas",
     icon: Dashboard,
     component: Etapa,
@@ -44,16 +51,16 @@ const dashboardRoutes = [
   },
   {
     path: "/estudiantes",
-    name: "Mis Estudiantes",
+    name: "Grupos y Estudiantes",
     icon: Dashboard,
-    component: MisEstudiantes,
+    component: GruposyESt,
     layout: "/olimpiadaTutor"
   },
   {
     path: "/convocatoria",
     name: "Convocatoria",
     icon: Dashboard,
-    component: DashboardPage,
+    component: Convocatoria,
     layout: "/olimpiadaTutor"
   },
   {

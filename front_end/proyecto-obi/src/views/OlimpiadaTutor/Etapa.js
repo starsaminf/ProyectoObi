@@ -96,7 +96,7 @@ useEffect(async()=>{
             <StepContent>
               <Typography>{console.descripcion}</Typography>
                 <div className={classes.actionsContainer}>
-                  {(console.tipo==='1')?<EtapaDeInscripcion idolimpiada={cookies.get('idolimpiada')} idtutor={cookies.get('idusuario')}/>:<EtapaDeClasificacion idolimpiada={cookies.get('idolimpiada')} idtutor={cookies.get('idusuario')} idetapa={console.idetapa}/>}
+                  {(console.tipo==='1')?<EtapaDeInscripcion idolimpiada={cookies.get('idolimpiada')} idtutor={cookies.get('idusuario')}/>:<EtapaDeClasificacion idolimpiada={cookies.get('idolimpiada')} idtutor={cookies.get('idusuario')} idetapa={console.idetapa} tipo={console.tipo}/>}
               </div>
             </StepContent>
           </Step>

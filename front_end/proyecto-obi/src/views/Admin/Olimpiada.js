@@ -259,7 +259,6 @@ const Eliminar=async()=>{
             <TableRow>
               <TableCell><strong >id</strong></TableCell>
               <TableCell><strong >Nombre / descripcion</strong></TableCell>
-              <TableCell><strong >baner/Convocatoria</strong></TableCell>
               <TableCell><strong >fechas</strong></TableCell>
               <TableCell><strong >Acciones</strong></TableCell>
             </TableRow>
@@ -269,7 +268,6 @@ const Eliminar=async()=>{
               <TableRow key={console.idolimpiada}>
                 <TableCell>{console.idolimpiada}</TableCell>
                 <TableCell><strong >{console.nombre}</strong><br/><i>{console.descripcion}</i></TableCell>
-                <TableCell><strong >{console.baner}</strong><br/><i>{console.convocatoria}</i></TableCell>
                 <TableCell><strong >{console.fechaini}</strong><br/><i>{console.fechafin}</i></TableCell>
                 <TableCell>
                   <center>

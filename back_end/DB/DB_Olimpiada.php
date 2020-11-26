@@ -8,14 +8,14 @@ require 'Coneccion/cripto.php';
 class DB_Olimpiada
 {
 
-    public static function getAll($idOlimpiada)
+    public static function getAll($idAdmin)
     {
         $consulta = "SELECT * from Olimpiada where idAdmin = ?";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($idOlimpiada));
+            $comando->execute(array($idAdmin));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return false;
@@ -82,9 +82,7 @@ where o.idolimpiada = p.idolimpiada and o.idolimpiada=?";
     public static function update(
         $idOlimpiada,
         $Nombre,
-        $Baner,
         $Descripcion,
-        $Convocatoria,
         $FechaIni,
         $FechaFin,
         $FechaLimiteEdad,
@@ -93,15 +91,13 @@ where o.idolimpiada = p.idolimpiada and o.idolimpiada=?";
     )
     {
 
-        $consulta = "UPDATE Olimpiada SET Nombre = ?, Descripcion = ?, Baner = ?,Convocatoria = ?,FechaIni = ?,FechaFin= ?,FechaLimiteEdad= ?,Estado= ? WHERE idOlimpiada = ?  AND idAdmin = ?;";
+        $consulta = "UPDATE Olimpiada SET Nombre = ?, Descripcion = ?,FechaIni = ?,FechaFin= ?,FechaLimiteEdad= ?,Estado= ? WHERE idOlimpiada = ?  AND idAdmin = ?;";
             $cmd = Database::getInstance()->getDb()->prepare($consulta);
             try {
                 
                 $cmd->execute(array(
                     $Nombre,
                     $Descripcion,
-                    $Baner,
-                    $Convocatoria,
                     $FechaIni,
                     $FechaFin,
                     $FechaLimiteEdad,
@@ -185,7 +181,6 @@ where o.idolimpiada = p.idolimpiada and o.idolimpiada=?";
     public static function CrearEtapas(
         $idOlimpiada
     ){
-        $comando = "INSERT INTO Etapa(Nombre, idOlimpiada) VALUES ('Etapa 1: Inscripciones',?);";
         /*INSERT INTO Etapa(Nombre, idOlimpiada) VALUES ('Etapa 2: Distrital',?);
         INSERT INTO Etapa(Nombre, idOlimpiada) VALUES ('Etapa 3: Departamental',?);
         INSERT INTO Etapa(Nombre, idOlimpiada) VALUES ('Etapa 4: Nacional',?);"*/

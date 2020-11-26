@@ -6,13 +6,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-//import InscribirParticipante from './InscribirParticipante.js';
+import ListarGrupo from './ListarGrupo.js';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import { BusinessCenterSharp } from '@material-ui/icons';
-import PaguinaResultados from './PaguinaResultados.js';
+
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -25,7 +24,7 @@ function header(){
   }
 };
 function TabPanel(props) {
-  const { children, value,idnivel,idetapa,tipo, index, ...other } = props;
+  const { children, value,idnivel,limiteporgrupo,limiteporedad, index, ...other } = props;
   return (
     <div
       role="tabpanel"
@@ -38,7 +37,7 @@ function TabPanel(props) {
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
-            <PaguinaResultados idnivel={idnivel} idetapa={idetapa} tipo={tipo}/>
+            <ListarGrupo idnivel={idnivel} limiteporgrupo={limiteporgrupo} limiteporedad={limiteporedad} fechaMax={cookies.get('fechalimiteedad')}/>
         </Box>
       )}
     </div>
@@ -50,8 +49,8 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
   idnivel: PropTypes.any.isRequired,
-  idetapa: PropTypes.any.isRequired,
-  tipo: PropTypes.any.isRequired
+  limiteporgrupo: PropTypes.any.isRequired,
+  limiteporedad: PropTypes.any.isRequired
 };
 
 function a11yProps(index) {
@@ -69,10 +68,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EtapaDeClasificacion(props) {
+export default function ScrollableTabsButtonAuto() {
   const classes = useStyles();
-  const [n, setN] = React.useState(-1);
-  const [m, setM] = React.useState(-1);
   const [value, setValue] = React.useState(0);
   const [data,setData]=useState([]);
   const handleChange = (event, newValue) => {
@@ -109,8 +106,6 @@ const Buscar = (e)=>{
 //getPorDEfecto
 useEffect(async()=>{
 //llamamos todas las etapas
-console.log("Holaaaa");
-console.log(props);
 getAllEtapa();
 },[]);
   return (
@@ -131,7 +126,7 @@ getAllEtapa();
         </Tabs>
       </AppBar>
       {data.map(console =>(
-        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel}  idetapa={props.idetapa} tipo ={props.tipo} index={Buscar(console.idnivel)}/>
+        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel} limiteporgrupo={console.limiteporgrupo} limiteporedad={console.limiteedad} index={Buscar(console.idnivel)}/>
       ))}
     </div>
   );

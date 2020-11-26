@@ -4,7 +4,7 @@ import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
 import Cookies from "universal-cookie";
-import HOST from "../variables/general.js";
+import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
@@ -16,9 +16,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-const baseUrl_grupo   = HOST.Url+'Grupo.php';
-const baseUrl_estudiante   = HOST.Url+'Estudiante.php';
-const baseUrl_Integrante_de   = HOST.Url+'Integrante_de.php';
+const baseUrl_nota   = HOST.Url+'Nota.php';
 const cookies = new Cookies();
 function getModalStyle() {
     return {
@@ -84,7 +82,7 @@ function getModalStyle() {
     }
   };
   
-function GestionDeIntegrantes(props) {
+function NotaDeGrupo(props) {
     const classes = useStyles();
 
     const [modalStyle] = useState(getModalStyle);
@@ -96,7 +94,7 @@ function GestionDeIntegrantes(props) {
     const [data,  setData]   = useState([]);
     const [estudiantes,  setEstudiantes]   = useState([]);
     const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-        idestudiante:''
+        rude:''
       })
       const handleChangle = e => {
         const {name, value}= e.target;
@@ -122,31 +120,22 @@ function GestionDeIntegrantes(props) {
       };
         //*** detenemos submit de formulario */
     
-      //*** seleccionar consola */
-    const seleccionarConsola =(consola,caso)=>{
-      console.log("Sleccionamos consola");
-      consoleSeleccionada.idestudiante=consola.idestudiante;
-        if(caso==='Borrar'){
-          BorrarParticipacion();
-        }else{
-          InsertarParticipacion();
-        }
-    };
 
 //***   GET ALL Estudiants inscritos en cada grupo  */
-const getAllEstudiantesDeGrupo=async()=>{
-      await axios.post(baseUrl_grupo,{
-        _metod:         'getAllEstudiantesDeGrupo',
-        idGrupo:        props.idGrupo
+const getAllNotaDeGrupo=async()=>{
+      await axios.post(baseUrl_nota,{
+        _metod:         'getById',
+        idGrupo:        props.idGrupo,
+        idEtapa:        props.idEtapa
       },header()
     ).then(
       response => {
         console.log(response);
-        if(response.data.estado===1){
+        /*if(response.data.estado===1){
           setData(response.data.val);
         }else{
           setData([]);
-        }
+        }*/
       }
     ).catch(
       error=>{
@@ -155,127 +144,16 @@ const getAllEstudiantesDeGrupo=async()=>{
     )
   };
   
-//***   GET ALL Estudiantes de cada tutor en la olimpiada  */
-const getAllEstudiantesPorTutor=async()=>{
-    await axios.post(baseUrl_estudiante,{
-      _metod:           'getAllEstudiantesDeTutor',
-      idTutor:          cookies.get('idusuario'),
-      idOlimpiada:      cookies.get('idolimpiada')
-    },header()
-  ).then(
-    response => {
-      console.log("estudiantessss")
-      console.log(response);
-      if(response.data.estado===1){
-        setEstudiantes(response.data.val);
-      }else{
-        setEstudiantes([]);
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error);
-    }
-  )
-};
-//**Borrar Integrante */
-const BorrarParticipacion=async()=>{
-  console.log(consoleSeleccionada);
-  await axios.post(baseUrl_Integrante_de,{
-    _metod:           'Delete',
-    idEstudiante:     consoleSeleccionada.idestudiante,
-    idGrupo:          props.idGrupo
-  },header()
-).then(
-  response => {
-    console.log(response);
-    if(response.data.estado===1){
-      getAllEstudiantesDeGrupo();
-      //setData(response.data.val);
-    }else{
-      //setData([]);
-    }
-  }
-).catch(
-  error=>{
-    alert(error);
-  }
-)
-};
-//**Insert  Integrante */
-const InsertarParticipacion=async()=>{
-  handleModalInsert();
-  console.log(consoleSeleccionada);
-  await axios.post(baseUrl_Integrante_de,{
-    _metod:           'Insert',
-    idEstudiante:     consoleSeleccionada.idestudiante,
-    idGrupo:          props.idGrupo
-  },header()
-).then(
-  response => {
-    console.log(response);
-    if(response.data.estado===1){
-      getAllEstudiantesDeGrupo();
-      //setData(response.data.val);
-    }else{
-    }
-  }
-).catch(
-  error=>{
-    alert(error);
-  }
-)
-};
-//**Abri Modulo para agregar un participoante */
-const AgregarParticipante =async()=>{
-  console.log("Agrenamos Participante");
-  setEstudiantes([]);
-  handleModalInsert();
-  getAllEstudiantesPorTutor();
-}
-const ClickAcordeon= () =>{
-  if(openAcordeon){
-    getAllEstudiantesDeGrupo();
-    handleAcordeon();
-  }
-}
+
+
+
 useEffect(async()=>{
-  console.log("Props ****");
+    console.log("******Nota de GRupo");
     console.log(props);
 },[]);
   return (
     <div>
-        <Accordion>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            onClick={ClickAcordeon}
-            >
-            <Typography className={classes.heading}>Estudiantes</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            {(data.length===0)?<Alert severity="error">Este grupo no tiene integrantes!</Alert>:''}
-            <div className={classes.content}>
-            <Table>
-            <TableBody>
-                {data.map(console =>(
-                <TableRow key={console.idestudiante}>
-                    <TableCell>{console.appaterno} {console.apmaterno} {console.nombre}<br/><strong>Rude:</strong>{console.rude}</TableCell>
-                    <TableCell>
-                        <HighlightOffIcon onClick={()=>{seleccionarConsola(console,'Borrar')}} color="secondary"/>
-                        
-                    </TableCell>
-                </TableRow>
-                ))}
-            </TableBody>
-            </Table>
-        {
-            (data.length<props.limiteporgrupo)?<Button className={classes.inputMaterial} onClick={AgregarParticipante} variant="contained"color="default"><PersonAddIcon/>{(data.length===0)?'':"Agregar Estudiante"}</Button>:''
-        }
-        </div>
-            </AccordionDetails>
-        </Accordion>
+        <Button variant="outlined" color="primary" onClick={getAllNotaDeGrupo}>Agregar</Button>
     
     
     
@@ -292,11 +170,9 @@ useEffect(async()=>{
               <Table>
                 <TableBody>
                     {estudiantes.map(console =>(
-                    <TableRow key={console.idestudiante}>
+                    <TableRow key={console.rude}>
                         <TableCell><strong>Nombre:</strong>{console.appaterno} {console.apmaterno} {console.nombre}<br/><strong>Rude:</strong>{console.rude}<br/>{console.edad}</TableCell>
-                        <TableCell>
-                          {(console.edad<=props.limiteporedad&&console.ngrupos===0)?<Button onClick={()=>{seleccionarConsola(console,'Agregar')}} color='primary'><HighlightOffIcon color='primary'/>Agregar </Button>:'Restringido por la edad o ya tiene grupo'}
-                        </TableCell>
+                        
                     </TableRow>
                     ))}
                     {(estudiantes.length===0)?<Alert severity="error">Usted no tiene ningun estudiante para agregar a este grupo, para seleccionar sus estudiantes dirijase a la pestaña <strong>Mis estudiantes</strong> del lado izquierdo y seleccione <strong>+ AGREGAR</strong> estudiante!</Alert>:''}
@@ -316,4 +192,4 @@ useEffect(async()=>{
   );
 }
 
-export default GestionDeIntegrantes;
+export default NotaDeGrupo;

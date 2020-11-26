@@ -47,8 +47,6 @@ CREATE TABLE Olimpiada(
 	idOlimpiada		SERIAL PRIMARY KEY,
 	Nombre          VARCHAR(50) NOT NULL,
 	Descripcion     TEXT,
-	Baner           VARCHAR(50),
-	Convocatoria    VARCHAR(50),
 	FechaIni		DATE,
 	FechaFin		DATE,
 	FechaLimiteEdad	DATE,
@@ -108,11 +106,7 @@ CREATE TABLE Tutor(
 );
 
 CREATE TABLE Estudiante(
-	idEstudiante 	SERIAL PRIMARY KEY,
-	idTutor 		SERIAL,
-	Sie	  			VARCHAR(30),
-	idOlimpiada		SERIAL,
-	Rude			VARCHAR(20),
+	Rude			VARCHAR(30)	PRIMARY KEY,
 	Nombre			VARCHAR(100),
 	ApPaterno		VARCHAR(50),
 	ApMaterno		VARCHAR(50),
@@ -120,25 +114,26 @@ CREATE TABLE Estudiante(
 	FechaNac		DATE,
 	Genero			VARCHAR(50),
 	Ci 				VARCHAR(50),
-	Correo 			VARCHAR(50),
-	foreign   key   (idTutor)   references  Tutor ON DELETE CASCADE,
-	foreign   key   (Sie)   references  Colegio ON DELETE CASCADE,
-	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
+	Correo 			VARCHAR(50)
 );
 
 CREATE TABLE Grupo(
 	idGrupo			SERIAL PRIMARY KEY,
 	idNivel 		SERIAL NOT NULL,
 	idTutor 		SERIAL NOT NULL,
+	idOlimpiada		SERIAL NOT NULL,
+	Sie	  			VARCHAR(30),
 	Nombre			Varchar(50),
 	foreign   key   (idNivel)   references  Nivel ON DELETE CASCADE,
-	foreign   key   (idTutor)   references  Tutor ON DELETE CASCADE
+	foreign   key   (Sie)   references  Colegio ON DELETE CASCADE,
+	foreign   key   (idTutor)   references  Tutor ON DELETE CASCADE,
+	foreign   key   (idOlimpiada)   references  Olimpiada ON DELETE CASCADE
 );
 
 CREATE TABLE Integrante_de(
-	idEstudiante  	SERIAL NOT NULL,
+	Rude			VARCHAR(30) NOT NULL,
 	idGrupo			SERIAL NOT NULL,
-	foreign   key   (idEstudiante)   references  Estudiante ,
+	foreign   key   (Rude)   references  Estudiante ,
 	foreign   key   (idGrupo)   references  Grupo ON DELETE CASCADE
 );
 

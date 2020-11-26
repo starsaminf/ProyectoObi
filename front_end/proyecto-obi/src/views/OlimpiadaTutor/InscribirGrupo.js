@@ -4,13 +4,15 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 
 
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
 import {Edit,Delete, SupervisedUserCircle, Update} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
+import AccordionActions from '@material-ui/core/AccordionActions';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
 //radiooooo
 
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -20,11 +22,11 @@ import FormLabel from '@material-ui/core/FormLabel';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
-import GestionarIntegrante from '../../components/GestionDeIntegrante.js';
-import GestionDeIntegrantes from '../../components/GestionDeIntegrante.js';
+import GestionDeIntegrantes from './components/GestionDeIntegrante.js';
 // host variables
 const baseUrl_estudiante   = HOST.Url+'Estudiante.php';
 const baseUrl_Grupo      = HOST.Url+'Grupo.php';
+const baseUrl_colegio      = HOST.Url+'Colegio.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -94,9 +96,14 @@ export default function IncribirParticipanteIndividual(props) {
   const [openModalMensaje,  setOpenMensaje]   = useState(false);
   const [grupos,  setGrupos]   = useState([]);
   const [grupos2,  setGrupos2]   = useState([]);
+  const [colegios,      setColegio]  =useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
     idGrupo:'',
     nombre:'',
+    mensaje:'',
+    sie:'',
+    colegio:'Indefinido',
+    colegiovalido:false,
     mensaje:''
   })
   const handleChangle = e => {
@@ -111,7 +118,7 @@ export default function IncribirParticipanteIndividual(props) {
     e=(e.target.value).toLowerCase();
 
     var search = grupos.filter(item=>{
-      var cad= (item.nombre).toString().toLowerCase(); 
+      var cad= (item.nombre+item.nombre_col+item.nombre_col).toString().toLowerCase(); 
       if(cad.includes(e))
         return item;
     });
@@ -150,11 +157,12 @@ const getAllGrupo=async()=>{
     await axios.post(baseUrl_Grupo,{
       _metod:       'getAll',
       idOlimpiada:  cookies.get('idolimpiada'),
-      idNivel:  props.idnivel,
-      idTutor:  cookies.get('idusuario'),
+      idNivel:      props.idnivel,
+      idTutor:      cookies.get('idusuario'),
     },header()
   ).then(
     response => {
+      //console.log("VALLLLLLSSDKJBKJJH");
       //console.log(response);
       if(response.data.estado===1){
         setGrupos(response.data.val);
@@ -172,13 +180,14 @@ const getAllGrupo=async()=>{
 };
 //***   INSERTAR GRUPO */
 const InsertGrupo=async(event)=>{
-  event.preventDefault();
   handleModalInsert();
     await axios.post(baseUrl_Grupo,{
-      _metod: 'Insert',
-      idNivel:  props.idnivel,
-      idTutor:  cookies.get('idusuario'),
-      Nombre:consoleSeleccionada.nombre
+      _metod:       'Insert',
+      idNivel:      props.idnivel,
+      idTutor:      cookies.get('idusuario'),
+      idOlimpiada:  cookies.get('idolimpiada'),
+      Sie:          consoleSeleccionada.sie,
+      Nombre:       consoleSeleccionada.nombre
     },header()
   ).then(
     response => {
@@ -248,10 +257,80 @@ const Eliminar=async()=>{
     }
   )
 };
+//** Buscamos elcolegio */
+const buscarColegio = e => {
+  var search = colegios.filter(item=>{
+    //p.*, e.nombre as nom_est,c.nombre as nom_col
+    var cad= item.sie; 
+    if(cad===e.target.value){
+      return item.nombre;
+    }
+  });
+  var estado="Indefinido";
+  var idcol='';
+  var b=false;
+  if(search.length===1){
+    estado = search[0].nombre;
+    idcol = search[0].sie;
+    b=true;
+  }
+  setConsolaSeleccionada(prevState=>({
+    ...prevState,
+    ['colegio']:""+estado
+  }))
+  setConsolaSeleccionada(prevState=>({
+    ...prevState,
+    ['sie']:idcol
+  }))
+  setConsolaSeleccionada(prevState=>({
+    ...prevState,
+    ['colegiovalido']:b
+  }))
 
+  //if(search)
+  //setParticipante2(search);
+}
+//******  getAll Colegio
+const getAllColegios=async()=>{
+  //console.log("getAll Colegio");
+    await axios.post(baseUrl_colegio,{
+      _metod: 'getAllSimple'
+    },header()
+  ).then(
+    response => {
+      //console.log(response);
+      if(response.data.estado===1){
+        setColegio(response.data.val);
+      }
+    }
+  ).catch(
+    error=>{
+      alert(error);
+      setColegio([]);
+    }
+  )
+};
+/*** Buscamos el colegio por el sie */
+const ValidarGrupo = event => {
+  event.preventDefault();//cancelamos los eventos 
+  if(consoleSeleccionada.colegiovalido){
+    //console.log("Colegio vALIDO");
+    InsertGrupo();
+    //Buscamos si yaes participante devolvemos si esta registrado y si esta participando
+    //true:mostramos que ya tiene tutor
+    //else:creamos o modificamos estudiante 
+  }else{
+    setConsolaSeleccionada(prevState=>({
+      ...prevState,
+      ['mensaje']:"Ingrese el Sie de un Colegio Valido"
+    }))
+    handleModalMensaje();
+  }
+};
 //******  se ejecuta cuando inicia el Componente
   useEffect(async()=>{
     getAllGrupo();
+    getAllColegios();
   },[]);
 
 
@@ -281,8 +360,9 @@ const Eliminar=async()=>{
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell><strong >id</strong></TableCell>
+              <TableCell><strong >codigo</strong></TableCell>
               <TableCell><strong >Nombre de Grupo</strong></TableCell>
+              <TableCell><strong >Colegio/Sie</strong></TableCell>
               <TableCell><strong ><center>Integrante</center></strong></TableCell>
               <TableCell><center><strong >Acciones</strong></center></TableCell>
             </TableRow>
@@ -290,27 +370,19 @@ const Eliminar=async()=>{
           <TableBody>
             {grupos2.map(console =>(
               <TableRow key={console.idgrupo}>
-                <TableCell>{console.idgrupo}</TableCell>
+                <TableCell><center>{console.idgrupo}</center></TableCell>
                 <TableCell>{console.nombre}</TableCell>
+                <TableCell>{console.nombre_col}<br/><strong>Sie: </strong>{console.sie}</TableCell>
                 <TableCell><GestionDeIntegrantes idGrupo={console.idgrupo} limiteporgrupo={props.limiteporgrupo} limiteporedad={props.limiteporedad}/></TableCell>
+                
                 <TableCell>
                   <center>
-                  <Button
-                    variant="contained"
-                    color="default"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Editar')}}
-                    >
-                      <Edit/>
-                  </Button><br/>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Eliminar')}}
-                    >
-                      <Delete/>
-                  </Button>
+                  
+                      <Edit color="primary" onClick={()=>{seleccionarConsola(console,'Editar')}}/>
+                  
+                  
+                      <Delete color="secondary" onClick={()=>{seleccionarConsola(console,'Eliminar')}}/>
+                  
                   </center>
                 </TableCell>
               </TableRow>
@@ -327,7 +399,7 @@ const Eliminar=async()=>{
           <div style={modalStyle} className={classes.paper2}>
               <h3 id="simple-modal-title">Crear Grupo</h3>
               <div >
-              <form onSubmit={InsertGrupo} >
+              <form onSubmit={ValidarGrupo} >
                   
                   <GridContainer >
                       <GridItem xs={12} sm={12} md={12}>
@@ -342,24 +414,18 @@ const Eliminar=async()=>{
                         onChange={handleChangle}
                       />
                       </GridItem>
-                  </GridContainer>
-                  <strong>Nota:</strong> Si el grupo contiene solo un integrante coloque el nombre de grupo como apPaterno-apMaterno-Nombres del estudiante
-                  <GridContainer >
                       <GridItem xs={12} sm={12} md={12}>
-                        <Toolbar>
-                          <Typography variant="h2" noWrap className={classes.title}>
-                          </Typography>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
-                          &nbsp;&nbsp;&nbsp;
-                          <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
-                        </Toolbar> 
+                        Colegio:{consoleSeleccionada.colegio}
+                        <TextField variant="outlined" margin="normal"   fullWidth name='sie' required  label="Codigo SIE del Colegio" type="number" onChange={buscarColegio }  />
                       </GridItem>
                   </GridContainer>
-                  <GridContainer>
-                    
-                  </GridContainer>
-
-              
+                  <Alert severity="info"><strong>Nota:</strong> Si el grupo contiene solo un integrante coloque el nombre de grupo como apPaterno-apMaterno-Nombres del estudiante!</Alert>
+                  <Divider/>
+                <AccordionActions>
+                  <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                         
+                  <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                </AccordionActions>
               </form>
               </div>
             </div>
@@ -390,22 +456,12 @@ const Eliminar=async()=>{
                         />
                       </GridItem>
                   </GridContainer>
-                  
-                  <GridContainer >
-                      <GridItem xs={12} sm={12} md={12}>
-                        <Toolbar>
-                          <Typography variant="h2" noWrap className={classes.title}>
-                          </Typography>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
-                          &nbsp;&nbsp;&nbsp;
-                          <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
-                        </Toolbar> 
-                      </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    
-                  </GridContainer>
-
+                  <Alert severity="info"><strong>Nota:</strong> Si el grupo contiene solo un integrante coloque el nombre de grupo como apPaterno-apMaterno-Nombres del estudiante!</Alert>
+                  <Divider/>
+                  <AccordionActions>
+                    <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                    <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
+                  </AccordionActions>
               
               </form>
             </div>
@@ -420,24 +476,15 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper2}>
             <h1 id="simple-modal-title"><strong>Eliminar:</strong></h1>
-                <br/>
-                <GridContainer >
-                    <GridItem xs={12} sm={12} md={12}>
-                        En realidad desea eliminar el grupo con nombre: <br/>
-                        <strong >nombre:</strong>{consoleSeleccionada.nombre}<br/>
-                    </GridItem>
-                </GridContainer>
-                <br/>
-                <GridContainer >
-                    <GridItem xs={12} sm={12} md={4}>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                        <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                        <Button type="submit" variant="contained" color="primary"  onClick={Eliminar}>Eliminar</Button>
-                    </GridItem>
-                </GridContainer>
+                
+                <Alert severity="warning">En realidad desea eliminar el grupo con nombre:<strong>{consoleSeleccionada.nombre}</strong>?</Alert>
+                <Divider/>
+                  <AccordionActions>
+                    <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
+                            
+                    <Button type="submit" variant="contained" color="primary"  onClick={Eliminar}>Eliminar</Button>
+                  </AccordionActions>
+                
           </div>
         </Modal>
         <Modal
@@ -448,10 +495,13 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper2}>
             <h1 id="simple-modal-title"><strong>Mensaje:</strong></h1>
-            <br/>
-            <h4>{consoleSeleccionada.mensaje}</h4>
-            <br/>
-              <Button type="submit" className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
+
+            <Alert severity="info">{consoleSeleccionada.mensaje}</Alert>
+                <Divider/>
+                  <AccordionActions>
+                   <Button type="submit" variant="contained" color="primary"  fullWidth onClick={handleModalMensaje}>Aceptar</Button>
+                  </AccordionActions>
+            
           </div>
         </Modal>
     </div>

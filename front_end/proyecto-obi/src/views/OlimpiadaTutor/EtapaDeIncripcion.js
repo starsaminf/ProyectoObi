@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import InscribirParticipante from './InscribirParticipante.js';
+import InscribirGrupo from './InscribirGrupo.js';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
@@ -38,7 +38,7 @@ function TabPanel(props) {
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
-            <InscribirParticipante idnivel={idnivel} limiteporgrupo={limiteporgrupo} limiteporedad={limiteporedad} fechaMax={cookies.get('fechalimiteedad')}/>
+            <InscribirGrupo idnivel={idnivel} limiteporgrupo={limiteporgrupo} limiteporedad={limiteporedad} fechaMax={cookies.get('fechalimiteedad')}/>
         </Box>
       )}
     </div>

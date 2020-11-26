@@ -1,3 +1,4 @@
+
 import React,{ useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,10 +10,17 @@ import Box from '@material-ui/core/Box';
 //import InscribirParticipante from './InscribirParticipante.js';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
-import HOST from "../../variables/general.js";
+import HOST from "../../../variables/general.js";
 import axios from 'axios';
-import { BusinessCenterSharp } from '@material-ui/icons';
-import PaguinaResultados from './PaguinaResultados.js';
+import PaguinaDeNotas from './PaguinaDeNotas';
+//**  EXPANDIBLE */
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Button from '@material-ui/core/Button';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Divider } from '@material-ui/core';
+
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -36,9 +44,9 @@ function TabPanel(props) {
     >
       
       {value === index && (
-        <Box p={3}>
+        <Box p={0}>
           <Typography>{children}</Typography>
-            <PaguinaResultados idnivel={idnivel} idetapa={idetapa} tipo={tipo}/>
+            <PaguinaDeNotas idnivel={idnivel} idetapa={idetapa} tipo={tipo}/>
         </Box>
       )}
     </div>
@@ -74,6 +82,7 @@ export default function EtapaDeClasificacion(props) {
   const [n, setN] = React.useState(-1);
   const [m, setM] = React.useState(-1);
   const [value, setValue] = React.useState(0);
+  const [value2,   setValue2]    = useState(false);
   const [data,setData]=useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,15 +115,29 @@ const Buscar = (e)=>{
       return index;
   }
 }
+const ClickAccion = () =>{
+  if(!value2){
+    getAllEtapa();
+    setValue2(!value2);
+  }
+}
 //getPorDEfecto
 useEffect(async()=>{
 //llamamos todas las etapas
-console.log("Holaaaa");
-console.log(props);
-getAllEtapa();
+
 },[]);
   return (
     <div className={classes.root}>
+        <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          onClick={ClickAccion}
+          >
+            <Typography className={classes.heading}>Notas y Observaciones</Typography>
+          </AccordionSummary>
+          <AccordionDetails  > 
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -129,10 +152,13 @@ getAllEtapa();
             <Tab label={console.nombre} key={console.idnivel} {...a11yProps(Buscar(console.idnivel))}/>
           ))}
         </Tabs>
-      </AppBar>
       {data.map(console =>(
-        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel}  idetapa={props.idetapa} tipo ={props.tipo} index={Buscar(console.idnivel)}/>
+        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel}  idetapa={props.idetapa}tipo={props.tipo} index={Buscar(console.idnivel)}/>
       ))}
+
+      </AppBar>
+</AccordionDetails>
+                          </Accordion>
     </div>
   );
 }

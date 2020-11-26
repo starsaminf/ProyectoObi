@@ -19,7 +19,7 @@ if (!empty($_POST['_metod'])) {
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Integrante_de::Insert(
 				$_POST['idGrupo'],
-				$_POST['idEstudiante']
+				$_POST['Rude']
 				
 			);
 			if ($retorno) {
@@ -40,7 +40,7 @@ if (!empty($_POST['_metod'])) {
 	if($_POST['_metod']=='Delete'){
 			$retorno = DB_Integrante_de::Delete(
 				$_POST['idGrupo'],
-				$_POST['idEstudiante']
+				$_POST['Rude']
 			);
 			if ($retorno) {
 		            print json_encode(

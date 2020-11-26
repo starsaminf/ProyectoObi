@@ -16,6 +16,8 @@ import PaguinaDeGrupo from '../../OlimpiadaAdmin/Components/PaguinaDeGrupo.js';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Divider } from '@material-ui/core';
 
@@ -31,7 +33,7 @@ function header(){
   }
 };
 function TabPanel(props) {
-  const { children, value,idnivel,idetapa, index, ...other } = props;
+  const { children, value,idnivel,idetapa,tipo, index, ...other } = props;
   return (
     <div
       role="tabpanel"
@@ -42,9 +44,9 @@ function TabPanel(props) {
     >
       
       {value === index && (
-        <Box p={3}>
+        <Box p={0}>
           <Typography>{children}</Typography>
-            <PaguinaDeGrupo idnivel={idnivel} idetapa={idetapa}/>
+            <PaguinaDeGrupo idnivel={idnivel} idetapa={idetapa} tipo={tipo}/>
         </Box>
       )}
     </div>
@@ -56,7 +58,8 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
   idnivel: PropTypes.any.isRequired,
-  idetapa: PropTypes.any.isRequired
+  idetapa: PropTypes.any.isRequired,
+  tipo: PropTypes.any.isRequired
 };
 
 function a11yProps(index) {
@@ -92,6 +95,7 @@ const getAllEtapa=async()=>{
   },header()
 ).then(
   response => {
+    
     //console.log(response);
     if(response.data.estado===1){
       setData(response.data.val);
@@ -149,13 +153,11 @@ useEffect(async()=>{
             <Tab label={console.nombre} key={console.idnivel} {...a11yProps(Buscar(console.idnivel))}/>
           ))}
         </Tabs>
-        <Divider/>
       {data.map(console =>(
-        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel}  idetapa={props.idetapa} index={Buscar(console.idnivel)}/>
+        <TabPanel value={value} key={console.idnivel} idnivel={console.idnivel}  idetapa={props.idetapa} tipo={props.tipo} index={Buscar(console.idnivel)}/>
       ))}
-      </AppBar>
-      
 
+      </AppBar>
 </AccordionDetails>
                           </Accordion>
     </div>

@@ -31,7 +31,52 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
-	if($_POST['_metod']=='getAllAdmin'){
+	if($_POST['_metod']=='getGrupoConNotas'){
+		//$idOlimpiada,$idTutor,$idNivel
+			$retorno = DB_Grupo::getGrupoConNotas($_POST['idNivel'], $_POST['idEtapa']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO se encontro ningun Grupo')
+					);
+				}
+	}
+	if($_POST['_metod']=='getGrupoConNotasCondicionado'){
+		//$idOlimpiada,$idTutor,$idNivel
+			$retorno = DB_Grupo::getGrupoConNotasCondicionado($_POST['idNivel'], $_POST['idEtapa']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO se encontro ningun Grupo')
+					);
+				}
+	}
+	if($_POST['_metod']=='getGrupoConNotasCondicionadoTutor'){
+		//$idOlimpiada,$idTutor,$idNivel
+			$retorno = DB_Grupo::getGrupoConNotasCondicionadoTutor($_POST['idTutor'],$_POST['idNivel'], $_POST['idEtapa']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'NO se encontro ningun Grupo')
+					);
+				}
+	}
+		if($_POST['_metod']=='getAllAdmin'){
 		//$idOlimpiada,$idTutor,$idNivel
 			$retorno = DB_Grupo::getAllAdmin($_POST['idNivel']);
 			if ($retorno) {
@@ -61,17 +106,35 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod'] == 'getAprobadosPorEtapa'){
+		$retorno = DB_Grupo::getAprobadosPorEtapa($_POST['idNivel'],$_POST['idEtapa']);
+		if ($retorno) {
+            $datos["estado"] = 1;
+            $datos["ret"] = $retorno;
+			$datos["val"] = $retorno;
+			print json_encode($datos);
+		} else {
+			print json_encode(
+				array(
+					'estado' => 2,
+					'mensaje' => 'NO se encontro ningunestudiante en el grupo')
+			);
+		}
+	}
 
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Grupo::Insert(
 				$_POST['idNivel'],
 				$_POST['idTutor'],
-				$_POST['Nombre']
+				$_POST['idOlimpiada'],
+				$_POST['Nombre'],
+				$_POST['Sie']
 			);
 			if ($retorno) {
 		            print json_encode(
 						array(
 							'estado' => 1,
+							'val'=>$retorno,
 							'mensaje' => 'El Grupo se Agrego correctamente')
 					);
 				} else {

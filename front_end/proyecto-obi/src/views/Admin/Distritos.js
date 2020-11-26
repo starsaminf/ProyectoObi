@@ -282,12 +282,10 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Agregar Nuevo Distrito</h3>
-            <TextField name='nombre' required className={classes.nombre} label="nombre de distrito"onChange={handleChangle} />
-            <br/>
+            <TextField name='nombre' margin="normal"variant="outlined"  required className={classes.inputMaterial} label="nombre de distrito"onChange={handleChangle} />
             
-            <br/>
             Departamento: 
-            <select name='departamento' defaultValue={''} required onChange={handleChangle}>
+            <select name='departamento' margin="normal"variant="outlined"className={classes.inputMaterial}  defaultValue={''} required onChange={handleChangle}>
               <option value="" disabled>Seleccionar</option>
               <option value="CH">Chuquisaca</option>
               <option value="LP">La Paz</option>
@@ -318,11 +316,11 @@ const Eliminar=async()=>{
         >
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Editar Distrito</h3>
-            <TextField name='iddistrito' disabled={true} className={classes.iddistrito} label="iddistrito"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.iddistrito}/>
-            <br/>
-            <TextField name='nombre' required className={classes.nombre} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
-            <br/>
-            <select name='departamento' defaultValue={consoleSeleccionada && consoleSeleccionada.departamento}  required onChange={handleChangle}>
+            <TextField name='iddistrito' margin="normal"variant="outlined"  disabled={true} className={classes.inputMaterial} label="iddistrito"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.iddistrito}/>
+            
+            <TextField name='nombre'  margin="normal"variant="outlined"  required className={classes.inputMaterial} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
+            Departamento:<br/>
+            <select name='departamento'margin="normal"variant="outlined" className={classes.inputMaterial}  defaultValue={consoleSeleccionada && consoleSeleccionada.departamento}  required onChange={handleChangle}>
               <option value="" disabled>Seleccionar</option>
               <option value="CH">Chuquisaca</option>
               <option value="LP">La Paz</option>

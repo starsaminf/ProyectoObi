@@ -31,6 +31,25 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getById'){
+			$retorno = DB_Nota::getById(
+				$_POST['idGrupo'],
+				$_POST['idEtapa']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'val' 	 => $retorno)
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado'  => 2,
+							'mensaje' => 'No Existe La nota')
+					);
+				}
+	}
 	if($_POST['_metod']=='Insert'){
 			$retorno = DB_Nota::Insert(
 				$_POST['idParticipante'],
@@ -51,6 +70,26 @@ if (!empty($_POST['_metod'])) {
 						array(
 							'estado' => 2,
 							'mensaje' => 'No se pudo agregar la nueva Nota')
+					);
+				}
+	}
+	if($_POST['_metod']=='InsertAll'){
+			$retorno = DB_Nota::InsertAll(
+				$_POST['idNivel'],
+				$_POST['idEtapa'],
+				$_POST['Datos']
+			);
+			if ($retorno) {
+		            print json_encode(
+						array(
+							'estado' => 1,
+							'mensaje' => 'Las Notas se registraron de Forma Exitosa')
+					);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No se pudo registrar las notas, Verifique que todos los espacios estan completados y de forma adecuada')
 					);
 				}
 	}

@@ -163,9 +163,7 @@ const Update=async()=>{
         _metod: 'Update',
         idOlimpiada:    consoleSeleccionada.idolimpiada,
         Nombre:         consoleSeleccionada.nombre,
-        Baner:          consoleSeleccionada.baner,
         Descripcion:    consoleSeleccionada.descripcion,
-        Convocatoria:   consoleSeleccionada.convocatoria,
         FechaIni:       consoleSeleccionada.fechaini,
         FechaFin:       consoleSeleccionada.fechafin,
         FechaLimiteEdad:consoleSeleccionada.fecha_limite_edad,
@@ -214,15 +212,7 @@ useEffect(async()=>{
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
-                    <TextField variant="outlined"  multiline={true} rows={5} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion de la olimpiada" value={consoleSeleccionada.descripcion} onChange={handleChangle} />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={6}>
-                  <TextField variant="outlined" margin="normal" fullWidth name='baner' required className={classes.baner} label="Baner" value={consoleSeleccionada.baner} onChange={handleChangle}/>
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <TextField variant="outlined" margin="normal" fullWidth name='convocatoria' required className={classes.convocatoria} label="Url de la convocatoria" value={consoleSeleccionada.convocatoria} onChange={handleChangle}/>
+                    <TextField variant="outlined"  multiline={true} rows={12} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion de la olimpiada" value={consoleSeleccionada.descripcion} onChange={handleChangle} />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>

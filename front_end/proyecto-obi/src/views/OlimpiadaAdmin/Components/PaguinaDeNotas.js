@@ -8,16 +8,14 @@ import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import ListarEstudiantes from './ListarEstudiantes.js';
-import NotaDeGrupo from './NotaDeGrupo';
 import AccordionActions from '@material-ui/core/AccordionActions';
-import { Alert } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import PublicarNota from './PublicarNota.js';
+
 const baseUrl_Grupos=HOST.Url+'Grupo.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //componentes de exel
-
-
-
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -66,14 +64,13 @@ function PaguinaResultados(props) {
 const getAll=async()=>{
     //consoleSeleccionada.mensaje='';
     await axios.post(baseUrl_Grupos,{
-        _metod: 'getAllAdmin',
-        idNivel:        props.idnivel     
-        
+        _metod: 'getGrupoConNotas',
+        idNivel:        props.idnivel,     
+        idEtapa:        props.idetapa
     },header()
   ).then(
     response => {
-      console.log("****************");
-        console.log(response);
+        //console.log(response);
         if(response.data.estado===1)
             setData(response.data.val);
         else
@@ -111,20 +108,12 @@ const getAprobadosPorEtapa = async()=>{
   )
 }
     useEffect(async()=>{
-        
-        console.log("props de paguina de Grupo");
-        console.log(props);
-        if(props.tipo==='1'){
-          getAll();  
-        }else{
-          console.log("Hacemos cambios papu");
-          getAprobadosPorEtapa();
-        }
-        //getAllEstudiantes();
-        /**
-        Nivel = {props.idnivel}<br/>
-        etapa = {props.idetapa}
-         */
+      if(props.tipo==='1'){
+        getAll();  
+      }else{
+        console.log("Hacemos cambios papu");
+        getAprobadosPorEtapa();
+      }
       },[]);
     return (
     <div>
@@ -132,39 +121,30 @@ const getAprobadosPorEtapa = async()=>{
 <TableContainer className={classes.content}>
         {(data.length===0)?<center><Alert severity="error">Esta Etapa no tiene Grupos!</Alert></center>:
        <div>
-         <Alert severity="info">En este nivel tenemos <strong>{data.length}</strong> grupos!</Alert>
-        <Table>
-          <TableHead >
-            <TableRow>
-              <TableCell><strong >idGrupo</strong></TableCell>
-              <TableCell><strong ><center>Nombre</center></strong></TableCell>
-              <TableCell><strong ><center>Colegio</center></strong></TableCell>
-              <TableCell><strong ><center>Tutor</center></strong></TableCell>
-              <TableCell><strong ><center>Integrantes</center></strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map(console =>(
-              <TableRow key={console.idgrupo}>
-                <TableCell>{console.idgrupo}</TableCell>
-                <TableCell>{console.nombre}</TableCell>
-                <TableCell>{console.nombre_col}<br/><strong>SIE:</strong> {console.sie}</TableCell>
-                <TableCell>{console.tut}</TableCell>
-                <TableCell><ListarEstudiantes idGrupo={console.idgrupo}/></TableCell>
-                
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+         <Alert severity="info">
+            <AlertTitle>Información</AlertTitle>
+            Para agregar las notas a este nivel y etapa descarge el Formulario de notas y una ves rellenado los espacios seleccione subir notas  !
+            - Cada ves que suba al archivo de notas, se limpiara todas las notas y se actualizara con las notas subidas en el ultimo archivo   
+            <br/>
+            <strong>Detalles:</strong><br/>
+            <strong>Puesto:</strong> la ubicacion en la tabla de pociciones<br/>
+            <strong>Estado:</strong> Aprobado o Reprobado para la siguiente etapa<br/>
+            <strong>Observaciones:</strong> Podria colocar cuantos problemas resolvio o puntos acumulo
+          </Alert>
         <AccordionActions>
-
-        <ExcelFile element={<Button color="primary"variant="outlined">Descargar en Excel</Button>} filename="Registro">
-                <ExcelSheet  data={data} name="Ciudades mas pobladas">
+        <ExcelFile element={<Button color="primary"variant="outlined">Descargar Formulario de Notas</Button>} filename="Registro">
+                <ExcelSheet  data={data} name="FormularioNotas">
                   <ExcelColumn label ="idgrupo" value="idgrupo"/>
                   <ExcelColumn label ="nombre" value="nombre"/>
-                  <ExcelColumn label ="tutor" value="tut"/>
+                  <ExcelColumn label ="colegio" value="col"/>
+                  <ExcelColumn label ="puesto" value="puesto"/>
+                  <ExcelColumn label ="estado" value="estado"/>
+                  <ExcelColumn label ="observaciones" value="observaciones"/>
                 </ExcelSheet>
             </ExcelFile>
+      </AccordionActions>
+      <AccordionActions>
+        <PublicarNota idNivel={props.idnivel} idEtapa={props.idetapa}/>
       </AccordionActions>
       
       </div>

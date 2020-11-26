@@ -32,6 +32,8 @@ import Salir from "../views/Admin/Salir.js";
 import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
 import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
 import Etapa from "../views/OlimpiadaAdmin/Etapa.js";
+import Grupos from "../views/OlimpiadaAdmin/Grupos y Estudiantes.js";
+import Convocatoria from "../views/OlimpiadaTutor/Convocatoria.js";
 // core components/views for RTL layout
 
 
@@ -66,10 +68,17 @@ const dashboardRoutes = [
     layout: "/olimpiadaAdmin"
   }, 
   {
-    path: "/estudiantes",
-    name: "Estudiantes",
+    path: "/grupos",
+    name: "Grupos y estudiantes",
     icon: Dashboard,
-    component: Salir,
+    component: Grupos,
+    layout: "/olimpiadaAdmin"
+  },
+  {
+    path: "/convocatoria",
+    name: "Convocatoria",
+    icon: Dashboard,
+    component: Convocatoria,
     layout: "/olimpiadaAdmin"
   }
   
