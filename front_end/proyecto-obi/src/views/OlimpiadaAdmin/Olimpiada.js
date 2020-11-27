@@ -11,7 +11,7 @@ import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
-
+import ReactMarkdown from 'react-markdown';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
@@ -197,14 +197,16 @@ useEffect(async()=>{
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
+        
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Detalles de la OLimpiada</h4>
               <p className={classes.cardCategoryWhite}>Detalles</p>
             </CardHeader>
             <CardBody>
-              <form onSubmit={handleSubmit}>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={6}>
+                <form onSubmit={handleSubmit}>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <TextField variant="outlined" margin="normal" fullWidth name='nombre' required className={classes.nombre} label="Nombre de Olimpiada" value={consoleSeleccionada.nombre} onChange={handleChangle}/>
@@ -213,6 +215,7 @@ useEffect(async()=>{
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <TextField variant="outlined"  multiline={true} rows={12} margin="normal" fullWidth name='descripcion' required className={classes.descripcion} label="Descripcion de la olimpiada" value={consoleSeleccionada.descripcion} onChange={handleChangle} />
+                    Nota:
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
@@ -272,10 +275,16 @@ useEffect(async()=>{
                     <Button type="submit" fullWidth variant="contained" color="primary" >Guardar Cambios</Button>
                   </GridItem>
                 </GridContainer>
-              </form>
+                </form>
+              </GridItem>
+              <GridItem xs={12} sm={12} md={6}>
+                <ReactMarkdown>{"## "+consoleSeleccionada.nombre+"\n"+consoleSeleccionada.descripcion}</ReactMarkdown>
+              </GridItem>
+              </GridContainer>
             </CardBody>
           </Card>
-        </GridItem>
+        
+        
         
       </GridContainer>
       <Modal

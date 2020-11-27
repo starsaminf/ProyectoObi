@@ -26,8 +26,8 @@ import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
-import Atraz from "../views/Admin/Dashboard.js";
-import DashboardPage from "../views/Admin/Olimpiada.js";
+import Atraz from "../views/Admin/Olimpiada.js";
+import DashboardPage from "../views/Admin/Dashboard.js";
 import Salir from "../views/Admin/Salir.js";
 import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
 import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
@@ -42,12 +42,19 @@ const dashboardRoutes = [
     path: "/olimpiada",
     name: "volver atras",
     icon: AtrazIcon,
-    component: DashboardPage,
+    component: Atraz,
     layout: "/admin"
   },
   {
     path: "/dashboard",
-    name: "OLimpiada",
+    name: "Dashboard",
+    icon: Dashboard,
+    component: DashboardPage,
+    layout: "/olimpiadaAdmin"
+  },
+  {
+    path: "/olimpiada",
+    name: "Olimpiada",
     icon: Dashboard,
     component: Olimpiada,
     layout: "/olimpiadaAdmin"

@@ -1,296 +1,179 @@
-import React , { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import {Modal, TextField,Container} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Avatar from '@material-ui/core/Avatar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Alert from 'react-bootstrap/Alert'
-import 'bootstrap/dist/css/bootstrap.min.css';
-// para los web servises
+import React from "react";
+// react plugin for creating charts
+import ChartistGraph from "react-chartist";
+// @material-ui/core
+import { makeStyles } from "@material-ui/core/styles";
+import Icon from "@material-ui/core/Icon";
+// @material-ui/icons
+import Store from "@material-ui/icons/Store";
+import DateRange from "@material-ui/icons/DateRange";
+import LocalOffer from "@material-ui/icons/LocalOffer";
+import Update from "@material-ui/icons/Update";
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import AccessTime from "@material-ui/icons/AccessTime";
+import Accessibility from "@material-ui/icons/Accessibility";
+// core components
+import GridItem from "../../components/Grid/GridItem.js";
+import GridContainer from "../../components/Grid/GridContainer.js";
+import Card from "../../components/Card/Card.js";
+import CardHeader from "../../components/Card/CardHeader.js";
+import CardIcon from "../../components/Card/CardIcon.js";
+import CardBody from "../../components/Card/CardBody.js";
+import CardFooter from "../../components/Card/CardFooter.js";
 
-import axios from 'axios';
-import md5 from "md5";
-import Cookies from "universal-cookie";
-import HOST from "../../variables/general.js";//../../variables/general.js";
-const baseUrl = HOST.Url+"Tutor.php";
+import {
+  dailySalesChart,
+  emailsSubscriptionChart,
+  completedTasksChart
+} from "../../variables/charts.js";
 
-const cookies = new Cookies();
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
-function getModalStyle() {
-  return {
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`,
-  };
-}
+import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  paper2: {
-    position: 'absolute',
-    width: 600,
-    height: '80%',
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(0),
-  },
-  icons: {
-    cursos:'pointer'
-  },
-  inputMaterial:{
-    width:'10%'
-  },
+const useStyles = makeStyles(styles);
 
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '80%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(1, 0, 2),
-  },
-}));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
-export default   function LoginUsuario(){
+export default function Dashboard() {
   const classes = useStyles();
-  const [modalStyle] = useState(getModalStyle);
-  const [openModalIniciar, setOpenIniciar] = useState(false);
-  const [openModalNuevo, setOpenNuevo] = useState(false);
-  const [viewAlert, setOpenAlertMensaje] = useState(false);
-  const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idtutor:'',
-    nombre:'',
-    appaterno:'',
-    apmaterno:'',
-    ci:'',
-    correo:'',
-    celular:'',
-    password:'',
-    password2:'',
-    mensaje:'Mensaje'
-  })
-  const handleChangle = e => {
-    const {name, value}= e.target;
-    setConsolaSeleccionada(prevState=>({
-      ...prevState,
-      [name]:value
-    }))
-  }
-  const handleModalIniciar = () => {
-    handleAlertMensaje(false);
-    setOpenIniciar(!openModalIniciar);
-    
-  };
-  const handleModalNuevo = () => {
-    handleAlertMensaje(false);
-    setOpenNuevo(!openModalNuevo);
-  };
-  const handleAlertMensaje = (e) => {
-    setOpenAlertMensaje(e);
-  };
-
-  const handleSubmitIniciar =async(event) =>{
-    event.preventDefault();
-    handleAlertMensaje(false);//juanhotmail.com
-    await axios.post(baseUrl,
-      {
-          _metod:     'Login',
-          Correo:     consoleSeleccionada.correo,
-          Password:   md5(consoleSeleccionada.password)
-      },
-      {
-          headers: {
-              "Accept": "application/json, text/plain, */*",
-              "Content-Type": "application/json;charset=utf-8"
-          }
-      }
-  )
-  .then(
-      response => {
-        //console.log(response);
-          if(response.data.estado===1){
-              var respuesta = response.data.val[0];
-              //console.log(respuesta);
-              cookies.set('idusuario', respuesta.idtutor, {path:"/"});
-              cookies.set('username', respuesta.nombre, {path:"/"});
-              cookies.set('correo', respuesta.correo, {path:"/"});
-              cookies.set('tipo', 'tutor', {path:"/"});
-              //console.log("Usuario guardadooo weee");
-              window.location.href="./tutor";
-          }else{
-            consoleSeleccionada.mensaje=response.data.mensaje;
-            handleAlertMensaje(true);
-            //this.setState({alertShow:true});
-          }
-      }
-  )
-  .catch(
-      error=>{
-        consoleSeleccionada.mensaje=""+error;
-            handleAlertMensaje(true);
-        //this.setState({alertShow:true});
-      }
-  )
-    //ejecutamos el axios
-  }
-
-  const handleSubmitCrear = async(event) =>{
-    event.preventDefault();
-    handleAlertMensaje(false);
-    //console.log(consoleSeleccionada.correo);
-    //console.log(consoleSeleccionada.password);
-    //console.log(consoleSeleccionada.password2);
-    //console.log("A donde muchachote");
-    //ejecutamos el axios
-    var alerta = false;
-    var mensaje ="";
-    if(!(consoleSeleccionada.password===consoleSeleccionada.password2)){
-      mensaje= mensaje + "Las contraseñas no son iguales";
-      alerta= true;
-    }
-
-/**
- *          * $_POST['Nombre'],
-				$_POST['ApPaterno'],
-				$_POST['ApMaterno'],
-				$_POST['Ci'],
-				$_POST['Correo'],
-				$_POST['Celular'],
-				$_POST['Password']
- */
-    ///verificamos si es valido o no
-    if(!alerta){
-      //console.log("valido weeeee listo pára el axios");
-      await axios.post(baseUrl,
-        {
-            _metod:     'Insert',
-            Nombre:     consoleSeleccionada.username,
-            Ci:         consoleSeleccionada.ci,
-            Correo:     consoleSeleccionada.correo,
-            Celular:    consoleSeleccionada.celular,
-            Password:   md5(consoleSeleccionada.password)
-        },
-        {
-            headers: {
-                "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json;charset=utf-8"
-            }
-        }
-    )
-    .then(
-        response => {
-          //console.log(response);
-          consoleSeleccionada.mensaje=response.data.mensaje;
-            if(response.data.estado===1){
-              handleModalNuevo();
-              handleModalIniciar();
-              alert("la cuenta ya fue creada con exito");
-              //window.location.href="./tutor";
-            }else{
-              //consoleSeleccionada.mensaje=response.data.mensaje;
-              handleAlertMensaje(true);
-              //this.setState({alertShow:true});
-            }
-        }
-    )
-    .catch(
-        error=>{
-          consoleSeleccionada.mensaje=""+error;
-              handleAlertMensaje(true);
-          //this.setState({alertShow:true});
-        }
-    )
-      //valido
-      //consoleSeleccionada.mensaje="Las contraseñas no son iguales";
-      //handleAlertMensaje(true);
-    }else{
-      //no valido
-      //console.log("No valido");
-      consoleSeleccionada.mensaje=mensaje;
-      handleAlertMensaje(alerta);
-    }
-  }
-
-    return (
-      <div >
-        <form onSubmit={handleSubmitIniciar}>
-              <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="correo"
-                  label="Correo"
-                  name="correo"
-                  autoComplete="correo"
-                  onChange={handleChangle}
-                  autoComplete="current-correo"
-                  autoFocus
-                />
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Contraseña"
-                  type="password"
-                  id="password"
-                  onChange={handleChangle}
-                  autoComplete="current-password"
-                />
-                <Alert show={viewAlert} variant="danger" >
-                  {consoleSeleccionada.mensaje}
-                </Alert>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >  Iniciar
-                </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link  variant="body2">
-                      ¿Se te olvidó tu contraseña?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link  variant="body2" onClick={()=>{handleModalNuevo();handleModalIniciar()}}>
-                      {"¿No tienes una cuenta? Regístrate"}
-                    </Link>
-                  </Grid>
-                </Grid>
-            </form>
-      </div>
-    );
+  return (
+    <div>
+      <GridContainer>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="warning" stats icon>
+              <CardIcon color="warning">
+                <Icon><DateRange/></Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Niveles</p>
+              <h3 className={classes.cardTitle}>4</h3>
+            </CardHeader>
+            <CardFooter stats>
+            <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="success" stats icon>
+              <CardIcon color="success">
+                <Store />
+              </CardIcon>
+              <p className={classes.cardCategory}>Etapas</p>
+              <h3 className={classes.cardTitle}>4</h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="danger" stats icon>
+              <CardIcon color="danger">
+                <Icon><DateRange/></Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Colegios</p>
+              <h3 className={classes.cardTitle}>75</h3>
+            </CardHeader>
+            <CardFooter stats>
+            <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
+                <Accessibility />
+              </CardIcon>
+              <p className={classes.cardCategory}>Estudiantes</p>
+              <h3 className={classes.cardTitle}>245</h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart>
+            <CardHeader color="success">
+              <ChartistGraph
+                className="ct-chart"
+                data={dailySalesChart.data}
+                type="Line"
+                options={dailySalesChart.options}
+                listener={dailySalesChart.animation}
+              />
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Daily Sales</h4>
+            </CardBody>
+            <CardFooter chart>
+              <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart>
+            <CardHeader color="warning">
+              <ChartistGraph
+                className="ct-chart"
+                data={emailsSubscriptionChart.data}
+                type="Bar"
+                options={emailsSubscriptionChart.options}
+                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
+                listener={emailsSubscriptionChart.animation}
+              />
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
+            </CardBody>
+            <CardFooter chart>
+              <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart>
+            <CardHeader color="danger">
+              <ChartistGraph
+                className="ct-chart"
+                data={completedTasksChart.data}
+                type="Line"
+                options={completedTasksChart.options}
+                listener={completedTasksChart.animation}
+              />
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Completed Tasks</h4>
+            </CardBody>
+            <CardFooter chart>
+            <div className={classes.stats}>
+                <Update />
+                Recién actualizado
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    </div>
+  );
 }

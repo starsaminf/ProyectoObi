@@ -196,7 +196,8 @@ useEffect(async()=>{
           >
             <Typography className={classes.heading}>Detalles de etapa</Typography>
           </AccordionSummary>
-          <AccordionDetails  >         
+          <AccordionDetails  >  
+          <GridItem xs={12} sm={12} md={6}>       
               <form onSubmit={handleSubmit} className={classes.root}>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
@@ -209,6 +210,7 @@ useEffect(async()=>{
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
+                
                   <GridItem xs={12} sm={12} md={6}>
                     <TextField
                       variant="outlined"
@@ -239,6 +241,7 @@ useEffect(async()=>{
                       onChange={handleChangle}
                     />
                   </GridItem>
+                 
                 </GridContainer>
                 <Divider/>
                 <AccordionActions>
@@ -246,6 +249,10 @@ useEffect(async()=>{
                   
                 </AccordionActions>
               </form>
+              </GridItem>
+              <GridItem xs={12} sm={12} md={6}>
+              <ReactMarkdown>{"## "+consoleSeleccionada.nombre+"\n"+consoleSeleccionada.descripcion}</ReactMarkdown>
+              </GridItem>
               
       </AccordionDetails>
                           </Accordion>

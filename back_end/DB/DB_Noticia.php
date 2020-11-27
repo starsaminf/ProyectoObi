@@ -24,7 +24,7 @@ class DB_Noticia
 
     public static function getAllPublic()
     {
-        $consulta = "SELECT * from Noticia ORDER BY idNoticia ";
+        $consulta = "SELECT * from Noticia ORDER BY  idNoticia DESC ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);

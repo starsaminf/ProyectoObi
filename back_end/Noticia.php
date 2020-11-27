@@ -30,6 +30,7 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	
 	if($_POST['_metod']=='getAllPublic'){
 			$retorno = DB_Noticia::getAllPublic();
 			if ($retorno) {
