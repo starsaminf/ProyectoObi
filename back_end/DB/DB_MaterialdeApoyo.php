@@ -148,7 +148,7 @@ class DB_MaterialdeApoyo
             
             return $sentencia;
         }catch (PDOException $e) {
-            return false;
+            return $e;
         }
     }
 

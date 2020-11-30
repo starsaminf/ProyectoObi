@@ -31,6 +31,34 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllCount'){
+			$retorno = DB_Olimpiada::getAllCount();
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no hay detalles')
+					);
+				}
+	}
+	if($_POST['_metod']=='getAllCountOlimpiada'){
+			$retorno = DB_Olimpiada::getAllCountOlimpiada($_POST['idOlimpiada']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no hay detalles')
+					);
+				}
+	}
 	if($_POST['_metod']=='getAllPublic'){
 			$retorno = DB_Olimpiada::getAllPublic();
 			if ($retorno) {

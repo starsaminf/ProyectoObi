@@ -84,7 +84,7 @@ if (!empty($_POST['_metod'])) {
 	}
 	if($_POST['_metod']=='Update'){
 			$retorno = DB_MaterialdeApoyo::Update(
-				$_POST['idMaterialDeApoyo'],
+				$_POST['idMaterial'],
 				$_POST['Titulo'],
 				$_POST['SubTitulo'],
 				$_POST['Tipo'],

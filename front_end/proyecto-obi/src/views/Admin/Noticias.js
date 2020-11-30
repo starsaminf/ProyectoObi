@@ -11,6 +11,16 @@ import axios from 'axios';
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import ReactMarkdown from 'react-markdown';
+import Update from "@material-ui/icons/Update";
+import IconNoticia from "../../assets/img/noticia.png";
+import Card from "../../components/Card/Card.js";
+import CardHeader from "../../components/Card/CardHeader.js";
+import CardIcon from "../../components/Card/CardIcon.js";
+import CardBody from "../../components/Card/CardBody.js";
+import CardFooter from "../../components/Card/CardFooter.js";
+import { Divider } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 const baseUrl=HOST.Url+'Noticia.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -52,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
   },
   inputMaterial:{
     width:'100%'
+  },
+  imagen: {
+    height: '50px',
+    width: '50px' 
   }
 }));
 function header(){
@@ -120,16 +134,6 @@ const seleccionarConsola =(consola,caso)=>{
   setConsolaSeleccionada(consola);
   (caso==='Editar')?handleModalUpdate():handleModalDelete();
 };
-const Visual = () =>{
-  var  c = "";
-  c+="# "+ consoleSeleccionada.titulo+"\n";
-  c+="## "+ consoleSeleccionada.subtitulo+"\n";
-  c+= consoleSeleccionada.contenido;
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ["mensaje"]:c
-  }))
-}
 
 //******  getAll
   const getAll=async()=>{
@@ -266,36 +270,56 @@ const Eliminar=async()=>{
           <Button type="submit" variant="contained" color="primary" onClick={handleModalInsert} >+ Agregar</Button>       
         </Toolbar>        
       </div>  
-      <TableContainer className={classes.content}>
-        <Table>
-          <TableHead >
-            <TableRow>
-              <TableCell><strong >id</strong></TableCell>
-              <TableCell><strong >Titulo</strong></TableCell>
-              <TableCell><strong >Contenido</strong></TableCell>
-              <TableCell><strong >Fecha</strong></TableCell>
-              <TableCell><strong >Acciones</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <Divider/>
+        
             {data2.map(console =>(
-              <TableRow key={console.idnoticia}>
-                <TableCell>{console.idnoticia}</TableCell>
-                <TableCell><strong >{console.titulo}</strong><br/><i>{console.subtitulo}</i></TableCell>
-                <TableCell>{console.contenido}</TableCell>
-                <TableCell>{console.fecha}</TableCell>
-                <TableCell>
-                  <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
-                    &nbsp;&nbsp;&nbsp;
-                  <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
-                </TableCell>
-              </TableRow>
+              
+                    
+                    
+                      <Card key={console.idnoticia}>
+                        <CardBody>    
+                          <GridItem xs={12} sm={12} md={12}>
+                            <Grid container wrap="nowrap" spacing={2}>
+                              <Grid item>
+                                <img src={IconNoticia} className={classes.imagen}/>
+                              </Grid>
+                              <Grid item xs zeroMinWidth>
+                                <ReactMarkdown>{"## "+console.titulo+"\n### "+console.subtitulo+"\n"+console.contenido}</ReactMarkdown>
+                                
+                              </Grid>
+                            </Grid>
+                          </GridItem>
+                          
+                        </CardBody>
+                        <Divider/>
+                        <CardFooter>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <Grid container wrap="nowrap" spacing={2}>
+                              <Grid item>
+                              Publicado en :{console.fecha}
+                              </Grid>
+                              <Grid item xs zeroMinWidth>
+                                
+                              </Grid>
+                              <Grid>
+                                <Button onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" >
+                                  <Edit   />
+                                  editar
+                                </Button>
+                                <Button onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary" >
+                                  <Delete  />
+                                  eliminar
+                                </Button>
+                                
+                              </Grid>
+                            </Grid>
+                          </GridItem>
+                        </CardFooter>
+                      </Card>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      
 
-
+        
 
 
 

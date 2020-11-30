@@ -107,7 +107,6 @@ export default function Noticias(){
 		await axios.post(baseUrl,{_metod: 'getAllPublic'},header()
 	  ).then(
 		response => {
-		  console.log(response);
 		  if(response.data.estado===1){
 			setData(response.data.val);
 			//setData2(response.data.val);

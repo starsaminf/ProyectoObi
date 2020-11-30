@@ -260,7 +260,7 @@ const Eliminar=async()=>{
               <TableCell><strong >id</strong></TableCell>
               <TableCell><strong >Nombre / descripcion</strong></TableCell>
               <TableCell><strong >fechas</strong></TableCell>
-              <TableCell><strong >Acciones</strong></TableCell>
+              <TableCell><strong ><center>Acciones</center></strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -271,30 +271,13 @@ const Eliminar=async()=>{
                 <TableCell><strong >{console.fechaini}</strong><br/><i>{console.fechafin}</i></TableCell>
                 <TableCell>
                   <center>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Admin')}}
-                    >
-                      <SupervisedUserCircle/>
-                  </Button><br/>
-                  <Button
-                    variant="contained"
-                    color="default"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Editar')}}
-                    >
-                      <Edit/>
-                  </Button><br/>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}
-                    onClick={()=>{seleccionarConsola(console,'Eliminar')}}
-                    >
-                      <Delete/>
-                  </Button>
+                  
+                      <SupervisedUserCircle color="primary" onClick={()=>{seleccionarConsola(console,'Admin')}}/>
+                      &nbsp;
+                      <Edit color="inherit" onClick={()=>{seleccionarConsola(console,'Editar')}}/>
+                      &nbsp;
+                      <Delete color="secondary" onClick={()=>{seleccionarConsola(console,'Eliminar')}}/>
+                  
                   </center>
                   
                 </TableCell>

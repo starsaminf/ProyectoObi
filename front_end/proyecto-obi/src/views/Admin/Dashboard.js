@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -20,19 +20,56 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardIcon from "../../components/Card/CardIcon.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
+import Cookies from "universal-cookie";
+import HOST from "../../variables/general.js";
+import axios from 'axios';
 
 import {
   dailySalesChart,
   emailsSubscriptionChart,
   completedTasksChart
 } from "../../variables/charts.js";
+//"../../variables/general.js";
 
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
-
+const cookies = new Cookies();
+const baseUrl=HOST.Url+'Olimpiada.php';
 const useStyles = makeStyles(styles);
-
+function header(){
+  return {
+    headers: {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json;charset=utf-8"
+    }
+  }
+};
 export default function Dashboard() {
   const classes = useStyles();
+  const [consoleSeleccionada, setConsolaSeleccionada]= useState({
+    col:'',
+    tut:'',
+    ol:'',
+    est:''
+  })
+  //******  getAll colegios
+      const getAll=async()=>{
+        await axios.post(baseUrl,{_metod: 'getAllCount'},header()
+      ).then(
+        response => {
+          console.log("***********");
+          console.log(response);
+          if(response.data.estado===1){
+            setConsolaSeleccionada(response.data.val[0]);
+          }
+        }
+      ).catch(
+        error=>{
+        }
+      )
+    };
+  useEffect(async()=>{
+    getAll();
+  },[]);
   return (
     <div>
       <GridContainer>
@@ -42,8 +79,8 @@ export default function Dashboard() {
               <CardIcon color="warning">
                 <Icon><DateRange/></Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Niveles</p>
-              <h3 className={classes.cardTitle}>4</h3>
+              <p className={classes.cardCategory}>Olimpiadas</p>
+              <h3 className={classes.cardTitle}>{consoleSeleccionada.ol}</h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>
@@ -59,8 +96,8 @@ export default function Dashboard() {
               <CardIcon color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Etapas</p>
-              <h3 className={classes.cardTitle}>4</h3>
+              <p className={classes.cardCategory}>Colegios</p>
+              <h3 className={classes.cardTitle}>{consoleSeleccionada.col}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -76,8 +113,8 @@ export default function Dashboard() {
               <CardIcon color="danger">
                 <Icon><DateRange/></Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Colegios</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <p className={classes.cardCategory}>Tutores</p>
+              <h3 className={classes.cardTitle}>{consoleSeleccionada.tut}</h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>
@@ -94,7 +131,7 @@ export default function Dashboard() {
                 <Accessibility />
               </CardIcon>
               <p className={classes.cardCategory}>Estudiantes</p>
-              <h3 className={classes.cardTitle}>245</h3>
+              <h3 className={classes.cardTitle}>{consoleSeleccionada.est}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>

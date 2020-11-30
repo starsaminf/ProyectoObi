@@ -27,13 +27,14 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import Atraz from "../views/Admin/Olimpiada.js";
-import DashboardPage from "../views/Admin/Dashboard.js";
-import Salir from "../views/Admin/Salir.js";
+import DashboardPage from "../views/OlimpiadaAdmin/Dashboard.js";
 import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
 import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
 import Etapa from "../views/OlimpiadaAdmin/Etapa.js";
 import Grupos from "../views/OlimpiadaAdmin/Grupos y Estudiantes.js";
 import Convocatoria from "../views/OlimpiadaTutor/Convocatoria.js";
+import Tutores from "../views/OlimpiadaAdmin/Tutor.js";
+import Estudiantes from "../views/OlimpiadaAdmin/Estudiante.js";
 // core components/views for RTL layout
 
 
@@ -54,7 +55,7 @@ const dashboardRoutes = [
   },
   {
     path: "/olimpiada",
-    name: "Olimpiada",
+    name: "Olimpiadas",
     icon: Dashboard,
     component: Olimpiada,
     layout: "/olimpiadaAdmin"
@@ -76,9 +77,23 @@ const dashboardRoutes = [
   }, 
   {
     path: "/grupos",
-    name: "Grupos y estudiantes",
+    name: "Grupos",
     icon: Dashboard,
     component: Grupos,
+    layout: "/olimpiadaAdmin"
+  },
+  {
+    path: "/Tutores",
+    name: "Tutores",
+    icon: Dashboard,
+    component: Tutores,
+    layout: "/olimpiadaAdmin"
+  },
+  {
+    path: "/estudiantes",
+    name: "Estudiantes",
+    icon: Dashboard,
+    component: Estudiantes,
     layout: "/olimpiadaAdmin"
   },
   {
@@ -87,7 +102,7 @@ const dashboardRoutes = [
     icon: Dashboard,
     component: Convocatoria,
     layout: "/olimpiadaAdmin"
-  }
+  },
   
 ];
 

@@ -41,7 +41,6 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'error' => $retorno,
 							'mensaje' => 'no hay noticias que mostrar')
 					);
 				}

@@ -1,26 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
 import {Edit,Delete, Transform} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-// core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardIcon from "../../components/Card/CardIcon.js";
-import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import DateRange from "@material-ui/icons/DateRange";
-const baseUrl=HOST.Url+'Distrito.php';
+import ReactMarkdown from 'react-markdown';
+const baseUrl=HOST.Url+'MaterialdeApoyo.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -36,6 +27,14 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
     width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  paper2: {
+    position: 'absolute',
+    width: 1200,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -64,11 +63,12 @@ function header(){
   }
 };
 
-export default function SimpleModal() {
+export default function MaterialdeApoyo() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
+  const [mensaje,setMensaje]=useState('');
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
   const [openModalDelete, setOpenDelete] = useState(false);
@@ -76,25 +76,29 @@ export default function SimpleModal() {
   const [data,setData]=useState([]);
   const [data2,setData2]=useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    iddistrito:'',
-    nombre:'',
-    departamento:'',
-    idAdmin:''
+    idmaterial:'',
+    titulo:'',
+    subtitulo:'',
+    tipo:'',
+    archivo:'',
+    contenido:'',
+    mensaje:''
   })
   const handleChangle = e => {
-    console.log(e.target);
+    
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
       ...prevState,
       [name]:value
     }))
+   
   }
   const handleChangleBuscador = e => {
     
     //console.log(e.target.value);
     var search = data.filter(item=>{
       console.log(item);
-      var cad= item.iddistrito+item.nombre+item.departamento; 
+      var cad= item.idnoticia+item.titulo+item.subtitulo+item.contenido+item.fecha; 
       if(cad.includes(e.target.value))
         return item;
     });
@@ -124,7 +128,7 @@ const seleccionarConsola =(consola,caso)=>{
       await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
     ).then(
       response => {
-        //console.log(response);
+        console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
           setData2(response.data.val);
@@ -140,15 +144,12 @@ const seleccionarConsola =(consola,caso)=>{
   //*****   Insert */
   const Insert=async()=>{
     handleModalInsert();
-    console.log("********************************");
-    console.log(consoleSeleccionada.nombre);
-    console.log(consoleSeleccionada.departamento);
-    console.log(cookies.get('idusuario'));
-    console.log("********************************");
       await axios.post(baseUrl,{
         _metod: 'Insert',
-        Nombre:         consoleSeleccionada.nombre,
-        Departamento:   consoleSeleccionada.departamento,
+        Titulo:         consoleSeleccionada.titulo,
+        SubTitulo:      consoleSeleccionada.subtitulo,
+        Tipo:           consoleSeleccionada.tipo,
+        Archivo:        consoleSeleccionada.archivo,
         idAdmin:        cookies.get('idusuario')
       },header()
     ).then(
@@ -159,9 +160,9 @@ const seleccionarConsola =(consola,caso)=>{
         if(response.data.estado===1){
           //setData(response.data.admin);
           getAll();
-          consoleSeleccionada.iddistrito = '';
-          consoleSeleccionada.nombre = '';
-          consoleSeleccionada.departamento = '';
+          consoleSeleccionada.username = '';
+          consoleSeleccionada.pasword = '';
+          consoleSeleccionada.correo = '';
         }
       }
     ).catch(
@@ -173,17 +174,20 @@ const seleccionarConsola =(consola,caso)=>{
 //**      UPDATE  */
 const Update=async()=>{
   handleModalUpdate();
-    console.log(consoleSeleccionada.departamento)
+  
     await axios.post(baseUrl,{
-      _metod: 'Update',
-      idDistrito:     consoleSeleccionada.iddistrito,
-      Nombre:         consoleSeleccionada.nombre,
-      Departamento:   consoleSeleccionada.departamento,
-      idAdmin:        cookies.get('idusuario')
+        _metod: 'Update',
+        idMaterial:     consoleSeleccionada.idmaterial,
+        Titulo:         consoleSeleccionada.titulo,
+        SubTitulo:      consoleSeleccionada.subtitulo,
+        Tipo:           consoleSeleccionada.tipo,
+        Archivo:        consoleSeleccionada.archivo,
+        idAdmin:        cookies.get('idusuario')
     },header()
   ).then(
     response => {
-      //console.log(response);
+      console.log("********************");
+      console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){
@@ -208,19 +212,20 @@ const Eliminar=async()=>{
     await axios.post(baseUrl,{
       _metod: 'Delete',
         idAdmin:    cookies.get('idusuario'),
-        idDistrito: consoleSeleccionada.iddistrito
+        idMaterialDeApoyo: consoleSeleccionada.idmaterial
     },header()
   ).then(
     response => {
-      console.log(response);
+      //console.log(response);
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){
         //setData(response.data.admin);
         getAll();
-        consoleSeleccionada.iddistrito = '';
-        consoleSeleccionada.nombre = '';
-        consoleSeleccionada.departamento = '';
+        consoleSeleccionada.idnoticia = '';
+        consoleSeleccionada.titulo = '';
+        consoleSeleccionada.subtitulo = '';
+        consoleSeleccionada.contenido = '';
       }
     }
   ).catch(
@@ -229,24 +234,9 @@ const Eliminar=async()=>{
     }
   )
 };
-const Aleatorio= ()=>{
-  var r = Math.floor(Math.random()*5);
-  if(r===0)
-  return 'primary';
-  if(r===1)
-  return 'success';
-  if(r===2)
-  return 'warning';
-  if(r===3)
-  return 'danger';
-  if(r===4)
-  return 'info';
-  
-}
 
 //******  se ejecuta cuando inicia el Componente
   useEffect(async()=>{
-    
     getAll();
   },[]);
 
@@ -256,7 +246,7 @@ const Aleatorio= ()=>{
       <div>
         <Toolbar>
           <Typography variant="h2" noWrap className={classes.title}>
-            Distritos 
+            Materiales de Apoyo
           </Typography>
           <TextField
             variant="outlined"
@@ -270,30 +260,34 @@ const Aleatorio= ()=>{
           <Button type="submit" variant="contained" color="primary" onClick={handleModalInsert} >+ Agregar</Button>       
         </Toolbar>        
       </div>  
-      
-      <Divider/>
-      <GridContainer>
-      {data2.map(console =>(
-        
-          <GridItem key={console.iddistrito} xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color={Aleatorio()} >
-                <h3 >{console.nombre}</h3>
-              </CardHeader>
-              <CardFooter >
-                <div>{console.departamento}</div>
-                <div>
+      <TableContainer className={classes.content}>
+        <Table>
+          <TableHead >
+            <TableRow>
+              <TableCell><strong >id</strong></TableCell>
+              <TableCell><strong >Titulo/Subtitulo</strong></TableCell>
+              <TableCell><strong >Tipo</strong></TableCell>
+              <TableCell><strong >Archivo</strong></TableCell>
+              <TableCell><strong >Acciones</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data2.map(console =>(
+              <TableRow key={console.idmaterial}>
+                <TableCell>{console.idmaterial}</TableCell>
+                <TableCell><strong >{console.titulo}</strong><br/>{console.subtitulo}</TableCell>
+                <TableCell>{console.tipo}</TableCell>
+                <TableCell>{console.archivo}</TableCell>
+                <TableCell>
                   <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
+                    &nbsp;&nbsp;&nbsp;
                   <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
-                </div>
-                
-              </CardFooter>
-            </Card>
-          </GridItem>
-        
-      ))}
-      </GridContainer>
-      
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
 
 
@@ -305,24 +299,41 @@ const Aleatorio= ()=>{
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <div style={modalStyle} className={classes.paper}>
-            <h3 id="simple-modal-title">Agregar Nuevo Distrito</h3>
-            <TextField name='nombre' margin="normal"variant="outlined"  required className={classes.inputMaterial} label="nombre de distrito"onChange={handleChangle} />
-            
-            Departamento: 
-            <select name='departamento' margin="normal"variant="outlined"className={classes.inputMaterial}  defaultValue={''} required onChange={handleChangle}>
-              <option value="" disabled>Seleccionar</option>
-              <option value="CH">Chuquisaca</option>
-              <option value="LP">La Paz</option>
-              <option value="CB">Cochabamba</option>
-              <option value="OR">Oruro</option>
-              <option value="PT">Potosi</option>
-              <option value="TJ">Tarija</option>
-              <option value="SC">Santa Cruz</option>
-              <option value="BE">Beni</option>
-              <option value="PD">Pando</option>
-            </select>
-            <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          <div style={modalStyle} className={classes.paper2}>
+            <h3 id="simple-modal-title">Agregar nuevo Material</h3>
+            <GridContainer >
+              <GridItem xs={6} sm={6} md={6}>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='titulo'variant="outlined" required margin="normal" className={classes.inputMaterial} label="titulo"onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='subtitulo'variant="outlined"  required margin="normal" className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='tipo'variant="outlined"  required margin="normal" className={classes.inputMaterial} label="tipo" onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+              <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField name='archivo'variant="outlined"  required margin="normal" className={classes.inputMaterial} label="archivo" onChange={handleChangle} />
+                </GridItem>
+              </GridContainer>
+
+              </GridItem>
+              <GridItem xs={6} sm={6} md={6}>
+                <article>
+                  <ReactMarkdown>{"# "+consoleSeleccionada.titulo+"\n## "+consoleSeleccionada.subtitulo+"\n"+consoleSeleccionada.tipo+"\n"+consoleSeleccionada.archivo}</ReactMarkdown>
+                </article>
+                
+              </GridItem>
+            </GridContainer>
+            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
               &nbsp;
               <Button type="submit" variant="contained" color="primary" onClick={Insert} >Guardar</Button>
@@ -340,23 +351,17 @@ const Aleatorio= ()=>{
           aria-describedby="simple-modal-description"
         >
           <div style={modalStyle} className={classes.paper}>
-            <h3 id="simple-modal-title">Editar Distrito</h3>
-            <TextField name='iddistrito' margin="normal"variant="outlined"  disabled={true} className={classes.inputMaterial} label="iddistrito"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.iddistrito}/>
-            
-            <TextField name='nombre'  margin="normal"variant="outlined"  required className={classes.inputMaterial} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.nombre}/>
-            Departamento:<br/>
-            <select name='departamento'margin="normal"variant="outlined" className={classes.inputMaterial}  defaultValue={consoleSeleccionada && consoleSeleccionada.departamento}  required onChange={handleChangle}>
-              <option value="" disabled>Seleccionar</option>
-              <option value="CH">Chuquisaca</option>
-              <option value="LP">La Paz</option>
-              <option value="CB">Cochabamba</option>
-              <option value="OR">Oruro</option>
-              <option value="PT">Potosi</option>
-              <option value="TJ">Tarija</option>
-              <option value="SC">Santa Cruz</option>
-              <option value="BE">Beni</option>
-              <option value="PD">Pando</option>
-            </select>
+            <h3 id="simple-modal-title">Editar Material</h3>
+              <TextField name='idmaterial'variant="outlined" margin="normal" disabled={true} className={classes.inputMaterial} label="idmaterial"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.idmaterial}/>
+            <br/>
+            <TextField name='titulo'variant="outlined"  margin="normal"required className={classes.inputMaterial} label="titulo"onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.titulo}/>
+            <br/>
+            <TextField name='subtitulo'variant="outlined" margin="normal" required className={classes.inputMaterial} label="subtitulo" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.subtitulo}/>
+            <br/>
+            <TextField name='tipo'variant="outlined" margin="normal" required className={classes.inputMaterial} label="tipo" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.tipo}/>
+            <br/>
+            <TextField name='archivo'variant="outlined" margin="normal" required className={classes.inputMaterial} label="archivo" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.archivo}/>
+            <br/>
             <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
               &nbsp;
@@ -373,15 +378,13 @@ const Aleatorio= ()=>{
         >
           <div style={modalStyle} className={classes.paper}>
             <h3 id="simple-modal-title">Eliminar...</h3>
-            <h4>En realidad desea eliminar el Distrito?</h4>
+            <h4>En realidad desea eliminar la noticia?</h4>
             <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
               &nbsp;
               <Button type="submit" variant="contained" color="primary" onClick={Eliminar} >Eliminar</Button>
           </div>
         </Modal>
-
-
 
         <Modal
           open={openModalMensaje}

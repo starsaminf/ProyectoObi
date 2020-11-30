@@ -26,8 +26,10 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import SupervisedUserCircle from "@material-ui/icons/SupervisedUserCircle";
 // core components/views for Admin layout
 import DashboardPage from "../views/Admin/Dashboard.js";
-import Salir from "../views/Admin/Salir.js";
+import Material from "../views/Admin/MaterialDeApoyo.js";
 import Noticias from "../views/Admin/Noticias.js";
+import Tutores from "../views/Admin/HojaEnBlanco.js";
+import Estudiantes from "../views/Admin/HojaEnBlanco.js";
 import Distritos from "../views/Admin/Distritos.js";
 import Colegios from "../views/Admin/Colegios.js";
 import Olimpiadas from "../views/Admin/Olimpiada.js";
@@ -44,7 +46,7 @@ const dashboardRoutes = [
   },
   {
     path: "/olimpiada",
-    name: "OLimpiada",
+    name: "Olimpiadas",
     icon: Dashboard,
     component: Olimpiadas,
     layout: "/admin"
@@ -71,10 +73,10 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/salir",
-    name: "Salir",
+    path: "/material",
+    name: "Material De Apoyo",
     icon: Dashboard,
-    component: Salir,
+    component: Material,
     layout: "/admin"
   },
   

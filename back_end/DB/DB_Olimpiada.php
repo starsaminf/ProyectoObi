@@ -21,6 +21,60 @@ class DB_Olimpiada
             return false;
         }
     }
+    public static function getAllCount()
+    {
+        $consulta = "select a.*, b.*, c.*, d.*
+            from
+            (select count(sie) as col
+            from colegio) a,
+            (select count(idTutor) as tut
+            from Tutor) b,
+            (select count(idOlimpiada) as ol
+            from olimpiada) c,
+            (select count(rude) as est
+            from Estudiante) d";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute();
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    public static function getAllCountOlimpiada($idOlimpiada)
+    {
+        $consulta = "select a.*, b.*, c.*, d.*
+from
+--cantidad de grupos en la olimpiada 1
+ (select count(distinct(idGrupo) )as grup
+ from Grupo
+ where idolimpiada=? ) a,
+
+--cantidad de colegios en la olimpiada 1
+ (select count(distinct(col.sie) )as cole
+ from colegio col, grupo gr
+ where col.sie = gr.sie and gr.idOlimpiada = ?) b,
+
+ --cantidad de tutores
+(select count(distinct(idtutor) )as tut
+from grupo where idolimpiada=?) c,
+
+--cantidad de estudiantes
+(select count(distinct(i.rude) )as est
+from grupo g, integrante_de i
+where g.idolimpiada = ? and i.idgrupo = g.idgrupo) d";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idOlimpiada, $idOlimpiada, $idOlimpiada, $idOlimpiada));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
 
     public static function getAllPublic()
     {

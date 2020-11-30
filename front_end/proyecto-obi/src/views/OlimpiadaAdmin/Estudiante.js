@@ -8,14 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
 //radiooooo
 
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -23,7 +21,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 // host components
-const baseUrl=HOST.Url+'Nivel.php';
+const baseUrl=HOST.Url+'Estudiante.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -38,7 +36,7 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    width: 600,
+    width: 400,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -67,7 +65,7 @@ function header(){
   }
 };
 
-export default function SimpleModal() {
+export default function Estudiante() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
@@ -84,12 +82,15 @@ export default function SimpleModal() {
   const [data,setData]=useState([]);
   const [data2,setData2]=useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idnivel:'',
+    rude:'',
     nombre:'',
-    descripcion:'',
-    limiteedad:'',
-    limiteporgrupo:'',
-    idAdmin:''
+    appaterno:'',
+    apmaterno:'',
+    celular:'',
+    fechaNac:'',
+    genero:'',
+    ci:'',
+    correo:''
   })
   const handleChangle = e => {
     const {name, value}= e.target;
@@ -102,7 +103,7 @@ export default function SimpleModal() {
     
     //console.log(e.target.value);
     var search = data.filter(item=>{
-      var cad= item.idnivel+item.nombre+item.descripcion; 
+      var cad= item.rude+item.ci+item.correo; 
       if(cad.includes(e.target.value))
         return item;
     });
@@ -140,10 +141,10 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idOlimpiada :cookies.get('idolimpiada')},header()
+      await axios.post(baseUrl,{_metod: 'getAllEstudiantesDeOlimpiada',idOlimpiada :cookies.get('idolimpiada')},header()
     ).then(
       response => {
-        //console.log(response);
+        console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
           setData2(response.data.val);
@@ -151,6 +152,16 @@ const seleccionarConsola =(consola,caso)=>{
           setData([]);
           setData2([]);
         }
+        /*rude:'',
+    nombre:'',
+    appaterno:'',
+    apmaterno:'',
+    celular:'',
+    fechaNac:'',
+    genero:'',
+    ci:'',
+    correo:''
+        */
       }
     ).catch(
       error=>{
@@ -253,7 +264,7 @@ const Eliminar=async()=>{
       <div>
         <Toolbar>
           <Typography variant="h2" noWrap className={classes.title}>
-            Niveles
+            Estudiantes
           </Typography>
           <TextField
             variant="outlined"
@@ -271,42 +282,21 @@ const Eliminar=async()=>{
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell><strong ><center>id</center></strong></TableCell>
-              <TableCell><strong ><center>descripcion</center></strong></TableCell>
-              <TableCell><strong ><center>Acciones</center></strong></TableCell>
+              <TableCell><strong ><center>rude</center></strong></TableCell>
+              <TableCell><strong >Carnet</strong></TableCell>
+              <TableCell><strong ><center>Nombre</center></strong></TableCell>
+              <TableCell><strong ><center>Correo</center></strong></TableCell>
+              <TableCell><strong ><center>Colegios</center></strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data2.map(console =>(
-              <TableRow key={console.idnivel}>
-                <TableCell><center>{console.idnivel}</center></TableCell>
-                
-                <TableCell>
-                <GridItem >
-                  <Card>
-                    <CardBody>
-                      <ReactMarkdown>{"## "+console.nombre+"\n "+console.descripcion}</ReactMarkdown>
-                      <GridContainer>
-                        <GridItem  xs={12} sm={12} md={6}>
-                          <strong>Edad Maxima : </strong> {console.limiteedad}
-                        </GridItem>
-                        <GridItem  xs={12} sm={12} md={6}>
-                          <strong>Integrantes por grupo : </strong> {console.limiteporgrupo}
-                        </GridItem>
-                      </GridContainer>
-                    </CardBody>
-                  </Card>
-                </GridItem>
-
-
-                </TableCell>
-                <TableCell>
-                  <center>
-                    <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
-                      &nbsp;&nbsp;&nbsp;
-                    <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
-                  </center>
-                </TableCell>
+              <TableRow key={console.rude}>
+                <TableCell><center>{console.rude}</center></TableCell>
+                <TableCell><strong >{console.ci}</strong><br/><i>{console.descripcion}</i></TableCell>
+                <TableCell><center>{console.nombre}</center></TableCell>
+                <TableCell><center>{console.correo}</center></TableCell>
+                <TableCell><center><Button  color="primary" > Lista de Colegios</Button></center></TableCell>
               </TableRow>
             ))}
           </TableBody>

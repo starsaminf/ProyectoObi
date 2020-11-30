@@ -2,7 +2,7 @@ import React,{ Component } from "react";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-class Salir extends Component{
+class HojaEnBlanco extends Component{
     cerrarsesion = e =>{
         cookies.remove('idusuario',{path:"/"});
         cookies.remove('username',{path:"/"});
@@ -22,13 +22,9 @@ class Salir extends Component{
         console.log(cookies.get('tipo'));
         return(
             <div>
-                
-                Menu principal de Tutor
-                <br/>
-                <h1>Bienvenidooooooo   { cookies.get('username')}</h1>
-                <button onClick={this.cerrarsesion}>Cerrar sesion</button>
+                Esta Paguina esta en Blanco
             </div>
         );
     }
 }
-export default Salir;
+export default HojaEnBlanco;

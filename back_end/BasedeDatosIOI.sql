@@ -138,13 +138,15 @@ CREATE TABLE Integrante_de(
 );
 
 CREATE TABLE Nota(
-	idNota			SERIAL PRIMARY KEY,
 	idEtapa  	 	SERIAL NOT NULL,
+	idNivel			Serial NOT NULL,
 	idGrupo			SERIAL NOT NULL,
+	Puesto			INTEGER,
+	Estado  		VARCHAR(30),
 	Nota 			DOUBLE	PRECISION,
 	Observaciones	VARCHAR(30),
-	Puesto			INTEGER,
 	foreign   key   (idEtapa)   references  Etapa ,
+	foreign   key   (idNivel)   references  Nivel ,
 	foreign   key   (idGrupo)   references  Grupo ON DELETE CASCADE
 );
 
