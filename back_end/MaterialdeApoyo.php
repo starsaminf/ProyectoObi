@@ -46,6 +46,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllNivelAdmin'){
+			$retorno = DB_MaterialdeApoyo::getAllNivelAdmin($_POST['idAdmin'],$_POST['idNivel']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'No hay material de apoyo')
+					);
+				}
+	}
 	if($_POST['_metod']=='getAllPublic'){
 			$retorno = DB_MaterialdeApoyo::getAllPublic();
 			if ($retorno) {

@@ -89,12 +89,12 @@ class DB_Sugerencia_para
      * @param $idPunto identificador del Punto
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($idEtapa,$idNivel)
+    public static function delete($idMaterial,$idNivel)
     {
         try {
-            $comando = "DELETE FROM Etapa WHERE idEtapa=? AND idNivel";
+            $comando = "DELETE FROM Sugerencia_para WHERE idMaterial=? AND idNivel=?";
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
-            return $sentencia->execute(array($idEtapa, $idNivel));
+            return $sentencia->execute(array($idMaterial, $idNivel));
         } catch (PDOException $e) {
             return false;
         }

@@ -292,7 +292,6 @@ const Aleatorio= ()=>{
                     <CardBody>
                       <MaterialDeNivel idNivel= {console.idnivel} descripcion={console.descripcion}/>
                     </CardBody>
-                    <Divider/>
                     <CardFooter>
                       <div>
                         <GridContainer>

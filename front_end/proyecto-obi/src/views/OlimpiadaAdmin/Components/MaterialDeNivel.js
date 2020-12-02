@@ -13,6 +13,7 @@ import {Table,  TableCell, TableBody, TableRow,TextField,  Modal, TableHead} fro
 import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import InfoIcon from '@material-ui/icons/Info';
 import BallotIcon from '@material-ui/icons/Ballot';
@@ -21,6 +22,8 @@ import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 // core components
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
@@ -75,6 +78,12 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
       border: 'none',
     },
+    inputMaterial2:{
+      backgroundColor: "#4CAF50",
+      color: "#ffffff",
+      textAlign: 'center',
+      border: 'none',
+    },
     button:{
       margin: theme.spacing(0.1),
     },
@@ -106,13 +115,10 @@ function MaterialDeNivel(props) {
     const [openModalMensaje,  setOpenMensaje]   = useState(false);
     const [mensaje,  setMensaje]   = useState([]);
     const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-        archivo:    '',
-        fecha:      '',
-        idadmin:    '',
-        idmaterial: '',
-        subtitulo:  '',
-        tipo:       '',
-        titulo:     ''
+        idmaterial:       '',
+        titulo:           '',
+        subtitulo:        '',
+        esta:             false
       })
     
       const handleModalMensaje = () => {
@@ -122,56 +128,39 @@ function MaterialDeNivel(props) {
     const ClickAcordeon= () =>{
         if(openAcordeon){
             getAllMaterial();
-            getRecomendaciones();
             //handleAcordeon();
         }
       }
-      const seleccionarConsola =(consola,caso)=>{
+      const seleccionarConsola =(consola)=>{
         console.log("Sleccionamos consola");
-        /*consoleSeleccionada.rude=consola.rude;
-          if(caso==='Borrar'){
-            BorrarParticipacion();
+        consoleSeleccionada.idmaterial=consola.idmaterial;
+          if(consola.esta){
+            Delete();
+            console.log("Borrar");
+            //BorrarSugerencia();
           }else{
-            InsertarParticipacion();
-          }*/
+            Insert();
+            console.log("agregar");
+            //InsertarSugerencia();
+          }
       };
-      //******  getAll
-    const getRecomendaciones=async()=>{
-        await axios.post(baseUrlSugerencia_para,{
-            _metod:     'getRecomendaciones',
-            idNivel:    props.idNivel
-        }, header()
-        ).then(
-            response => {
-                console.log(response);
-                if(response.data.estado===1){
-                    setData1(response.val);
-                }else{
-                    
-                }
-            }
-        ).catch(
-            error=>{
-            
-            //console.log(error);
-            }
-        )
-    };
-
+    //******  getAll
     const getAllMaterial = async () =>{
         await axios.post(baseUrlMaterial,{
-            _metod:     'getAll',
-            idAdmin:    cookies.get('idusuario')
+            _metod:     'getAllNivelAdmin',
+            idAdmin:    cookies.get('idusuario'),
+            idNivel:    props.idNivel 
         }, header()
         ).then(
             response => {
-            console.log(response);
-            if(response.data.estado===1){
-                setData(response.data.val);
-                console.log(data);
-            }else{
-                
-            }
+              console.log("***************material");
+              console.log(response);
+              if(response.data.estado===1){
+                  setData(response.data.val);
+                  //console.log(data);
+              }else{
+                  
+              }
             }
         ).catch(
             error=>{
@@ -180,12 +169,46 @@ function MaterialDeNivel(props) {
             }
         )    
     }
-    const AgregarParticipante = async()=>{
-      handleModalMensaje();
-        console.log("Agergar Participante");
-    };
+    //******  getAll
+    const Insert = async () =>{
+      await axios.post(baseUrlSugerencia_para,{
+          _metod:         'Insert',
+          idMaterial:     consoleSeleccionada.idmaterial,
+          idNivel:        props.idNivel 
+      }, header()
+      ).then(
+          response => {
+            if(response.data.estado===1){
+                getAllMaterial();
+            }
+          }
+      ).catch(
+          error=>{
+          //console.log(error);
+          }
+      )    
+  }
+  const Delete = async () =>{
+    await axios.post(baseUrlSugerencia_para,{
+        _metod:         'Delete',
+        idMaterial:     consoleSeleccionada.idmaterial,
+        idNivel:        props.idNivel 
+    }, header()
+    ).then(
+        response => {
+          console.log(response);
+          if(response.data.estado===1){
+              getAllMaterial();
+          }
+        }
+    ).catch(
+        error=>{
+        //console.log(error);
+        }
+    )    
+}
     useEffect(async()=>{
-        console.log(props);
+        //console.log(props);
         //console.log(calcularEdad('1990-08-02'));
     },[]);
   return (
@@ -218,44 +241,7 @@ function MaterialDeNivel(props) {
             <AccordionDetails >
             
             <div className={classes.content}>
-            {(data1.length===0)?<><Alert severity="error">Este Nivel no tiene Material de Apoyo!</Alert><br/></>:''}
-                  <GridContainer>
-                    {data1.map(console =>(
-                        <GridItem key={console.idmaterial} xs={12} sm={6} md={6}>
-                          <Card>
-                            <CardHeader color="primary" >
-                              <h4 >{console.titulo}</h4>
-                            </CardHeader>
-                            <CardFooter >
-                            <div>{console.subtitulo}</div>
-                            </CardFooter>
-                            <CardFooter >
-                            <div>{console.tipo}</div>
-                              <div>
-                                <VisibilityIcon  color="primary"/>
-                                <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
-                              </div>
-                              
-                            </CardFooter>
-                          </Card>
-                        </GridItem>
-                      
-                    ))}
-                  </GridContainer>
-                  <Button className={classes.inputMaterial} onClick={AgregarParticipante} variant="contained"color="default">Agregar Material de Apoyo</Button>
-                </div>
-            </AccordionDetails>
-        </Accordion>
-
-
-        <Modal
-          open={openModalMensaje}
-          onClose={handleModalMensaje}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div style={modalStyle} className={classes.paper2}>
-           
+            {(data.length===0)?<><Alert severity="error">Este Nivel no tiene Material de Apoyo!</Alert><br/></>:''}
             <Table>
               <TableHead>
               <TableRow >
@@ -270,22 +256,22 @@ function MaterialDeNivel(props) {
                       
                 {data.map(console =>(
                 <TableRow key={console.idmaterial}>
-                    <TableCell><strong>{console.titulo}</strong> {console.subtitulo}</TableCell>
+                    <TableCell><strong>{console.titulo}</strong><br/> {console.subtitulo}</TableCell>
                     <TableCell>{console.tipo}</TableCell>
                     <TableCell>
-                        <HighlightOffIcon onClick={()=>{seleccionarConsola(console,'Agregar')}} color="primary"/>
+                      <FormControlLabel
+                        control={<Switch checked={console.esta} onClick={()=>{seleccionarConsola(console)}} />}
+                        label="Normal"
+                      />
                     </TableCell>
                 </TableRow>
                 ))}
             </TableBody>
             </Table>
-            <Divider/>
-                <AccordionActions>
-                <Button type="submit"  variant="outlined" color="primary" onClick={handleModalMensaje} >Cancelar</Button>
-                </AccordionActions>
-              
-          </div>
-        </Modal>
+                 
+                </div>
+            </AccordionDetails>
+        </Accordion>
     </div>
   );
 }

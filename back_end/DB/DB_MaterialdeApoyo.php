@@ -34,6 +34,31 @@ class DB_MaterialdeApoyo
             return false;
         }
     }
+    public static function getAllNivelAdmin(
+        $idAdmin,$idNivel
+    )
+    {
+        $consulta = "select hh.idmaterial, hh.titulo, hh.subtitulo,hh.tipo, hh.esta
+from (
+select m.*, 
+CASE WHEN s.idmaterial IS NULL 
+            THEN false 
+            ELSE true 
+    END AS esta
+from materialdeapoyo m
+left join (select * from sugerencia_para where idnivel= ?) s
+on (s.idmaterial = m.idmaterial)) hh
+where idadmin = ?";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idNivel,$idAdmin));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
     public static function getAllPublic()
     {
         $consulta = "SELECT * from MaterialdeApoyo ";
