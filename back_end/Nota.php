@@ -31,6 +31,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllporGrupo'){
+			$retorno = DB_Nota::getAllporGrupo($_POST['idGrupo']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+					$datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'Error al cargar las notas')
+					);
+				}
+	}
 	if($_POST['_metod']=='getById'){
 			$retorno = DB_Nota::getById(
 				$_POST['idGrupo'],

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal,  TextField} from '@material-ui/core';
 
 import Toolbar from '@material-ui/core/Toolbar';
-import AccordionActions from '@material-ui/core/AccordionActions';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
@@ -12,8 +11,6 @@ import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 
 // core components
-import GridItem from "../../components/Grid/GridItem.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
 import ListaDeIntegrantes from './Components/ListaDeIntegrantes.js';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Grafico from './Components/Grafico.js';
@@ -58,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+  },
+  paper4: {
+    position: 'absolute',
+    width: 500,
+    border: '0px solid #000',
+    boxShadow: theme.shadows[0],
+    padding: theme.spacing(1, 1, 1),
   },
   title: {
     flexGrow: 1,
@@ -403,12 +407,9 @@ const ValidarGrupo = event => {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <div style={modalStyle} className={classes.paper3}>
-              <h3 id="simple-modal-title">Crear Grupo</h3>
-              <div >
-              <Grafico/>
-              </div>
-            </div>
+          <div style={modalStyle} className={classes.paper4}>
+            <Grafico idGrupo={consoleSeleccionada.idgrupo}/>
+          </div>
           
         </Modal>
     </div>

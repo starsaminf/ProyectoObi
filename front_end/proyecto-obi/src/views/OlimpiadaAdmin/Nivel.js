@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Radio} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TextField, Divider} from '@material-ui/core';
+import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
@@ -15,13 +15,11 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
-//radiooooo
-
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import CardFooter from '../../components/Card/CardFooter.js';
+import { cardHeader } from '../../assets/jss/material-dashboard-react.js';
+import MaterialDeNivel from "./Components/MaterialDeNivel.js";
+import { propTypes } from 'react-bootstrap/esm/Image';
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 // host components
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
@@ -67,7 +65,7 @@ function header(){
   }
 };
 
-export default function SimpleModal() {
+export default function Nivel() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
@@ -240,10 +238,23 @@ const Eliminar=async()=>{
     }
   )
 };
+const Aleatorio= ()=>{
+  var r = Math.floor(Math.random()*5);
+  if(r===0)
+  return 'primary';
+  if(r===1)
+  return 'success';
+  if(r===2)
+  return 'warning';
+  if(r===3)
+  return 'danger';
+  if(r===4)
+  return 'info';
+  
+}
 
 //******  se ejecuta cuando inicia el Componente
   useEffect(async()=>{
-    
     getAll();
   },[]);
 
@@ -267,51 +278,42 @@ const Eliminar=async()=>{
           <Button type="submit" variant="contained" color="primary" onClick={handleModalInsert} >+ Agregar</Button>       
         </Toolbar>        
       </div>  
-      <TableContainer className={classes.content}>
-        <Table>
-          <TableHead >
-            <TableRow>
-              <TableCell><strong ><center>id</center></strong></TableCell>
-              <TableCell><strong ><center>descripcion</center></strong></TableCell>
-              <TableCell><strong ><center>Acciones</center></strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      
             {data2.map(console =>(
-              <TableRow key={console.idnivel}>
-                <TableCell><center>{console.idnivel}</center></TableCell>
-                
-                <TableCell>
-                <GridItem >
+              
+                <GridItem key={console.idnivel}>
+                  
                   <Card>
+                  <CreateNewFolderIcon />
+                    <CardHeader color={Aleatorio()} >
+                      
+                      <h3 ><CreateNewFolderIcon/>{console.nombre}</h3>
+                    </CardHeader>
                     <CardBody>
-                      <ReactMarkdown>{"## "+console.nombre+"\n "+console.descripcion}</ReactMarkdown>
-                      <GridContainer>
-                        <GridItem  xs={12} sm={12} md={6}>
-                          <strong>Edad Maxima : </strong> {console.limiteedad}
-                        </GridItem>
-                        <GridItem  xs={12} sm={12} md={6}>
-                          <strong>Integrantes por grupo : </strong> {console.limiteporgrupo}
-                        </GridItem>
-                      </GridContainer>
+                      <MaterialDeNivel idNivel= {console.idnivel} descripcion={console.descripcion}/>
                     </CardBody>
+                    <Divider/>
+                    <CardFooter>
+                      <div>
+                        <GridContainer>
+                          <GridItem  xs={12} sm={12} md={12}>
+                            <strong>Edad Maxima : </strong> {console.limiteedad}
+                          </GridItem>
+                          <GridItem  xs={12} sm={12} md={12}>
+                            <strong>Integrantes por grupo : </strong> {console.limiteporgrupo}
+                          </GridItem>
+                        </GridContainer>
+                      </div>
+                      <div>
+                        <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
+                          &nbsp;&nbsp;&nbsp;
+                        <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
+                      </div>
+                    </CardFooter>
                   </Card>
                 </GridItem>
-
-
-                </TableCell>
-                <TableCell>
-                  <center>
-                    <Edit onClick={()=>{seleccionarConsola(console,'Editar')}} color="primary" />
-                      &nbsp;&nbsp;&nbsp;
-                    <Delete onClick={()=>{seleccionarConsola(console,'Eliminar')}} color="secondary"/>
-                  </center>
-                </TableCell>
-              </TableRow>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          
 
 
 

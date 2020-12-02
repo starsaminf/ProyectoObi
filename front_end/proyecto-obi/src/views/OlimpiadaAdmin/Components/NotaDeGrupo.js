@@ -7,15 +7,8 @@ import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
 //**  EXPANDIBLE */
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 const baseUrl_nota   = HOST.Url+'Nota.php';
 const cookies = new Cookies();
 function getModalStyle() {

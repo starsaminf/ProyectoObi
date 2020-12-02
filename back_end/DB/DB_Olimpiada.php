@@ -43,6 +43,35 @@ class DB_Olimpiada
             return false;
         }
     }
+
+    public static function getAllCountTutor($idolimpiada)
+    {
+        $consulta = "select a.niv, b.et, c.col , d.est 
+            from
+                (select count(idnivel) as niv
+                from nivel
+                where idolimpiada=?) a,
+                            (select count(idetapa) as et
+                from etapa
+                where idolimpiada=?) b,
+                            (select count(distinct(c.sie) )as col
+                from colegio c, grupo g
+                where g.sie = c.sie and g.idolimpiada = ?) c,
+                            (select count (distinct(e.rude)) as est
+                from integrante_de i, estudiante e,Grupo g
+                where i.idgrupo = g.idgrupo and e.rude = i.rude and g.idolimpiada = ?) d
+            ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idolimpiada, $idolimpiada, $idolimpiada, $idolimpiada));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public static function getAllCountOlimpiada($idOlimpiada)
     {
         $consulta = "select a.*, b.*, c.*, d.*

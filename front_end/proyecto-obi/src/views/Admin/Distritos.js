@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import { Modal, TextField, Divider} from '@material-ui/core';
+import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
@@ -13,13 +13,8 @@ import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
-import CardIcon from "../../components/Card/CardIcon.js";
-import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import DateRange from "@material-ui/icons/DateRange";
 const baseUrl=HOST.Url+'Distrito.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
@@ -82,7 +77,7 @@ export default function SimpleModal() {
     idAdmin:''
   })
   const handleChangle = e => {
-    console.log(e.target);
+    
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
       ...prevState,
@@ -93,7 +88,7 @@ export default function SimpleModal() {
     
     //console.log(e.target.value);
     var search = data.filter(item=>{
-      console.log(item);
+      
       var cad= item.iddistrito+item.nombre+item.departamento; 
       if(cad.includes(e.target.value))
         return item;
@@ -140,11 +135,6 @@ const seleccionarConsola =(consola,caso)=>{
   //*****   Insert */
   const Insert=async()=>{
     handleModalInsert();
-    console.log("********************************");
-    console.log(consoleSeleccionada.nombre);
-    console.log(consoleSeleccionada.departamento);
-    console.log(cookies.get('idusuario'));
-    console.log("********************************");
       await axios.post(baseUrl,{
         _metod: 'Insert',
         Nombre:         consoleSeleccionada.nombre,
@@ -153,7 +143,7 @@ const seleccionarConsola =(consola,caso)=>{
       },header()
     ).then(
       response => {
-        console.log(response);
+        
         consoleSeleccionada.mensaje = response.data.mensaje;
         handleModalMensaje();
         if(response.data.estado===1){
@@ -173,7 +163,7 @@ const seleccionarConsola =(consola,caso)=>{
 //**      UPDATE  */
 const Update=async()=>{
   handleModalUpdate();
-    console.log(consoleSeleccionada.departamento)
+  
     await axios.post(baseUrl,{
       _metod: 'Update',
       idDistrito:     consoleSeleccionada.iddistrito,
@@ -212,7 +202,7 @@ const Eliminar=async()=>{
     },header()
   ).then(
     response => {
-      console.log(response);
+      
       consoleSeleccionada.mensaje = response.data.mensaje;
       handleModalMensaje();
       if(response.data.estado===1){

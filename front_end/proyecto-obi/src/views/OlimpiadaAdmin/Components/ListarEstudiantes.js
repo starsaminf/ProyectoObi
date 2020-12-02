@@ -6,9 +6,6 @@ import { Alert } from '@material-ui/lab';
 import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
 //**  EXPANDIBLE */
 import Accordion from '@material-ui/core/Accordion';

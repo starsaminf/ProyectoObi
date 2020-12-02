@@ -435,9 +435,9 @@ useEffect(async()=>{
                 ))}
             </TableBody>
             </Table>
-        {
+          {
             (data.length<props.limiteporgrupo)?<Button className={classes.inputMaterial} onClick={AgregarParticipante} variant="contained"color="default"><PersonAddIcon/>{(data.length===0)?'':"Agregar Estudiante"}</Button>:''
-        }
+          }
         </div>
             </AccordionDetails>
         </Accordion>

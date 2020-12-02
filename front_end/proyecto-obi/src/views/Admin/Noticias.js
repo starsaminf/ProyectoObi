@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
+import { Modal, TextField} from '@material-ui/core';
 import {Edit,Delete, Transform} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,15 +11,11 @@ import axios from 'axios';
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import ReactMarkdown from 'react-markdown';
-import Update from "@material-ui/icons/Update";
 import IconNoticia from "../../assets/img/noticia.png";
 import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardIcon from "../../components/Card/CardIcon.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import { Divider } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 const baseUrl=HOST.Url+'Noticia.php';
 //"../../variables/general.js";
@@ -109,7 +105,7 @@ export default function SimpleModal() {
     
     //console.log(e.target.value);
     var search = data.filter(item=>{
-      console.log(item);
+      
       var cad= item.idnoticia+item.titulo+item.subtitulo+item.contenido+item.fecha; 
       if(cad.includes(e.target.value))
         return item;
@@ -140,7 +136,7 @@ const seleccionarConsola =(consola,caso)=>{
       await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
     ).then(
       response => {
-        console.log(response);
+
         if(response.data.estado===1){
           setData(response.data.val);
           setData2(response.data.val);

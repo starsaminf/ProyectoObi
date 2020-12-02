@@ -6,12 +6,11 @@ import { Alert } from '@material-ui/lab';
 import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
-import {Table,  TableCell, TableBody, TableRow, TableHead, Divider} from '@material-ui/core';
+import {Table,  TableCell, TableRow, TableHead} from '@material-ui/core';
 
 //**  EXPANDIBLE */
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';

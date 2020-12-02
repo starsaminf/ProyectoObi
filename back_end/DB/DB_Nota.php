@@ -22,6 +22,20 @@ class DB_Nota
         }
     }
 
+        public static function getAllporGrupo($idGrupo)
+    {
+        $consulta = "SELECT * from nota where idGrupo=?";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($idGrupo));
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 
     /**
      * consultar usuario por Id de Usuario

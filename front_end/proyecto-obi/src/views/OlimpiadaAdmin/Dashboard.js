@@ -56,9 +56,7 @@ export default function Dashboard() {
         await axios.post(baseUrl,{_metod: 'getAllCountOlimpiada',idOlimpiada: cookies.get('idolimpiada')},header()
       ).then(
         response => {
-          console.log("****eee*******");
-          console.log(cookies.get('idolimpiada'));
-          console.log(response);
+          
           if(response.data.estado===1){
             setConsolaSeleccionada(response.data.val[0]);
           }

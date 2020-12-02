@@ -45,6 +45,20 @@ if (!empty($_POST['_metod'])) {
 					);
 				}
 	}
+	if($_POST['_metod']=='getAllCountTutor'){
+			$retorno = DB_Olimpiada::getAllCountTutor($_POST['idOlimpiada']);
+			if ($retorno) {
+		            $datos["estado"] = 1;
+		            $datos["val"] = $retorno;
+					print json_encode($datos);
+				} else {
+					print json_encode(
+						array(
+							'estado' => 2,
+							'mensaje' => 'no hay detalles')
+					);
+				}
+	}
 	if($_POST['_metod']=='getAllCountOlimpiada'){
 			$retorno = DB_Olimpiada::getAllCountOlimpiada($_POST['idOlimpiada']);
 			if ($retorno) {

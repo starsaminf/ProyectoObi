@@ -123,6 +123,7 @@ export default function Noticias(){
 
 	useEffect(async()=>{
 		getAll();
+		console.log(process.env);
 	  },[]);
 	
     return(

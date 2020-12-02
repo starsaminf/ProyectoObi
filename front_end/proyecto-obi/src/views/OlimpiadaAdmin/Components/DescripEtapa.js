@@ -2,7 +2,7 @@ import React ,{ useEffect, useState }from "react";
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import {Divider, TextField} from '@material-ui/core';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, Input} from '@material-ui/core';
+import { Modal} from '@material-ui/core';
 
 // core components
 import GridItem from "../../../components/Grid/GridItem.js";
@@ -91,7 +91,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DescripcionEtapa(props) {
   const classes = useStyles();
-  const [data,setData]=useState([]);
   const [modalStyle] = useState(getModalStyle);
   const [openModalMensaje, setOpenMensaje] = useState(false);
   const [value,   setValue]    = useState(false);

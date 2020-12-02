@@ -13,7 +13,7 @@ var server = [
   "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit",
   'Sign contract for "What are conference organizers afraid of?"'
 ];
-var Url='http://localhost:4000/proyectoOBI/back_end/';
+var Url=process.env.REACT_APP_URL_BACK_END+'proyectoOBI/back_end/';
 module.exports = {
   Url
 };

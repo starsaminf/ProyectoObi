@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactExport from "react-export-excel";
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Button} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Button} from '@material-ui/core';
+
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import ListarEstudiantes from './ListarEstudiantes.js';
-import NotaDeGrupo from './NotaDeGrupo';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert } from '@material-ui/lab';
 const baseUrl_Grupos=HOST.Url+'Grupo.php';

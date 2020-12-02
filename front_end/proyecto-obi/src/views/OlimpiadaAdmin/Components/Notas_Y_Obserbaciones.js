@@ -17,9 +17,7 @@ import PaguinaDeNotas from './PaguinaDeNotas';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Divider } from '@material-ui/core';
 
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";

@@ -56,8 +56,6 @@ export default function Dashboard() {
         await axios.post(baseUrl,{_metod: 'getAllCount'},header()
       ).then(
         response => {
-          console.log("***********");
-          console.log(response);
           if(response.data.estado===1){
             setConsolaSeleccionada(response.data.val[0]);
           }

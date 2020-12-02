@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TextField} from '@material-ui/core';
+import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
@@ -68,7 +68,6 @@ export default function MaterialdeApoyo() {
   //const idAdmin='1';
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-  const [mensaje,setMensaje]=useState('');
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
   const [openModalDelete, setOpenDelete] = useState(false);
@@ -128,7 +127,6 @@ const seleccionarConsola =(consola,caso)=>{
       await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
     ).then(
       response => {
-        console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
           setData2(response.data.val);

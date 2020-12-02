@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import BackupIcon from '@material-ui/icons/Backup';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
+import { Modal, Divider} from '@material-ui/core';
 
 // wiservise y coneecciones
 import Cookies from "universal-cookie";

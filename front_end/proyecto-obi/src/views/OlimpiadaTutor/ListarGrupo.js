@@ -59,6 +59,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  paper4: {
+    position: 'absolute',
+    width: 500,
+    border: '0px solid #000',
+    boxShadow: theme.shadows[0],
+    padding: theme.spacing(1, 1, 1),
+  },
   title: {
     flexGrow: 1,
   },
@@ -401,12 +408,9 @@ const ValidarGrupo = event => {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <div style={modalStyle} className={classes.paper3}>
-              <h3 id="simple-modal-title">Desempeño</h3>
-              <div >
-              <Grafico/>
-              </div>
-            </div>
+          <div style={modalStyle} className={classes.paper4}>
+            <Grafico idGrupo={consoleSeleccionada.idgrupo}/>
+          </div>
           
         </Modal>
     </div>

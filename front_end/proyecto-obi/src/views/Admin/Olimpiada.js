@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TextField} from '@material-ui/core';
 import {Edit,Delete, SupervisedUserCircle} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,10 +11,6 @@ import axios from 'axios';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardBody from "../../components/Card/CardBody.js";
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 // host variables
 const baseUrl=HOST.Url+'Olimpiada.php';
 //"../../variables/general.js";
