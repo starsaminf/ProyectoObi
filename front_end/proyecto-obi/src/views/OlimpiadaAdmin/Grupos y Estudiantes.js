@@ -104,7 +104,7 @@ const Buscar = (e)=>{
   }
 }
 //getPorDEfecto
-useEffect(async()=>{
+useEffect(()=>{
 //llamamos todas las etapas
 getAllEtapa();
 },[]);

@@ -7,10 +7,7 @@ import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
 import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
 import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
@@ -20,7 +17,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardIcon from "../../components/Card/CardIcon.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import Cookies from "universal-cookie";
+
 import HOST from "../../variables/general.js";
 import axios from 'axios';
 
@@ -32,7 +29,7 @@ import {
 //"../../variables/general.js";
 
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
-const cookies = new Cookies();
+
 const baseUrl=HOST.Url+'Olimpiada.php';
 const useStyles = makeStyles(styles);
 function header(){
@@ -65,7 +62,7 @@ export default function Dashboard() {
         }
       )
     };
-  useEffect(async()=>{
+  useEffect(()=>{
     getAll();
   },[]);
   return (

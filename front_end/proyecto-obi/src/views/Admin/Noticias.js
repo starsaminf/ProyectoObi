@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { Modal, TextField} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
@@ -78,7 +78,7 @@ export default function SimpleModal() {
   //const idAdmin='1';
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-  const [mensaje,setMensaje]=useState('');
+
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
   const [openModalDelete, setOpenDelete] = useState(false);
@@ -103,15 +103,20 @@ export default function SimpleModal() {
   }
   const handleChangleBuscador = e => {
     
-    //console.log(e.target.value);
-    var search = data.filter(item=>{
-      
-      var cad= item.idnoticia+item.titulo+item.subtitulo+item.contenido+item.fecha; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    //console.log(search);
-    setData2(search);
+    if(e.target.value==='')
+    setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.idnoticia+
+        c.titulo+
+        c.subtitulo+
+        c.contenido+
+        c.fecha
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -144,8 +149,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
-        //console.log(error);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -242,7 +247,7 @@ const Eliminar=async()=>{
 };
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     getAll();
   },[]);
 
@@ -277,7 +282,7 @@ const Eliminar=async()=>{
                           <GridItem xs={12} sm={12} md={12}>
                             <Grid container wrap="nowrap" spacing={2}>
                               <Grid item>
-                                <img src={IconNoticia} className={classes.imagen}/>
+                                <img src={IconNoticia} className={classes.imagen} alt="icon"/>
                               </Grid>
                               <Grid item xs zeroMinWidth>
                                 <ReactMarkdown>{"## "+console.titulo+"\n### "+console.subtitulo+"\n"+console.contenido}</ReactMarkdown>

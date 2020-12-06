@@ -21,24 +21,6 @@ const baseUrl=HOST.Url+'Olimpiada.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
 function getModalStyle() {
   return {
     top: `50%`,
@@ -81,21 +63,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OLimpiada() {
   const classes = useStyles();
-  const [data,setData]=useState([]);
   const [modalStyle] = useState(getModalStyle);
   const [openModalMensaje, setOpenMensaje] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idolimpiada:cookies.get('idolimpiada'),
-    nombre:'',
-    descripcion:'',
-    convocatoria:'',
-    baner:'',
-    fechaini:'',
-    fechafin:'',
-    fecha_limite_edad:'',
-    estado:'',
-    mensaje:''
+    descripcion: "",
+    estado: "",
+    fechafin: "",
+    fechaini: "",
+    fechalimiteedad: "",
+    idadmin: 0,
+    n: 0,
+    nombre: ""
   })
+
+
+
   const handleChangle = e => {
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
@@ -107,75 +91,24 @@ export default function OLimpiada() {
     setOpenMensaje(!openModalMensaje);
   };
   //**      GETBYID  */
-const getbyId=async()=>{
-    await axios.post(baseUrl,{
-        _metod: 'getById',
-        idOlimpiada:    consoleSeleccionada.idolimpiada
-    },header()
-  ).then(
-    response => {
-      if(response.data.estado===1){
-        const v = response.data.val;
-        consoleSeleccionada.nombre =""+v.nombre;
-        consoleSeleccionada.baner =""+v.baner;
-        consoleSeleccionada.descripcion =""+v.descripcion;
-        consoleSeleccionada.convocatoria =""+v.convocatoria;
-        consoleSeleccionada.fechaini =""+v.fechaini;
-        consoleSeleccionada.fechafin =""+v.fechafin;
-        consoleSeleccionada.fecha_limite_edad= ""+v.fechalimiteedad;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          ['estado']:""+v.estado
-        }))
-        if(v.n===0){
-          crearEtapas();
-        }
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error+"");
-    }
-  )
-};
-/** CREMOS ETAPAS */
-const crearEtapas=async()=>{
-  await axios.post(baseUrl,{
-      _metod: 'CrearEtapas',
-      idOlimpiada:    consoleSeleccionada.idolimpiada
-  },header()
-).then(
-  response => {
-    console.log(response);
-    //alert("error al crear las etapas");
-  }
-).catch(
-  error=>{
-    console.log(error);
-    alert(error+"");
-  }
-)
-};
 //**      UPDATE  */
 const Update=async()=>{
     consoleSeleccionada.mensaje='';
     await axios.post(baseUrl,{
         _metod: 'Update',
-        idOlimpiada:    consoleSeleccionada.idolimpiada,
+        idOlimpiada:    cookies.get('idolimpiada'),
         Nombre:         consoleSeleccionada.nombre,
         Descripcion:    consoleSeleccionada.descripcion,
         FechaIni:       consoleSeleccionada.fechaini,
         FechaFin:       consoleSeleccionada.fechafin,
-        FechaLimiteEdad:consoleSeleccionada.fecha_limite_edad,
+        FechaLimiteEdad:consoleSeleccionada.fechalimiteedad,
         Estado:         consoleSeleccionada.estado,       
         idAdmin:        cookies.get('idusuario')
     },header()
   ).then(
     response => {
-      setConsolaSeleccionada(prevState=>({
-        ...prevState,
-        ['mensaje']:response.data.mensaje
-      }))
+      console.log(response);
+      setMensaje(response.data.mensaje);
       handleModalMensaje();
     }
   ).catch(
@@ -189,15 +122,51 @@ const handleSubmit = event =>{
   Update();
   //ejecutamos el axios
 }
-useEffect(async()=>{
-    
+/*useEffect(()=>{  
   getbyId();
-},[]);
+},[getbyId]);*/
+useEffect(() => {
+  const fetchData = async () => {
+    setIsLoading(true);
+     await axios.post(baseUrl,{
+      _metod: 'getById',
+      idOlimpiada:    cookies.get('idolimpiada')
+    },header()).then(
+      response => {
+        console.log(response);
+        if(response.data.estado===1){
+          setConsolaSeleccionada(response.data.val);
+          if(response.data.val.n===0){
+            axios.post(baseUrl,{
+             _metod: 'CrearEtapas',
+             idOlimpiada:    cookies.get('idolimpiada')
+             },header()
+           ).then(
+             response => {
+               console.log(response);
+             }
+           ).catch(
+             error=>{
+               console.log(error);
+             }
+           )
+         }
+        }
+        setIsLoading(false);
+      }
+    ).catch(
+      error=>{
+        setIsLoading(false);
+      }
+    );
+  };
 
+  fetchData();
+}, []);
   return (
     <div>
       <GridContainer>
-        
+          {(isLoading)?"CArgandooooooooooo":''}
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Detalles de la OLimpiada</h4>
@@ -231,7 +200,7 @@ useEffect(async()=>{
                       type="date"
                       InputLabelProps={{shrink:true}}
                     
-                      value={consoleSeleccionada.fechaini}
+                      value={(consoleSeleccionada.fechaini!==null)?consoleSeleccionada.fechaini:''}
                       onChange={handleChangle}
                     />
                   </GridItem>
@@ -247,7 +216,7 @@ useEffect(async()=>{
                       label="Fecha final"
                       type="date"
                       InputLabelProps={{shrink:true}}
-                      value={consoleSeleccionada.fechafin}
+                      value={(consoleSeleccionada.fechafin!==null)?consoleSeleccionada.fechafin:''}
                       onChange={handleChangle}
                     />
                   </GridItem>
@@ -257,12 +226,12 @@ useEffect(async()=>{
                       margin="normal"
                       required
                       fullWidth
-                      id="fecha_limite_edad"
-                      name="fecha_limite_edad"
+                      id="fechalimiteedad"
+                      name="fechalimiteedad"
                       label="Fecha Limite para cumplir edad"
                       type="date"
                       InputLabelProps={{shrink:true}}
-                      value={consoleSeleccionada.fecha_limite_edad}
+                      value={(consoleSeleccionada.fechalimiteedad!==null)?consoleSeleccionada.fechalimiteedad:''}
                       onChange={handleChangle}
                     />
                   </GridItem>
@@ -296,7 +265,7 @@ useEffect(async()=>{
           <div style={modalStyle} className={classes.paper}>
             <h1 id="simple-modal-title">Mensaje...</h1>
             <br/>
-            <h4>{consoleSeleccionada.mensaje}</h4>
+            <h4>{mensaje}</h4>
             <br/>
               <Button type="submit" className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
           </div>

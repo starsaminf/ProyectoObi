@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Radio from '@material-ui/core/Radio';
 
 
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
-import {Edit,Delete, SupervisedUserCircle, Update} from '@material-ui/icons';
+
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TextField, Divider} from '@material-ui/core';
+import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import Typography from '@material-ui/core/Typography';
@@ -13,18 +13,12 @@ import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
-//radiooooo
 
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import GestionDeIntegrantes from './components/GestionDeIntegrante.js';
 // host variables
-const baseUrl_estudiante   = HOST.Url+'Estudiante.php';
 const baseUrl_Grupo      = HOST.Url+'Grupo.php';
 const baseUrl_colegio      = HOST.Url+'Colegio.php';
 //"../../variables/general.js";
@@ -103,8 +97,7 @@ export default function IncribirParticipanteIndividual(props) {
     mensaje:'',
     sie:'',
     colegio:'Indefinido',
-    colegiovalido:false,
-    mensaje:''
+    colegiovalido:false
   })
   const handleChangle = e => {
     const {name, value}= e.target;
@@ -115,14 +108,18 @@ export default function IncribirParticipanteIndividual(props) {
   }
 
   const handleChangleBuscador = e => {
-    e=(e.target.value).toLowerCase();
-
-    var search = grupos.filter(item=>{
-      var cad= (item.nombre+item.nombre_col+item.nombre_col).toString().toLowerCase(); 
-      if(cad.includes(e))
-        return item;
-    });
-    setGrupos2(search);
+    //****************** */
+    if(e.target.value==='')
+    setGrupos2(grupos);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = grupos
+      .filter(c => (
+        c.nombre+
+        c.nombre_col
+      ).toLowerCase().includes(val));
+      setGrupos2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -152,7 +149,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //***   GET ALL GRUPO */
 
-const getAllGrupo=async()=>{
+const getAllGrupo=useCallback(async()=>{
   //console.log("getAll estudiantes por tutor y olimpiada");
     await axios.post(baseUrl_Grupo,{
       _metod:       'getAll',
@@ -177,7 +174,7 @@ const getAllGrupo=async()=>{
       alert(error);
     }
   )
-};
+},[props]);
 //***   INSERTAR GRUPO */
 const InsertGrupo=async(event)=>{
   handleModalInsert();
@@ -259,13 +256,14 @@ const Eliminar=async()=>{
 };
 //** Buscamos elcolegio */
 const buscarColegio = e => {
-  var search = colegios.filter(item=>{
-    //p.*, e.nombre as nom_est,c.nombre as nom_col
-    var cad= item.sie; 
-    if(cad===e.target.value){
-      return item.nombre;
-    }
-  });
+
+//********************* */
+  var val=e.target.value.toLowerCase();
+  var search = colegios
+  .filter(c => (
+    c.sie
+  ).toLowerCase()===(val));
+  /********* */
   var estado="Indefinido";
   var idcol='';
   var b=false;
@@ -274,24 +272,15 @@ const buscarColegio = e => {
     idcol = search[0].sie;
     b=true;
   }
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['colegio']:""+estado
-  }))
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['sie']:idcol
-  }))
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['colegiovalido']:b
-  }))
+  setConsolaSeleccionada({colegio:""+estado});
+  setConsolaSeleccionada({sie:idcol});
+  setConsolaSeleccionada({colegiovalido:b});
 
   //if(search)
   //setParticipante2(search);
 }
 //******  getAll Colegio
-const getAllColegios=async()=>{
+const getAllColegios=useCallback(async()=>{
   //console.log("getAll Colegio");
     await axios.post(baseUrl_colegio,{
       _metod: 'getAllSimple'
@@ -309,7 +298,7 @@ const getAllColegios=async()=>{
       setColegio([]);
     }
   )
-};
+},[setColegio]);
 /*** Buscamos el colegio por el sie */
 const ValidarGrupo = event => {
   event.preventDefault();//cancelamos los eventos 
@@ -320,18 +309,15 @@ const ValidarGrupo = event => {
     //true:mostramos que ya tiene tutor
     //else:creamos o modificamos estudiante 
   }else{
-    setConsolaSeleccionada(prevState=>({
-      ...prevState,
-      ['mensaje']:"Ingrese el Sie de un Colegio Valido"
-    }))
+    setConsolaSeleccionada({mensaje:"Ingrese el Sie de un Colegio Valido"})
     handleModalMensaje();
   }
 };
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     getAllGrupo();
     getAllColegios();
-  },[]);
+  },[getAllGrupo,getAllColegios]);
 
 
   return (

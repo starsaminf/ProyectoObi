@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal,  TextField} from '@material-ui/core';
@@ -16,7 +16,6 @@ import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Grafico from './Components/Grafico.js';
 // host variables
 const baseUrl_Grupo      = HOST.Url+'Grupo.php';
-const baseUrl_colegio      = HOST.Url+'Colegio.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -97,14 +96,9 @@ function header(){
 export default function IncribirParticipanteIndividual(props) {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-  const [openModalInsert,   setOpenInsert]    = useState(false);
   const [openModalEstadistica,   setOpenEstadistica]    = useState(false);
-  const [openModalUpdate,   setOpenUpdate]    = useState(false);
-  const [openModalDelete,   setOpenDelete]    = useState(false);
-  const [openModalMensaje,  setOpenMensaje]   = useState(false);
   const [grupos,  setGrupos]   = useState([]);
   const [grupos2,  setGrupos2]   = useState([]);
-  const [colegios,      setColegio]  =useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
     idGrupo:'',
     nombre:'',
@@ -112,38 +106,23 @@ export default function IncribirParticipanteIndividual(props) {
     sie:'',
     colegio:'Indefinido',
     colegiovalido:false,
-    mensaje:''
-  })
-  const handleChangle = e => {
-    const {name, value}= e.target;
-    setConsolaSeleccionada(prevState=>({
-      ...prevState,
-      [name]:value
-    }))
-  }
+  });
 
   const handleChangleBuscador = e => {
-    e=(e.target.value).toLowerCase();
-
-    var search = grupos.filter(item=>{
-      var cad= (item.nombre+item.nombre_col+item.nombre_col).toString().toLowerCase(); 
-      if(cad.includes(e))
-        return item;
-    });
-    setGrupos2(search);
+    /***************** */
+    if(e.target.value==='')
+    setGrupos2(grupos);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = grupos
+      .filter(c => (
+        c.nombre+
+        c.nombre_col
+      ).toLowerCase().includes(val));
+      setGrupos2(relevantCompanyMeasures);
+    }
   }
-  const handleModalInsert = () => {
-    setOpenInsert(!openModalInsert);
-  };
-  const handleModalUpdate = () => {
-    setOpenUpdate(!openModalUpdate);
-  };
-  const handleModalDelete = () => {
-    setOpenDelete(!openModalDelete);
-  };
-  const handleModalMensaje = () => {
-    setOpenMensaje(!openModalMensaje);
-  };
+
   const handleModalEstadistica = () => {
     setOpenEstadistica(!openModalEstadistica);
   };
@@ -162,187 +141,43 @@ const seleccionarConsola =(consola,caso)=>{
 
 //***   GET ALL GRUPO */
 
-const getAllGrupo=async()=>{
-  //console.log("getAll estudiantes por tutor y olimpiada");
-    await axios.post(baseUrl_Grupo,{
-      _metod:       'getAllAdmin',
-      idOlimpiada:  cookies.get('idolimpiada'),
-      idNivel:      props.idnivel,
-      idTutor:      cookies.get('idusuario'),
-    },header()
-  ).then(
-    response => {
-      console.log("VALLLLLLSSDKJBKJJH");
-      console.log(response);
-      if(response.data.estado===1){
-        setGrupos(response.data.val);
-        setGrupos2(response.data.val);
-      }else{
-        setGrupos([]);
-        setGrupos2([]);
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error);
-    }
-  )
-};
+
 //***   INSERTAR GRUPO */
-const InsertGrupo=async(event)=>{
-  handleModalInsert();
-    await axios.post(baseUrl_Grupo,{
-      _metod:       'Insert',
-      idNivel:      props.idnivel,
-      idTutor:      cookies.get('idusuario'),
-      idOlimpiada:  cookies.get('idolimpiada'),
-      Sie:          consoleSeleccionada.sie,
-      Nombre:       consoleSeleccionada.nombre
-    },header()
-  ).then(
-    response => {
-      //console.log(response);
-      consoleSeleccionada.mensaje = response.data.mensaje;
-      handleModalMensaje();
-      if(response.data.estado===1){
-        getAllGrupo();
-        //getAll_Por_Tutor_y_Olimpiada();
-        //setData(response.data.admin);
-        //getAll();
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error+"");
-    }
-  )
-};
-const UpdateGrupo=async(event)=>{
-  //console.log("Update");
 
-  event.preventDefault();
-  //console.log(consoleSeleccionada);
-  handleModalUpdate();
-    await axios.post(baseUrl_Grupo,{
-      _metod: 'Update',
-      idGrupo: consoleSeleccionada.idgrupo,
-      Nombre:consoleSeleccionada.nombre
-    },header()
-  ).then(
-    response => {
-      //console.log(response);
-      consoleSeleccionada.mensaje = response.data.mensaje;
-      handleModalMensaje();
-      if(response.data.estado===1){
-        getAllGrupo();
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error+"");
-    }
-  )
-};
 
-const Eliminar=async()=>{
-  handleModalDelete();
-  //console.log("Eliminar");
-    await axios.post(baseUrl_Grupo,{
-      _metod: 'Delete',
-        idGrupo: consoleSeleccionada.idgrupo
-    },header()
-  ).then(
-    response => {
-      //console.log(response);
-      //console.log(consoleSeleccionada);
-      consoleSeleccionada.mensaje = response.data.mensaje;
-      handleModalMensaje();
-      if(response.data.estado===1){
-        getAllGrupo();
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error+"");
-    }
-  )
-};
-//** Buscamos elcolegio */
-const buscarColegio = e => {
-  var search = colegios.filter(item=>{
-    //p.*, e.nombre as nom_est,c.nombre as nom_col
-    var cad= item.sie; 
-    if(cad===e.target.value){
-      return item.nombre;
-    }
-  });
-  var estado="Indefinido";
-  var idcol='';
-  var b=false;
-  if(search.length===1){
-    estado = search[0].nombre;
-    idcol = search[0].sie;
-    b=true;
-  }
- 
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['colegio']:""+estado
-  }))
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['sie']:idcol
-  }))
-  setConsolaSeleccionada(prevState=>({
-    ...prevState,
-    ['colegiovalido']:b
-  }))
-
-  //if(search)
-  //setParticipante2(search);
-}
 //******  getAll Colegio
-const getAllColegios=async()=>{
-  //console.log("getAll Colegio");
-    await axios.post(baseUrl_colegio,{
-      _metod: 'getAllSimple'
-    },header()
-  ).then(
-    response => {
-      //console.log(response);
-      if(response.data.estado===1){
-        setColegio(response.data.val);
-      }
-    }
-  ).catch(
-    error=>{
-      alert(error);
-      setColegio([]);
-    }
-  )
-};
+
 /*** Buscamos el colegio por el sie */
-const ValidarGrupo = event => {
-  event.preventDefault();//cancelamos los eventos 
-  if(consoleSeleccionada.colegiovalido){
-    //console.log("Colegio vALIDO");
-    InsertGrupo();
-    //Buscamos si yaes participante devolvemos si esta registrado y si esta participando
-    //true:mostramos que ya tiene tutor
-    //else:creamos o modificamos estudiante 
-  }else{
-    setConsolaSeleccionada(prevState=>({
-      ...prevState,
-      ['mensaje']:"Ingrese el Sie de un Colegio Valido"
-    }))
-    handleModalMensaje();
-  }
-};
+
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
+  const getAllGrupo=async()=>{
+      await axios.post(baseUrl_Grupo,{
+        _metod:       'getAllAdmin',
+        idOlimpiada:  cookies.get('idolimpiada'),
+        idNivel:      props.idnivel,
+        idTutor:      cookies.get('idusuario'),
+      },header()
+    ).then(
+      response => {
+        console.log("VALLLLLLSSDKJBKJJH");
+        console.log(response);
+        if(response.data.estado===1){
+          setGrupos(response.data.val);
+          setGrupos2(response.data.val);
+        }else{
+          setGrupos([]);
+          setGrupos2([]);
+        }
+      }
+    ).catch(
+      error=>{
+        alert(error);
+      }
+    )
+  };
     getAllGrupo();
-    getAllColegios();
-  },[]);
+  },[props]);
 
 
   return (

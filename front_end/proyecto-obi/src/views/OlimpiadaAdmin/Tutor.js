@@ -60,11 +60,6 @@ export default function Tutor() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
-  const [value, setValue] = useState('individual');
-
-  const handleChangeRadio = (event) => {
-    setValue(event.target.value);
-  };
   const [modalStyle] = useState(getModalStyle);
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
@@ -89,15 +84,19 @@ export default function Tutor() {
     }))
   }
   const handleChangleBuscador = e => {
-    
-    //console.log(e.target.value);
-    var search = data.filter(item=>{
-      var cad= item.idnivel+item.nombre+item.descripcion; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    //console.log(search);
-    setData2(search);
+    ///**************** */
+    if(e.target.value==='')
+    setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.idnivel+
+        c.nombre+
+        c.descripcion
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -122,11 +121,6 @@ export default function Tutor() {
     Update();
     //ejecutamos el axios
   }
-  //*** seleccionar consola */
-const seleccionarConsola =(consola,caso)=>{
-  setConsolaSeleccionada(consola);
-  (caso==='Editar')?handleModalUpdate():handleModalDelete();
-};
 
 //******  getAll
   const getAll=async()=>{
@@ -144,8 +138,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
-        //console.log(error);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -232,7 +226,7 @@ const Eliminar=async()=>{
 };
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     
     getAll();
   },[]);

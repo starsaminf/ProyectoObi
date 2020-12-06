@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ReactExport from "react-export-excel";
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow} from '@material-ui/core';
 
 // wiservise y coneecciones
-import Cookies from "universal-cookie";
+
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 const baseUrl_Grupos=HOST.Url+'Grupo.php';
 //"../../variables/general.js";
-const cookies = new Cookies();
+
 //componentes de exel
 
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
 function header(){
     return {
       headers: {
@@ -57,8 +54,9 @@ function Score(props) {
     const classes = useStyles();
     const [data,setData]=useState([]);
 
+
     //**      UPDATE  */
-const getGrupoConNotas=async()=>{
+const getGrupoConNotas=useCallback(async()=>{
     //consoleSeleccionada.mensaje='';
     await axios.post(baseUrl_Grupos,{
         _metod: 'getGrupoConNotas',
@@ -83,8 +81,8 @@ const getGrupoConNotas=async()=>{
       alert(error+"");
     }
   )
-};
-const getGrupoConNotasCondicionado = async()=>{
+},[props]);
+const getGrupoConNotasCondicionado = useCallback(async()=>{
   //consoleSeleccionada.mensaje='';
   await axios.post(baseUrl_Grupos,{
     _metod: 'getGrupoConNotasCondicionado',
@@ -109,29 +107,27 @@ const getGrupoConNotasCondicionado = async()=>{
     alert(error+"");
   }
   )
-}
-    useEffect(async()=>{
+},[props]);
+    useEffect(()=>{
       if(props.tipo==='1'){
         getGrupoConNotas();  
       }else{
         console.log("Hacemos cambios papu");
         getGrupoConNotasCondicionado();
       }
-      },[]);
+      },[getGrupoConNotas, getGrupoConNotasCondicionado, props]);
     return (
     <div>
 
 <TableContainer className={classes.content}>
         {(data.length===0)?<center><Alert severity="error">Esta Etapa no tiene Grupos!</Alert></center>:
        <div>
-         <Alert severity="info">
-            <AlertTitle>Información</AlertTitle>
-          </Alert>
           <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell><strong><center>#</center></strong> </TableCell>
-                        <TableCell><strong><center>Score</center></strong> </TableCell>
+                        <TableCell><strong><center>Puntos</center></strong> </TableCell>
+                        <TableCell><strong><center>Observaciones</center></strong> </TableCell>
                         <TableCell><strong><center>Grupo</center></strong> </TableCell>
                         <TableCell><strong><center>Colegio</center></strong> </TableCell>
                         <TableCell><strong><center>Estado</center></strong> </TableCell>
@@ -141,16 +137,19 @@ const getGrupoConNotasCondicionado = async()=>{
               <TableBody>
               {data.map(console =>(
                 <TableRow key={console.idgrupo}>
-                  
-                    <TableCell><center>{console.puesto}</center></TableCell>
+                    
+                    <TableCell><center>{console.row_number }</center></TableCell>
+                    <TableCell><center>{console.puntos}</center></TableCell>
                     <TableCell><center>{console.observaciones}</center></TableCell>
                     <TableCell><center>{console.nombre}</center></TableCell>
                     <TableCell><center>{console.col}</center></TableCell>
                     <TableCell>
-                        
+                      <center>
                         {(console.estado==='Aprobado')?<Alert severity="success"><AlertTitle>{console.estado}</AlertTitle></Alert>:''}
                         {(console.estado==='Reprobado')?<Alert severity="error"><AlertTitle>{console.estado}</AlertTitle></Alert>:''}
-                    
+                        {(console.estado==='')?'-':''}
+                        {(console.estado==='-')?'-':''}
+                      </center>
                     </TableCell>
                 </TableRow>
                 ))}

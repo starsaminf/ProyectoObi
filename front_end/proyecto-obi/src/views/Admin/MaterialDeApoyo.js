@@ -93,16 +93,22 @@ export default function MaterialdeApoyo() {
    
   }
   const handleChangleBuscador = e => {
-    
-    //console.log(e.target.value);
-    var search = data.filter(item=>{
-      console.log(item);
-      var cad= item.idnoticia+item.titulo+item.subtitulo+item.contenido+item.fecha; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    //console.log(search);
-    setData2(search);
+    /******************* */
+    if(e.target.value==='')
+      setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.idnoticia+
+        c.titulo+
+        c.subtitulo+
+        c.contenido+
+        c.fecha+
+        c.archivo
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -134,8 +140,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
-        //console.log(error);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -234,7 +240,7 @@ const Eliminar=async()=>{
 };
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     getAll();
   },[]);
 

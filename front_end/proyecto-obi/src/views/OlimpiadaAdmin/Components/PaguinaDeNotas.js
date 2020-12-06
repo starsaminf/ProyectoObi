@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactExport from "react-export-excel";
 import { TableContainer, Button} from '@material-ui/core';
 // wiservise y coneecciones
-import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import AccordionActions from '@material-ui/core/AccordionActions';
@@ -12,7 +11,7 @@ import PublicarNota from './PublicarNota.js';
 
 const baseUrl_Grupos=HOST.Url+'Grupo.php';
 //"../../variables/general.js";
-const cookies = new Cookies();
+
 //componentes de exel
 
 const ExcelFile = ReactExport.ExcelFile;
@@ -59,7 +58,7 @@ function PaguinaResultados(props) {
     const [data,setData]=useState([]);
 
     //**      UPDATE  */
-const getAll=async()=>{
+const getAll=useCallback(async()=>{
     //consoleSeleccionada.mensaje='';
     await axios.post(baseUrl_Grupos,{
         _metod: 'getGrupoConNotas',
@@ -68,7 +67,8 @@ const getAll=async()=>{
     },header()
   ).then(
     response => {
-        //console.log(response);
+      console.log("GetAll");
+        console.log(response);
         if(response.data.estado===1)
             setData(response.data.val);
         else
@@ -84,15 +84,17 @@ const getAll=async()=>{
       alert(error+"");
     }
   )
-};
-const getAprobadosPorEtapa = async()=>{
+},[props]);
+const getAprobadosPorEtapa = useCallback(async()=>{
   await axios.post(baseUrl_Grupos,{
     _metod: 'getAprobadosPorEtapa',
     idNivel:        props.idnivel,
-    idEtapa:        props.idetapa-1   
+    idEtapaAnt:     props.idetapa-1,
+    idEtapa:        props.idetapa,   
   },header()
   ).then(
     response => {
+      console.log("AGREGADOS POR ETAPA");
         console.log(response);
         if(response.data.estado===1)
             setData(response.data.val);
@@ -104,15 +106,19 @@ const getAprobadosPorEtapa = async()=>{
       alert(error+"");
     }
   )
-}
-    useEffect(async()=>{
+},[props]);
+const Actualiza = useCallback(() =>{
+  console.log(props);
       if(props.tipo==='1'){
         getAll();  
       }else{
         console.log("Hacemos cambios papu");
         getAprobadosPorEtapa();
       }
-      },[]);
+},[getAll,getAprobadosPorEtapa,props]);
+    useEffect(()=>{
+        Actualiza();
+      },[Actualiza,props]);
     return (
     <div>
 
@@ -125,24 +131,24 @@ const getAprobadosPorEtapa = async()=>{
             - Cada ves que suba al archivo de notas, se limpiara todas las notas y se actualizara con las notas subidas en el ultimo archivo   
             <br/>
             <strong>Detalles:</strong><br/>
-            <strong>Puesto:</strong> la ubicacion en la tabla de pociciones<br/>
+            <strong>Puntos:</strong> Puntos acumulados en la etapa<br/>
             <strong>Estado:</strong> Aprobado o Reprobado para la siguiente etapa<br/>
-            <strong>Observaciones:</strong> Podria colocar cuantos problemas resolvio o puntos acumulo
+            <strong>Observaciones:</strong> Podria colocar cuantos problemas resolvio ejemplo (3/10: 3 de 10 problemas)
           </Alert>
         <AccordionActions>
-        <ExcelFile element={<Button color="primary"variant="outlined">Descargar Formulario de Notas</Button>} filename="Registro">
-                <ExcelSheet  data={data} name="FormularioNotas">
-                  <ExcelColumn label ="idgrupo" value="idgrupo"/>
-                  <ExcelColumn label ="nombre" value="nombre"/>
-                  <ExcelColumn label ="colegio" value="col"/>
-                  <ExcelColumn label ="puesto" value="puesto"/>
-                  <ExcelColumn label ="estado" value="estado"/>
-                  <ExcelColumn label ="observaciones" value="observaciones"/>
-                </ExcelSheet>
-            </ExcelFile>
+          <ExcelFile element={<Button color="primary"variant="outlined">Descargar Formulario de Notas</Button>} filename="Registro">
+            <ExcelSheet  data={data} name="FormularioNotas">
+              <ExcelColumn label ="idgrupo" value="idgrupo"/>
+              <ExcelColumn label ="nombre" value="nombre"/>
+              <ExcelColumn label ="colegio" value="col"/>
+              <ExcelColumn label ="puntos" value="puntos"/>
+              <ExcelColumn label ="estado" value="estado"/>
+              <ExcelColumn label ="observaciones" value="observaciones"/>
+            </ExcelSheet>
+          </ExcelFile>
       </AccordionActions>
       <AccordionActions>
-        <PublicarNota idNivel={props.idnivel} idEtapa={props.idetapa}/>
+        <PublicarNota idNivel={props.idnivel} idEtapa={props.idetapa} func={Actualiza}/>
       </AccordionActions>
       
       </div>

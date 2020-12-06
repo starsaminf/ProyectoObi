@@ -107,7 +107,7 @@ if (!empty($_POST['_metod'])) {
 				}
 	}
 	if($_POST['_metod'] == 'getAprobadosPorEtapa'){
-		$retorno = DB_Grupo::getAprobadosPorEtapa($_POST['idNivel'],$_POST['idEtapa']);
+		$retorno = DB_Grupo::getAprobadosPorEtapa($_POST['idNivel'],$_POST['idEtapaAnt'],$_POST['idEtapa']);
 		if ($retorno) {
             $datos["estado"] = 1;
             $datos["ret"] = $retorno;

@@ -17,19 +17,11 @@
 */
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
-import Person from "@material-ui/icons/Person";
-import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import BubbleChart from "@material-ui/icons/BubbleChart";
-import LocationOn from "@material-ui/icons/LocationOn";
-import Notifications from "@material-ui/icons/Notifications";
-import Unarchive from "@material-ui/icons/Unarchive";
-import SupervisedUserCircle from "@material-ui/icons/SupervisedUserCircle";
+
 // core components/views for Admin layout
 import DashboardPage from "../views/Admin/Dashboard.js";
 import Material from "../views/Admin/MaterialDeApoyo.js";
 import Noticias from "../views/Admin/Noticias.js";
-import Tutores from "../views/Admin/HojaEnBlanco.js";
-import Estudiantes from "../views/Admin/HojaEnBlanco.js";
 import Distritos from "../views/Admin/Distritos.js";
 import Colegios from "../views/Admin/Colegios.js";
 import Olimpiadas from "../views/Admin/Olimpiada.js";

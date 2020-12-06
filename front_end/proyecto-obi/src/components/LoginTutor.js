@@ -1,4 +1,4 @@
-import React , { useEffect, useState } from 'react';
+import React , {useState } from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import {Modal, TextField,Container} from '@material-ui/core';
@@ -72,14 +72,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0, 2),
   },
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+
 export default   function LoginUsuario(){
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
@@ -265,7 +258,7 @@ export default   function LoginUsuario(){
                   id="correo"
                   label="Correo"
                   name="correo"
-                  autoComplete="correo"
+                  
                   onChange={handleChangle}
                   autoComplete="current-correo"
                   autoFocus

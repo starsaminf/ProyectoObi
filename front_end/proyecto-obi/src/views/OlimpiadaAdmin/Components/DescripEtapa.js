@@ -1,4 +1,4 @@
-import React ,{ useEffect, useState }from "react";
+import React ,{ useState }from "react";
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import {Divider, TextField} from '@material-ui/core';
@@ -27,24 +27,6 @@ const cookies = new Cookies();
 
 
 //Estilos
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "100",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "1px",
-    textDecoration: "none"
-  }
-};
 function getModalStyle() {
   return {
     top: `50%`,
@@ -94,16 +76,12 @@ export default function DescripcionEtapa(props) {
   const [modalStyle] = useState(getModalStyle);
   const [openModalMensaje, setOpenMensaje] = useState(false);
   const [value,   setValue]    = useState(false);
+  const [mensaje,   setMensaje]    = useState("");
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idolimpiada:cookies.get('idolimpiada'),
-    idetapa:props.idetapa,
-    tipo:'1',//enesta parte describimos el nivel 
     nombre:'',
     descripcion:'',
     fechaini:'',
-    fechafin:'',
-    mensaje:'',
-    estado:''
+    fechafin:''
   })
   const handleChangle = e => {
     const {name, value}= e.target;
@@ -119,26 +97,20 @@ export default function DescripcionEtapa(props) {
 const getbyId=async()=>{
     await axios.post(baseUrl,{
         _metod:         'getById',
-        idEtapa:        consoleSeleccionada.idetapa,
-        idOlimpiada:    consoleSeleccionada.idolimpiada
+        idEtapa:        props.idetapa,
+        idOlimpiada:    cookies.get('idolimpiada')
     },header()
   ).then(
     response => {
       console.log(response);
       if(response.data.estado===1){
-        consoleSeleccionada.nombre=(response.data.val.nombre===null)?"":response.data.val.nombre;
-        consoleSeleccionada.descripcion=(response.data.val.descripcion===null)?"":response.data.val.descripcion;
-        consoleSeleccionada.fechaini=(response.data.val.fechaini===null)?"":response.data.val.fechaini;
-        consoleSeleccionada.fechafin=(response.data.val.fechafin===null)?"":response.data.val.fechafin;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          ['mensaje']:""
-        }))
+        setConsolaSeleccionada(response.data.val);
+        setMensaje("");
       }
     }
   ).catch(
     error=>{
-      alert(error+"");
+      console.log(error);
     }
   )
 };
@@ -149,7 +121,7 @@ const Update=async()=>{
     consoleSeleccionada.mensaje='';
     await axios.post(baseUrl,{
         _metod: 'Update',
-        idEtapa:        consoleSeleccionada.idetapa,
+        idEtapa:        props.idetapa,
         Nombre:         consoleSeleccionada.nombre,
         Descripcion:    consoleSeleccionada.descripcion,
         FechaIni:       consoleSeleccionada.fechaini,
@@ -158,15 +130,14 @@ const Update=async()=>{
     },header()
   ).then(
     response => {
-      setConsolaSeleccionada(prevState=>({
-        ...prevState,
-        ['mensaje']:response.data.mensaje
-      }))
+      console.log("**************");
+      console.log(response);
+      setMensaje(response.data.mensaje);
       handleModalMensaje();
     }
   ).catch(
     error=>{
-      alert(error+"");
+      console.log(error);
     }
   )
 };
@@ -181,8 +152,6 @@ const ClickAccion = () =>{
     setValue(!value);
   }
 }
-useEffect(async()=>{
-},[]);
 
   return (
     <div>
@@ -264,7 +233,7 @@ useEffect(async()=>{
           <div style={modalStyle} className={classes.paper}>
             <h1 id="simple-modal-title">Mensaje...</h1>
             <br/>
-            <h4>{consoleSeleccionada.mensaje}</h4>
+            <h4>{mensaje}</h4>
             <br/>
               <Button type="submit" className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
           </div>

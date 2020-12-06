@@ -7,10 +7,7 @@ import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
 import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
 import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
@@ -68,7 +65,7 @@ export default function Dashboard() {
         }
       )
     };
-  useEffect(async()=>{
+  useEffect(()=>{
     getAll();
   },[]);
   return (

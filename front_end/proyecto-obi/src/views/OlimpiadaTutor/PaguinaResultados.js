@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ReactExport from "react-export-excel";
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Button} from '@material-ui/core';
-import {Edit,Delete, Transform} from '@material-ui/icons';
+import React, { useEffect, useState,useCallback } from 'react';
+
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow} from '@material-ui/core';
+
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import AccordionActions from '@material-ui/core/AccordionActions';
+
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 
@@ -16,9 +15,6 @@ const baseUrl_Grupos=HOST.Url+'Grupo.php';
 const cookies = new Cookies();
 //componentes de exel
 
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 function header(){
     return {
       headers: {
@@ -27,40 +23,14 @@ function header(){
       }
     }
   };
-const useStyles = makeStyles((theme) => ({
-    paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-    icons: {
-      cursos:'pointer'
-    },
-    inputMaterial:{
-      width:'100%'
-    },
-    root: {
-      width: '100%',
-    },
-  }));
 
 
 function PaguinaResultados(props) {
-    const classes = useStyles();
+    
     const [data,setData]=useState([]);
 
     //**      UPDATE  */
-const getGrupoConNotas=async()=>{
+const getGrupoConNotas=useCallback(async()=>{
     //consoleSeleccionada.mensaje='';
     await axios.post(baseUrl_Grupos,{
         _metod: 'getGrupoConNotas',
@@ -83,10 +53,11 @@ const getGrupoConNotas=async()=>{
   ).catch(
     error=>{
       alert(error+"");
+      console.log(error);
     }
   )
-};
-const getGrupoConNotasCondicionado = async()=>{
+},[props]);
+const getGrupoConNotasCondicionado = useCallback(async()=>{
   //consoleSeleccionada.mensaje='';
   await axios.post(baseUrl_Grupos,{
     _metod: 'getGrupoConNotasCondicionado',
@@ -109,32 +80,31 @@ const getGrupoConNotasCondicionado = async()=>{
   }
   ).catch(
   error=>{
-    alert(error+"");
+    //alert(error+"");
+    console.log(error);
   }
   )
-}
-    useEffect(async()=>{
+},[props]);
+    useEffect(()=>{
       if(props.tipo==='1'){
         getGrupoConNotas();  
       }else{
         console.log("Hacemos cambios papu");
         getGrupoConNotasCondicionado();
       }
-      },[]);
+      },[getGrupoConNotas,getGrupoConNotasCondicionado,props]);
     return (
     <div>
 
-<TableContainer className={classes.content}>
+<TableContainer >
         {(data.length===0)?<center><Alert severity="error">Esta Etapa no tiene Grupos!</Alert></center>:
        <div>
-         <Alert severity="info">
-            <AlertTitle>Información</AlertTitle>
-          </Alert>
           <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell><strong><center>#</center></strong> </TableCell>
-                        <TableCell><strong><center>Score</center></strong> </TableCell>
+                        <TableCell><strong><center>puntos</center></strong> </TableCell>
+                        <TableCell><strong><center>observaciones</center></strong> </TableCell>
                         <TableCell><strong><center>Grupo</center></strong> </TableCell>
                         <TableCell><strong><center>Colegio</center></strong> </TableCell>
                         <TableCell><strong><center>Estado</center></strong> </TableCell>
@@ -145,7 +115,8 @@ const getGrupoConNotasCondicionado = async()=>{
               {data.map(console =>(
                 <TableRow key={console.idgrupo}>
                   
-                    <TableCell><center>{console.puesto}</center></TableCell>
+                    <TableCell><center>{console.row_number}</center></TableCell>
+                    <TableCell><center>{console.puntos}</center></TableCell>
                     <TableCell><center>{console.observaciones}</center></TableCell>
                     <TableCell><center>{console.nombre}</center></TableCell>
                     <TableCell><center>{console.col}</center></TableCell>

@@ -76,8 +76,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EtapaDeClasificacion(props) {
   const classes = useStyles();
-  const [n, setN] = React.useState(-1);
-  const [m, setM] = React.useState(-1);
+
   const [value, setValue] = React.useState(0);
   const [value2,   setValue2]    = useState(false);
   const [data,setData]=useState([]);
@@ -120,7 +119,7 @@ const ClickAccion = () =>{
   }
 }
 //getPorDEfecto
-useEffect(async()=>{
+useEffect(()=>{
 //llamamos todas las etapas
 
 },[]);

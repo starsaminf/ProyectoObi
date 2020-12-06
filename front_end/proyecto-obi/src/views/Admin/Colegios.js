@@ -8,6 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 const baseUrl=HOST.Url+'Colegio.php';
 const baseUrlDist=HOST.Url+'Distrito.php';
 //"../../variables/general.js";
@@ -42,7 +46,14 @@ const useStyles = makeStyles((theme) => ({
   },
   inputMaterial:{
     width:'100%'
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: '100%',
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 function header(){
   return {
@@ -53,9 +64,8 @@ function header(){
   }
 };
 
-export default function SimpleModal() {
+export default function Colegio() {
   //const baseUrl = HOST.Url+"Noticia.php";
-  const idAdmin='1';
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
   const [openModalInsert, setOpenInsert] = useState(false);
@@ -76,6 +86,7 @@ export default function SimpleModal() {
     longitud:'0'
   })
   const handleChangle = e => {
+    console.log(e.target);
     const {name, value}= e.target;
     setConsolaSeleccionada(prevState=>({
       ...prevState,
@@ -83,12 +94,19 @@ export default function SimpleModal() {
     }))
   }
   const handleChangleBuscador = e => {
-    var search = data.filter(item=>{
-      var cad= item.nombre+item.sie+item.nn+item.nd; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    setData2(search);
+    if(e.target.value==='')
+      setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.sie+
+        c.nombre+
+        c.dd+
+        c.nd
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -120,7 +138,7 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
+        console.log(error);
       }
     )
   };
@@ -235,10 +253,13 @@ const Eliminar=async()=>{
 };
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
-    
-    getAll();
-    getAllDistritos();
+  useEffect(()=>{
+      
+      function fetchBusinesses() {
+        getAll();
+        getAllDistritos();
+      }
+      fetchBusinesses()
   },[]);
 
 
@@ -302,29 +323,41 @@ const Eliminar=async()=>{
               <h3 id="simple-modal-title">Agregar Nuevo Colegio</h3>
               <form  onSubmit={Insert}>
                 <TextField name='nombre'margin="normal"variant="outlined" required className={classes.inputMaterial} label="nombre"onChange={handleChangle} />
-                <br/>
+                
                 <TextField name='sie'margin="normal"variant="outlined" required className={classes.inputMaterial} label="sie" onChange={handleChangle} />
-                <br/>
+                
                 <TextField name='zona'margin="normal" variant="outlined"required className={classes.inputMaterial} label="zona" onChange={handleChangle} />
                 <br/>
                 <TextField name='direccion'margin="normal" variant="outlined" className={classes.inputMaterial} label="direccion" onChange={handleChangle} />
-                <br/>
-                
-                
-                <br/>
-                <br/>
-                Seleccione un distrito&nbsp;&nbsp;
-                <select name='iddistrito' required onChange={handleChangle}>
-                  {data3.map(console =>(
-                    <option value={console.iddistrito} key={console.iddistrito}>{console.nombre+'('+console.departamento+')'}</option>
+          
+                <FormControl variant="outlined" className={classes.inputMaterial}>
+                  <InputLabel id="iddistrito-label">Distrito</InputLabel>
+                  <Select
+                    labelId="iddistrito-label"
+                    id="iddistrito"
+                    value={consoleSeleccionada&&consoleSeleccionada.iddistrito}
+                    onChange={handleChangle}
+                    label="Distrito"
+                    name='iddistrito'
+                    required
+                  >
+                    <MenuItem disabled value="">
+                      <em>Ninguno</em>
+                    </MenuItem>
+                    {data3.map(console =>(
+                      <MenuItem value={console.iddistrito} key={console.iddistrito}>
+                        {console.nombre+'('+console.departamento+')'}
+                      </MenuItem>
+                    
                   ))}
-                </select>
+                  </Select>
+                </FormControl>
             
                 
                 
                 
                 <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                  <Button  variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
                   &nbsp;
                   <Button type="submit" variant="contained" color="primary"  >Guardar</Button>
               </form>
@@ -363,7 +396,7 @@ const Eliminar=async()=>{
                 </select>
                 
                 <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                <Button variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
                 &nbsp;
                 <Button type="submit" variant="contained" color="primary"  >Guardar Cambios</Button>
             </form>
@@ -381,7 +414,7 @@ const Eliminar=async()=>{
             <h3 id="simple-modal-title">Eliminar...</h3>
             <h4>En realidad desea eliminar el Colegio?</h4>
             <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
+              <Button  variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
               &nbsp;
               <Button type="submit" variant="contained" color="primary" onClick={Eliminar} >Eliminar</Button>
           </div>
@@ -400,7 +433,7 @@ const Eliminar=async()=>{
             <br/>
             <h4>{consoleSeleccionada.mensaje}</h4>
             <br/>
-              <Button type="submit" className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
+              <Button  className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
           </div>
         </Modal>
     </div>

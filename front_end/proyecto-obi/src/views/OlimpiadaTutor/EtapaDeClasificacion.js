@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from 'react';
+import React,{ useEffect, useState,useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,7 +11,6 @@ import Box from '@material-ui/core/Box';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import { BusinessCenterSharp } from '@material-ui/icons';
 import PaguinaResultados from './PaguinaResultados.js';
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
@@ -71,15 +70,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EtapaDeClasificacion(props) {
   const classes = useStyles();
-  const [n, setN] = React.useState(-1);
-  const [m, setM] = React.useState(-1);
   const [value, setValue] = React.useState(0);
   const [data,setData]=useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 //getAllEtapa
-const getAllEtapa=async()=>{
+const getAllEtapa=useCallback(async()=>{
   await axios.post(baseUrl,{
       _metod:         'getAll',
       idOlimpiada:    cookies.get('idolimpiada')
@@ -98,7 +95,7 @@ const getAllEtapa=async()=>{
     alert(error+"");
   }
 )
-};
+},[setData]);
 const Buscar = (e)=>{
   for (let index = 0; index < data.length; index++) {
     const element = data[index];
@@ -107,12 +104,12 @@ const Buscar = (e)=>{
   }
 }
 //getPorDEfecto
-useEffect(async()=>{
+useEffect(()=>{
 //llamamos todas las etapas
 console.log("Holaaaa");
 console.log(props);
 getAllEtapa();
-},[]);
+},[getAllEtapa,props]);
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">

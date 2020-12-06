@@ -85,16 +85,19 @@ export default function SimpleModal() {
     }))
   }
   const handleChangleBuscador = e => {
-    
-    //console.log(e.target.value);
-    var search = data.filter(item=>{
-      
-      var cad= item.iddistrito+item.nombre+item.departamento; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    //console.log(search);
-    setData2(search);
+    //****************************
+    if(e.target.value==='')
+      setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.iddistrito+
+        c.nombre+
+        c.departamento
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    } 
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -116,6 +119,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
+    //setData2(data);
       await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
     ).then(
       response => {
@@ -127,8 +131,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
-        //console.log(error);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -235,7 +239,7 @@ const Aleatorio= ()=>{
 }
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     
     getAll();
   },[]);

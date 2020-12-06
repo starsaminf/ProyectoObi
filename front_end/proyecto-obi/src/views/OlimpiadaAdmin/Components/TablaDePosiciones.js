@@ -17,7 +17,7 @@ import Score from './Score.js';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Button from '@material-ui/core/Button';
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const baseUrl=HOST.Url+'Nivel.php';
@@ -78,8 +78,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TablasDePociciones(props) {
   const classes = useStyles();
-  const [n, setN] = React.useState(-1);
-  const [m, setM] = React.useState(-1);
+
   const [value, setValue] = React.useState(0);
   const [value2,   setValue2]    = useState(false);
   const [data,setData]=useState([]);
@@ -121,7 +120,7 @@ const ClickAccion = () =>{
   }
 }
 //getPorDEfecto
-useEffect(async()=>{
+useEffect(()=>{
 //llamamos todas las etapas
 
 },[]);

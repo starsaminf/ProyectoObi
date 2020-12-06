@@ -11,7 +11,7 @@ import InscribirGrupo from './InscribirGrupo.js';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import { BusinessCenterSharp } from '@material-ui/icons';
+
 
 const baseUrl=HOST.Url+'Nivel.php';
 //"../../variables/general.js";
@@ -105,7 +105,7 @@ const Buscar = (e)=>{
   }
 }
 //getPorDEfecto
-useEffect(async()=>{
+useEffect(()=>{
 //llamamos todas las etapas
 getAllEtapa();
 },[]);

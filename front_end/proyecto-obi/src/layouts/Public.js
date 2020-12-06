@@ -109,7 +109,7 @@ export default function MiniDrawer() {
     }else{
       console.log("Usuario no iniciado");
     }
-  });
+  },[]);
 
   return (
     <div className={classes.root}>

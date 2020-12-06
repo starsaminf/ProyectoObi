@@ -87,12 +87,21 @@ export default function SimpleModal() {
     }))
   }
   const handleChangleBuscador = e => {
-    var search = data.filter(item=>{
-      var cad= item.idolimpiada+item.nombre+item.descripcion+item.convocatoria+item.fechaini+item.fechafin+item.estado; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    setData2(search);
+    if(e.target.value==='')
+    setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.idolimpiada+
+        c.nombre+
+        c.descripcion+
+        c.convocatoria+
+        c.fechaini+
+        c.fechafin
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -144,7 +153,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -224,7 +234,7 @@ const Eliminar=async()=>{
 };
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     
     getAll();
   },[]);

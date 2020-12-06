@@ -54,7 +54,7 @@ ORDER BY pp.idGrupo";
     }
     public static function getGrupoConNotas($idNivel, $idEtapa){
         $consulta="
-select pp.*, COALESCE(n.puesto, 0) as puesto,COALESCE(n.estado, '')as estado ,COALESCE(n.observaciones, '') as observaciones
+select ROW_NUMBER () OVER (ORDER BY n.puntos desc),pp.*, COALESCE(n.puntos, 0) as puntos,COALESCE(n.estado, '-')as estado ,COALESCE(n.observaciones, '-') as observaciones
 from (
 select g.idGrupo, g.nombre ,c.nombre as col
 from Grupo g, Colegio c
@@ -73,6 +73,7 @@ SELECT *
 FROM Nota 
 WHERE idetapa=?
 )n ON (pp.idGrupo = n.idGrupo)
+ORDER BY  n.puntos desc
         ";
         try {
             // Preparar sentencia
@@ -86,8 +87,8 @@ WHERE idetapa=?
     }
 
     public static function getGrupoConNotasCondicionado($idNivel, $idEtapa){
-        $consulta="select pepillo.*
-from (select pp.*, COALESCE(n.puesto, 0) as puesto,COALESCE(n.estado, '')as estado ,COALESCE(n.observaciones, '') as observaciones
+        $consulta="select ROW_NUMBER () OVER (ORDER BY pepillo.puntos desc),pepillo.*
+from (select pp.*, COALESCE(n.puntos, 0) as puntos,COALESCE(n.estado, '-')as estado ,COALESCE(n.observaciones, '-') as observaciones
 from (
 select g.idGrupo, g.nombre ,c.nombre as col
 from Grupo g, Colegio c
@@ -107,6 +108,7 @@ FROM Nota
 WHERE idetapa=?
 )n ON (pp.idGrupo = n.idGrupo)) pepillo
 where pepillo.idgrupo in ( select x.idGrupo from nota x where x.idEtapa =? and x.estado = 'Aprobado')
+order by pepillo.puntos desc
         ";
         try {
             // Preparar sentencia
@@ -167,18 +169,23 @@ where pepillo.idgrupo in ( select x.idGrupo from nota x where x.idEtapa =? and x
             return false;
         }
     }
-
-    public static function getAprobadosPorEtapa($idNivel, $idEtapa)
+    // esta funcion es util para  ver las notas de los estudiantes en un asierta etapa
+    public static function getAprobadosPorEtapa($idNivel, $idEtapaAnt, $idEtapa)
     {
-        $consulta = "select g.*,t.nombre as tut, c.nombre as nombre_col,c.sie
+        $consulta = "select pp.* from (select hh.*, COALESCE(mm.puntos, 0) as puntos,COALESCE(mm.estado, '-')as estado ,COALESCE(mm.observaciones, '-') as observaciones
+        from(select g.*,t.nombre as tut, c.nombre as col,c.sie
         from Grupo g, Nota n, Tutor t ,colegio c
-        where g.idGrupo = n.idGrupo and n.idNivel= ? and n.idEtapa = ? and n.estado = 'Aprobado' and g.idTutor = t.idTutor and c.sie=g.sie
+        where g.idGrupo = n.idGrupo and n.idNivel= ? and n.idEtapa = ? and n.estado = 'Aprobado' and g.idTutor = t.idTutor and c.sie=g.sie)hh
+        left join ( select x.idgrupo,x.puntos,x.estado,x.observaciones
+        from Nota x
+        where x.idetapa = ?) mm
+        on(mm.idGrupo = hh.idGrupo))pp order by pp.puntos desc
         ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($idNivel, $idEtapa));
+            $comando->execute(array($idNivel, $idEtapaAnt,$idEtapa));
             return $comando->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return $e;

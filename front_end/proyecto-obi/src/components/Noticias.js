@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Typography from '@material-ui/core/Typography';
+
 // core components
 import GridItem from "../components/Grid/GridItem.js";
 import GridContainer from "../components/Grid/GridContainer.js";
@@ -10,7 +10,7 @@ import CardIcon from "../components/Card/CardIcon.js";
 import CardBody from "../components/Card/CardBody.js";
 import CardFooter from "../components/Card/CardFooter.js";
 import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
+
 import Update from "@material-ui/icons/Update";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,13 +18,13 @@ import Icon from "@material-ui/core/Icon";
 import styles from "../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import avatar from "../assets/img/icpc_logo.jpg";//../assets/img/faces/marc.jpg";
 import avatar1 from "../assets/img/OBI_small.jpg";//../assets/img/faces/marc.jpg";
-import { Label } from "@material-ui/icons";
+
 import Link from '@material-ui/core/Link';
 
 import Slider from 'react-animated-slider';
 import 'react-animated-slider/build/horizontal.css';
-import horizontalCss from '../assets/css/horizontal.css';//../../css/horizontal.css';
-import Cookies from "universal-cookie";
+
+
 import HOST from "../variables/general.js";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -32,7 +32,7 @@ import ReactMarkdown from 'react-markdown';
 const useStyles = makeStyles(styles);
 const baseUrl=HOST.Url+'Noticia.php';
 //"../../variables/general.js";
-const cookies = new Cookies();
+
 const content = [
     {
 		title: 'Vulputate Mollis Ultricies',
@@ -121,7 +121,7 @@ export default function Noticias(){
 	};
 
 
-	useEffect(async()=>{
+	useEffect(()=>{
 		getAll();
 		console.log(process.env);
 	  },[]);
@@ -166,8 +166,8 @@ export default function Noticias(){
                         <h3 className={classes.cardTitle}>Anfitriones</h3>
                         </CardHeader>
                         <CardBody>
-                            <center><img src={avatar} /></center>
-                            <center><img src={avatar1} /></center>
+                            <center><img src={avatar} alt="logo1"/></center>
+                            <center><img src={avatar1} alt="logo1"/></center>
                         </CardBody>
                         <CardFooter stats>
                             <div className={classes.stats}>

@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {Table,  TableCell, TableBody, TableRow,TextField,  Modal} from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
+
 import Radio from '@material-ui/core/Radio';
 import { Divider } from '@material-ui/core';
 
@@ -106,7 +106,6 @@ function GestionDeIntegrante(props) {
     const [openModalInsertRude,   setOpenInsertRude]    = useState(false);
     const [openModalInsert,   setOpenInsert]    = useState(false);
     const [openModalUpdate,   setOpenUpdate]    = useState(false);
-    const [openModalDelete,   setOpenDelete]    = useState(false);
     const [openModalMensaje,  setOpenMensaje]   = useState(false);
     const [openAcordeon,  setOpenAcordeon]   = useState(true);
     const [data,  setData]   = useState([]);
@@ -151,9 +150,7 @@ function GestionDeIntegrante(props) {
       const handleModalUpdate = () => {
         setOpenUpdate(!openModalUpdate);
       };
-      const handleModalDelete = () => {
-        setOpenDelete(!openModalDelete);
-      };
+
       const handleModalMensaje = () => {
         setOpenMensaje(!openModalMensaje);
       };
@@ -198,28 +195,7 @@ const getAllEstudiantesDeGrupo=async()=>{
   };
   
 //***   GET ALL Estudiantes de cada tutor en la olimpiada  */
-const getAllEstudiantesPorTutor=async()=>{
-    await axios.post(baseUrl_estudiante,{
-      _metod:           'getAllEstudiantesDeTutor',
-      idTutor:          cookies.get('idusuario'),
-      idOlimpiada:      cookies.get('idolimpiada')
-    },header()
-  ).then(
-    response => {
-      console.log("estudiantessss")
-      console.log(response);
-      /*if(response.data.estado===1){
-        setEstudiantes(response.data.val);
-      }else{
-        setEstudiantes([]);
-      }*/
-    }
-  ).catch(
-    error=>{
-      alert(error);
-    }
-  )
-};
+
 //**Borrar Integrante */
 const BorrarParticipacion=async()=>{
   console.log("Borrar PArticipacion");
@@ -404,7 +380,7 @@ function calcularEdad(fecha) {
 
   return edad;
 }
-useEffect(async()=>{
+useEffect(()=>{
   //console.log(props);
   //console.log(calcularEdad('1990-08-02'));
 },[]);

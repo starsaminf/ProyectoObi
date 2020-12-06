@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
-import Cookies from "universal-cookie";
+
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
@@ -14,7 +14,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 const baseUrl_grupo   = HOST.Url+'Grupo.php';
-const cookies = new Cookies();
+
 function getModalStyle() {
     return {
       top: `50%`,
@@ -84,34 +84,13 @@ function ListarEstudiantes(props) {
 
     const [modalStyle] = useState(getModalStyle);
     const [openModalInsert,   setOpenInsert]    = useState(false);
-    const [openModalUpdate,   setOpenUpdate]    = useState(false);
-    const [openModalDelete,   setOpenDelete]    = useState(false);
-    const [openModalMensaje,  setOpenMensaje]   = useState(false);
     const [openAcordeon,  setOpenAcordeon]   = useState(true);
     const [data,  setData]   = useState([]);
-    const [estudiantes,  setEstudiantes]   = useState([]);
-    const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-        rude:''
-      })
-      const handleChangle = e => {
-        const {name, value}= e.target;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          [name]:value
-        }))
-      }
+    const [estudiantes]   = useState([]);
       const handleModalInsert = () => {
         setOpenInsert(!openModalInsert);
       };
-      const handleModalUpdate = () => {
-        setOpenUpdate(!openModalUpdate);
-      };
-      const handleModalDelete = () => {
-        setOpenDelete(!openModalDelete);
-      };
-      const handleModalMensaje = () => {
-        setOpenMensaje(!openModalMensaje);
-      };
+
       const handleAcordeon = () => {
         setOpenAcordeon(!openAcordeon);
       };
@@ -148,7 +127,7 @@ const ClickAcordeon= () =>{
     handleAcordeon();
   }
 }
-useEffect(async()=>{
+useEffect(()=>{
 },[]);
   return (
     <div>

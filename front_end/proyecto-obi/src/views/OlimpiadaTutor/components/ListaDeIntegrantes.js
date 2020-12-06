@@ -3,15 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
-import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
-import {Table,  TableCell, TableBody, TableRow, TableHead, Divider} from '@material-ui/core';
+import {Table,  TableCell, TableRow, TableHead} from '@material-ui/core';
 
 //**  EXPANDIBLE */
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';
@@ -19,14 +18,7 @@ import ListIcon from '@material-ui/icons/List';
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
 const baseUrl_grupo   = HOST.Url+'Grupo.php';
-const cookies = new Cookies();
-function getModalStyle() {
-    return {
-      top: `50%`,
-      left: `50%`,
-      transform: `translate(-50%, -50%)`,
-    };
-  }
+
   
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -91,7 +83,7 @@ function GestionDeIntegrante(props) {
     const [data,  setData]   = useState([]);
 
 
-      const [value, setValue] = useState('femenino');
+
 
       const handleAcordeon = () => {
         setOpenAcordeon(!openAcordeon);
@@ -136,19 +128,7 @@ const ClickAcordeon= () =>{
   }
 }
 
-function calcularEdad(fecha) {
-  var hoy = new Date(cookies.get('fechalimiteedad'));
-  var cumpleanos = new Date(fecha);
-  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
-  var m = hoy.getMonth() - cumpleanos.getMonth();
-
-  if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
-      edad--;
-  }
-
-  return edad;
-}
-useEffect(async()=>{
+useEffect(()=>{
   //console.log(props);
   //console.log(calcularEdad('1990-08-02'));
 },[]);

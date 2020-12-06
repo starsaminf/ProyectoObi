@@ -1,20 +1,20 @@
-import React , { useEffect, useState }from "react";
+import React , { useEffect, useState ,useCallback }from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "../components/Grid/GridItem.js";
 import GridContainer from "../components/Grid/GridContainer.js";
-import CustomInput from "../components/CustomInput/CustomInput.js";
+
 import Button from "../components/CustomButtons/Button.js";
 import Card from "../components/Card/Card.js";
 import CardHeader from "../components/Card/CardHeader.js";
 import CardAvatar from "../components/Card/CardAvatar.js";
 import CardBody from "../components/Card/CardBody.js";
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input} from '@material-ui/core';
-import CardFooter from "../components/Card/CardFooter.js";
+import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal,  TextField} from '@material-ui/core';
+
 import ReactMarkdown from 'react-markdown';
 import avatar from "../assets/img/faces/marc.jpg";
-import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js";
+
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../variables/general.js";
@@ -31,6 +31,14 @@ function getModalStyle() {
       transform: `translate(-50%, -50%)`,
     };
   }
+  function header(){
+    return {
+      headers: {
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/json;charset=utf-8"
+      }
+    }
+  };
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -54,73 +62,49 @@ function getModalStyle() {
       width:'100%'
     }
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+  
 
 export default function UserProfile() {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
   const [data,setData]=useState([]);
+  const [mensaje,setMensaje]=useState("");
   const [openModalMensaje, setOpenMensaje] = useState(false);
-  const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-    idtutor:cookies.get('idusuario'),
-    nombre:'',
-    correo:'',
-    celular:'',
-    carnet:'',
-    fechalimiteedad:'',
-    v:[],
-    idolimpiada:''
-  })
+
+  const[consoleSeleccionada,setTutor]= useState({
+    celular:  0,
+    ci:       0,
+    correo:   "",
+    nombre:   ""
+  });
+  
   const handleChangle = e => {
     const {name, value}= e.target;
-    setConsolaSeleccionada(prevState=>({
+    setTutor(prevState=>({
       ...prevState,
       [name]:value
     }))
   }
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+
     //**      GETBYID  */
-const getbyId=async()=>{
+const getbyId=useCallback(async()=>{
     await axios.post(baseUrl,{
-        _metod: 'getById',
-        idTutor:    consoleSeleccionada.idtutor
+        _metod:     'getById',
+        idTutor:    cookies.get('idusuario')
     },header()
   ).then(
     response => {
-      //console.log(response);
+      console.log(response);
       if(response.data.estado===1){
-        const v = response.data.val;
-        consoleSeleccionada.nombre =""+v.nombre;
-        consoleSeleccionada.correo =""+v.correo;
-        consoleSeleccionada.celular =""+v.celular;
-        consoleSeleccionada.fechalimiteedad=""+v.fechalimiteedad;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          ['carnet']:""+v.ci
-        }))
-
+        setTutor(response.data.val);
       }
     }
   ).catch(
     error=>{
-      alert(error+"");
+      console.log(error);
     }
   )
-};
+},[]);
     //**      getAllOLimpiadas  */
     const getAllPublic=async()=>{
       await axios.post(baseUrl2,{
@@ -128,14 +112,15 @@ const getbyId=async()=>{
       },header()
     ).then(
       response => {
-        //console.log(response);
+        console.log(response);
         if(response.data.estado===1){
           setData(response.data.val);
         }
       }
     ).catch(
       error=>{
-        alert(error+"");
+        //alert(error+"");
+        console.log(error);
       }
     )
   };
@@ -148,19 +133,16 @@ const Update=async()=>{
     consoleSeleccionada.mensaje='';
     await axios.post(baseUrl,{
         _metod:         'Update',
-        idTutor:        consoleSeleccionada.idtutor,
+        idTutor:        cookies.get('idusuario'),
         Nombre:         consoleSeleccionada.nombre,
         Correo:         consoleSeleccionada.correo,
-        Ci:             consoleSeleccionada.carnet,
+        Ci:             consoleSeleccionada.ci,
         Celular:        consoleSeleccionada.celular
     },header()
   ).then(
     response => {
-        //console.log(response);
-      setConsolaSeleccionada(prevState=>({
-        ...prevState,
-        ['mensaje']:response.data.mensaje
-      }))
+      console.log(response);
+      setMensaje(response.data.mensaje);
       handleModalMensaje();
     }
   ).catch(
@@ -169,26 +151,21 @@ const Update=async()=>{
     }
   )
 };
-//** Seleccionamos consola */
+
 const seleccionarConsola =(consola)=>{
-  //console.log(consola.idolimpiada)
-  //en esta parte abrimos el admin de tutor con el id =console.logidOLimpiada
   cookies.set('idolimpiada', consola.idolimpiada, {path:"/"});
   cookies.set('fechalimiteedad', consola.fechalimiteedad, {path:"/"});
   window.location.href="../olimpiadaTutor/dashboard";
 };
-//POr defecto al entrar
+
   const handleSubmitUpdate = event =>{
     event.preventDefault();
-    //console.log("Editamos");
     Update();
-    //ejecutamos el axios
   }
-  useEffect(async()=>{
-    
+  useEffect(()=>{
     getbyId();
     getAllPublic();
-  },[]);
+  },[getbyId]);
   const salir =()=>{
     cookies.remove('idusuario',{path:"/"});
     cookies.remove('username',{path:"/"});
@@ -223,7 +200,7 @@ const seleccionarConsola =(consola)=>{
                         <TextField inputProps={{ type: 'number'}} variant="outlined" margin="normal" fullWidth name='celular' required className={classes.celular} label="Celular" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.celular}/>
                       </GridItem>
                       <GridItem xs={12} sm={12} md={6}>
-                        <TextField inputProps={{ type: 'number'}} variant="outlined" margin="normal" fullWidth name='carnet' required className={classes.carnet} label="Carnet" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.carnet}/>
+                        <TextField inputProps={{ type: 'number'}} variant="outlined" margin="normal" fullWidth name='ci' required className={classes.carnet} label="Carnet" onChange={handleChangle} value={consoleSeleccionada && consoleSeleccionada.ci}/>
                       </GridItem>
                   </GridContainer>
                     <Button type="submit"  color="primary" round>
@@ -292,7 +269,7 @@ const seleccionarConsola =(consola)=>{
           <div style={modalStyle} className={classes.paper}>
             <h1 id="simple-modal-title">Mensaje...</h1>
             <br/>
-            <h4>{consoleSeleccionada.mensaje}</h4>
+            <h4>{mensaje}</h4>
             <br/>
               <Button type="submit" className={classes.inputMaterial} variant="outlined" color="primary" onClick={handleModalMensaje} >Aceptar</Button>
           </div>

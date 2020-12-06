@@ -50,7 +50,7 @@ class DB_Etapa
     public static function getById($idEtapa,$idOlimpiada)
     {
         // Consulta de la meta
-        $consulta = "SELECT *
+        $consulta = "SELECT idEtapa, COALESCE(nombre, '') as nombre, COALESCE(Descripcion, '') as Descripcion, COALESCE(FechaIni, '12-12-12') as FechaIni, COALESCE(FechaFin, '12-12-12') as fechaFin,idolimpiada,tipo
                              FROM Etapa
                              WHERE idEtapa = ? and idOlimpiada = ?";
 

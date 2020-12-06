@@ -170,7 +170,7 @@ class DB_Nota
             " idEtapa," .
             " idNivel," .
             " idGrupo," .
-            " puesto," .
+            " puntos," .
             " estado," .
             " Observaciones)" .
             " VALUES";

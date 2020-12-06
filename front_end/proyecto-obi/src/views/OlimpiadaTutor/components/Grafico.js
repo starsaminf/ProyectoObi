@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState,useCallback } from "react";
 // react plugin for creating chart
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,7 +9,7 @@ import GridContainer from "../../../components/Grid/GridContainer.js";
 import Card from "../../../components/Card/Card.js";
 import CardHeader from "../../../components/Card/CardHeader.js";
 import CardBody from "../../../components/Card/CardBody.js";
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
+import {Table,  TableHead, TableCell, TableBody, TableRow} from '@material-ui/core';
 
 
 import styles from "../../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -24,7 +24,7 @@ import axios from 'axios';
 
 import { Alert, AlertTitle } from '@material-ui/lab';
 const useStyles = makeStyles(styles);
-var Chartist = require("chartist");
+
 // ##############################
 // // // variables used to create animation on charts
 // #############################
@@ -45,7 +45,7 @@ export default function Grafico(props) {
   const [nota,setNota]=useState([]);
   const [etapa,setEtapa]=useState([]);
   //#########################
-  const getAllNotas=async()=>{
+  const getAllNotas=useCallback(async()=>{
     await axios.post(baseUrlNota,{
         _metod:         'getAllporGrupo',
         idGrupo:         props.idGrupo
@@ -60,40 +60,36 @@ export default function Grafico(props) {
     }
   ).catch(
     error=>{
-      alert(error+"");
+      //alert(error+"");
+      console.log(error);
     }
   )
-  };
+  },[props]);
   const buscarNota = id => {
-  
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).includes(id));
     if(resp.length>=1)
       return (resp[0].puesto);
     else
       return "-";
   }
   const buscarObservaciones = id => {
-  
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
-
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).includes(id));
     if(resp.length>=1)
       return (resp[0].observaciones);
     else
       return "-";
   }
   const buscarEstado = id => {
-  
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
-
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).includes(id));
     if(resp.length>=1)
       return (resp[0].estado);
     else
@@ -120,10 +116,10 @@ export default function Grafico(props) {
   )
   };
   //####################
-  useEffect(async()=>{
+  useEffect(()=>{
     //llamamos todas las etapas
     getAllNotas();
-    },[]);
+    },[getAllNotas,props]);
   return (
     <div>
       

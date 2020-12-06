@@ -26,7 +26,6 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'error' => $retorno,
 							'mensaje' => 'No hay sugerencias que mostrar')
 					);
 				}
@@ -41,7 +40,6 @@ if (!empty($_POST['_metod'])) {
 					print json_encode(
 						array(
 							'estado' => 2,
-							'error' => $retorno,
 							'mensaje' => 'No hay sugerencias que mostrar')
 					);
 				}

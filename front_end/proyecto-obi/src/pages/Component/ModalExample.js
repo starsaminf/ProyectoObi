@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import Button from '@material-ui/core/Button';
 import Login from './Component/Listas';
-import Hidden from '@material-ui/core/Hidden';
+
 const customStyles = {
   content : {
     top                   : '50%',

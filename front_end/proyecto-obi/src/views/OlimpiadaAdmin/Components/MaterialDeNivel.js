@@ -8,13 +8,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AccordionActions from '@material-ui/core/AccordionActions';
-import {Table,  TableCell, TableBody, TableRow,TextField,  Modal, TableHead} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import {Table,  TableCell, TableBody, TableRow, TableHead} from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import BallotIcon from '@material-ui/icons/Ballot';
 import { Divider } from '@material-ui/core';
@@ -24,25 +18,12 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-// core components
-import GridItem from "../../../components/Grid/GridItem.js";
-import GridContainer from "../../../components/Grid/GridContainer.js";
-import Card from "../../../components/Card/Card.js";
-import CardHeader from "../../../components/Card/CardHeader.js";
-import CardFooter from "../../../components/Card/CardFooter.js";
-import {Edit,Delete} from '@material-ui/icons';
 const baseUrlMaterial=HOST.Url+'MaterialdeApoyo.php';
 const baseUrlSugerencia_para=HOST.Url+'Sugerencia_para.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
-function getModalStyle() {
-  return {
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`,
-  };
-}
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -108,23 +89,20 @@ const useStyles = makeStyles((theme) => ({
 
 function MaterialDeNivel(props) {
     const classes = useStyles();
-    const [modalStyle] = useState(getModalStyle);
-    const [openAcordeon,  setOpenAcordeon]   = useState(true);
+
+    const [openAcordeon]   = useState(true);
     const [data,  setData]   = useState([]);
-    const [data1,  setData1]   = useState([]);
-    const [openModalMensaje,  setOpenMensaje]   = useState(false);
-    const [mensaje,  setMensaje]   = useState([]);
-    const [consoleSeleccionada, setConsolaSeleccionada]= useState({
+
+
+
+    const [consoleSeleccionada]= useState({
         idmaterial:       '',
         titulo:           '',
         subtitulo:        '',
         esta:             false
       })
     
-      const handleModalMensaje = () => {
-        setOpenMensaje(!openModalMensaje);
-      };
-      
+
     const ClickAcordeon= () =>{
         if(openAcordeon){
             getAllMaterial();
@@ -207,7 +185,7 @@ function MaterialDeNivel(props) {
         }
     )    
 }
-    useEffect(async()=>{
+    useEffect(()=>{
         //console.log(props);
         //console.log(calcularEdad('1990-08-02'));
     },[]);
@@ -245,11 +223,9 @@ function MaterialDeNivel(props) {
             <Table>
               <TableHead>
               <TableRow >
-                  <TableCell>titulo</TableCell>
-                  <TableCell>tipo</TableCell>
-                    <TableCell>
-                        Opcion
-                    </TableCell>
+                  <TableCell><center>titulo</center></TableCell>
+                  <TableCell><center>tipo</center></TableCell>
+                  <TableCell><center>Opción</center></TableCell>
                 </TableRow>
               </TableHead>
             <TableBody>
@@ -257,12 +233,13 @@ function MaterialDeNivel(props) {
                 {data.map(console =>(
                 <TableRow key={console.idmaterial}>
                     <TableCell><strong>{console.titulo}</strong><br/> {console.subtitulo}</TableCell>
-                    <TableCell>{console.tipo}</TableCell>
+                    <TableCell><center>{console.tipo}</center></TableCell>
                     <TableCell>
-                      <FormControlLabel
-                        control={<Switch checked={console.esta} onClick={()=>{seleccionarConsola(console)}} />}
-                        label="Normal"
-                      />
+                      <center>
+                        <FormControlLabel
+                          control={<Switch checked={console.esta} onClick={()=>{seleccionarConsola(console)}} />}
+                        />
+                      </center>
                     </TableCell>
                 </TableRow>
                 ))}

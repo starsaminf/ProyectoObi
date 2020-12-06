@@ -1,16 +1,16 @@
 
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
-import Cookies from "universal-cookie";
+
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
 //**  EXPANDIBLE */
 const baseUrl_nota   = HOST.Url+'Nota.php';
-const cookies = new Cookies();
+
 function getModalStyle() {
     return {
       top: `50%`,
@@ -80,36 +80,11 @@ function NotaDeGrupo(props) {
 
     const [modalStyle] = useState(getModalStyle);
     const [openModalInsert,   setOpenInsert]    = useState(false);
-    const [openModalUpdate,   setOpenUpdate]    = useState(false);
-    const [openModalDelete,   setOpenDelete]    = useState(false);
-    const [openModalMensaje,  setOpenMensaje]   = useState(false);
-    const [openAcordeon,  setOpenAcordeon]   = useState(true);
-    const [data,  setData]   = useState([]);
-    const [estudiantes,  setEstudiantes]   = useState([]);
-    const [consoleSeleccionada, setConsolaSeleccionada]= useState({
-        rude:''
-      })
-      const handleChangle = e => {
-        const {name, value}= e.target;
-        setConsolaSeleccionada(prevState=>({
-          ...prevState,
-          [name]:value
-        }))
-      }
+
+    const [estudiantes]   = useState([]);
+ 
       const handleModalInsert = () => {
         setOpenInsert(!openModalInsert);
-      };
-      const handleModalUpdate = () => {
-        setOpenUpdate(!openModalUpdate);
-      };
-      const handleModalDelete = () => {
-        setOpenDelete(!openModalDelete);
-      };
-      const handleModalMensaje = () => {
-        setOpenMensaje(!openModalMensaje);
-      };
-      const handleAcordeon = () => {
-        setOpenAcordeon(!openAcordeon);
       };
         //*** detenemos submit de formulario */
     
@@ -136,14 +111,6 @@ const getAllNotaDeGrupo=async()=>{
       }
     )
   };
-  
-
-
-
-useEffect(async()=>{
-    console.log("******Nota de GRupo");
-    console.log(props);
-},[]);
   return (
     <div>
         <Button variant="outlined" color="primary" onClick={getAllNotaDeGrupo}>Agregar</Button>

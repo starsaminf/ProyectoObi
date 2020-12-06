@@ -8,13 +8,13 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import { Modal, Divider} from '@material-ui/core';
 
 // wiservise y coneecciones
-import Cookies from "universal-cookie";
+
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 
 const baseUrl_Grupos=HOST.Url+'Nota.php';
 //"../../variables/general.js";
-const cookies = new Cookies();
+
 function header(){
     return {
       headers: {
@@ -126,12 +126,12 @@ function PublicarNota(props) {
       obj[headers[5]] = currentline[5];
       if(obj.idgrupo!==''){
             result.push(obj);
-            if(i!=0)
+            if(i!==0)
                 phpconect+=";";
             phpconect+= currentline[0]+","+currentline[3]+","+currentline[4]+","+currentline[5];
         }
     }
-    
+    console.log(phpconect);
     setCode(phpconect);
     //return result; //JavaScript object
     //return JSON.stringify(result); //JSON String
@@ -173,9 +173,10 @@ function PublicarNota(props) {
   ).then(
     response => {
         handleModalInsert();
-        //console.log(response);
+        console.log(response);
         setMensaje(response.data.mensaje);
         handleModalMensaje();
+        props.func();
         
         //console.log(response);
         //if(response.data.estado===1)
@@ -194,11 +195,11 @@ function PublicarNota(props) {
     }
   )
 };
-  useEffect(async()=>{
+  useEffect(()=>{
       //console.log("Subimos Notas*************");
-    
+    console.log(props);
     //console.log(props);
-  },[]);
+  },[props]);
     return (
       <div className={useStyles.root}>
         <input

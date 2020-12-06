@@ -1,36 +1,26 @@
-import React,{ useEffect, useState }from 'react';
+import React,{ useEffect, useState,useCallback }from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import DescripEtapa from '../../views/OlimpiadaAdmin/Components/DescripEtapa.js';
 // wiservise y coneecciones
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-//**  EXPANDIBLE */
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 /**Pasos */
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import Typography from '@material-ui/core/Typography';
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
-import ReactMarkdown from 'react-markdown';
 import Button from '@material-ui/core/Button';
 import GrupoEtapa from './Components/GrupoEtapa.js';
-import Notas_Y_Obserbaciones from './Components/Notas_Y_Obserbaciones.js';
+import NotasYObserbaciones from './Components/Notas_Y_Obserbaciones.js';
 import TablaDePosiciones from './Components/TablaDePosiciones.js';
 import { Divider } from '@material-ui/core';
 const baseUrl=HOST.Url+'Etapa.php';
@@ -45,7 +35,6 @@ function header(){
   }
 };
 function TabPanel(props) {
-  const classes = useStyles();
   const { children, value,idetapa, index, ...other } = props;
 
   return (<div>
@@ -74,12 +63,6 @@ TabPanel.propTypes = {
   idetapa: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -91,12 +74,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleTabs() {
   const classes = useStyles();
   const [data,setData]=useState([]);
-  const [value, setValue] = React.useState(0);
-  const [nivel,setNivel]=useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  
 /** Pasos adelante y atras */
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -106,7 +85,7 @@ export default function SimpleTabs() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   //getAllEtapa
-  const getAllEtapa=async()=>{
+  const getAllEtapa=useCallback(async()=>{
       await axios.post(baseUrl,{
           _metod:         'getAll',
           idOlimpiada:    cookies.get('idolimpiada')
@@ -124,12 +103,12 @@ export default function SimpleTabs() {
         alert(error+"");
       }
     )
-  };
+  },[setData]);
   //getPorDEfecto
-  useEffect(async()=>{
+  useEffect(()=>{
     //llamamos todas las etapas
     getAllEtapa();
-  },[]);
+  },[getAllEtapa]);
   return (
     <div className={classes.root}>      
       <GridContainer>
@@ -150,7 +129,7 @@ export default function SimpleTabs() {
                               <Divider/>
                               <GrupoEtapa idetapa={console.idetapa} tipo={console.tipo}/>
                               <Divider/>
-                              <Notas_Y_Obserbaciones idetapa={console.idetapa} tipo={console.tipo}/>
+                              <NotasYObserbaciones idetapa={console.idetapa} tipo={console.tipo}/>
                               <Divider/>
                               <TablaDePosiciones idetapa={console.idetapa} tipo={console.tipo}/>
                               <br/>

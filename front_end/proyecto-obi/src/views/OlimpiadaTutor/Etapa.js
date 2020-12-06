@@ -4,8 +4,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 //webservise
 import Cookies from "universal-cookie";
@@ -47,40 +45,43 @@ export default function VerticalLinearStepper() {
   // handleee
 
 //******  getAll Colegio
-const getAllEstado=async()=>{
-  //console.log("getAll Estado");
-    await axios.post(baseUrl_Etapas,{
-      _metod: 'getAllTutor',
-      idOlimpiada: cookies.get('idolimpiada')
-    },header()
-  ).then(
-    response => {
-      if(response.data.estado===1){
-        setEtapa(response.data.val);
-        var search = response.data.val.filter(item=>{
-          if('2'===item.es)
-            return item;
-        });
-        if(search!==null){
-          setValue(prevState=>({
-            ...prevState,
-            ['tipo']:(search[0].tipo-1)//con esta varaible manejamos la pocicion del que se mostrara 0 = inscripcion, 1= etapa 2
-          }))
-          if(value===1){
-            console.log("Etapa de incripcion");
-          }else{
-            console.log("Etapa de clasificacion");
+
+useEffect(()=>{
+
+  const getAllEstado=async()=>{
+    //console.log("getAll Estado");
+      await axios.post(baseUrl_Etapas,{
+        _metod: 'getAllTutor',
+        idOlimpiada: cookies.get('idolimpiada')
+      },header()
+    ).then(
+      response => {
+        if(response.data.estado===1){
+          setEtapa(response.data.val);
+          
+          ///ini
+          var search = response.data.val
+        .filter(c => (
+          c.es
+        ).toLowerCase().includes('2'));
+          ///fin
+          if(search!==null){
+            setValue({tipo:(search[0].tipo-1)});//con esta varaible manejamos la pocicion del que se mostrara 0 = inscripcion, 1= etapa 2
+            /*if(value===1){
+              console.log("Etapa de incripcion");
+            }else{
+              console.log("Etapa de clasificacion");
+            }*/
           }
         }
       }
-    }
-  ).catch(
-    error=>{
-      alert(error);
-    }
-  )
-};
-useEffect(async()=>{
+    ).catch(
+      error=>{
+        //alert(error);
+        console.log(error);
+      }
+    )
+  };
   getAllEstado();
   //getAllEstudiantes();
 },[]);

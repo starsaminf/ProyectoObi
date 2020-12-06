@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState,useCallback } from "react";
 // react plugin for creating chart
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,7 +9,7 @@ import GridContainer from "../../../components/Grid/GridContainer.js";
 import Card from "../../../components/Card/Card.js";
 import CardHeader from "../../../components/Card/CardHeader.js";
 import CardBody from "../../../components/Card/CardBody.js";
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TexField, TextField, Input, Divider} from '@material-ui/core';
+import {Table, TableHead, TableCell, TableBody, TableRow} from '@material-ui/core';
 
 
 import styles from "../../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -23,7 +23,7 @@ import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import { Alert, AlertTitle } from '@material-ui/lab';
 const useStyles = makeStyles(styles);
-var Chartist = require("chartist");
+
 // ##############################
 // // // variables used to create animation on charts
 // #############################
@@ -44,31 +44,31 @@ export default function Grafico(props) {
   const [nota,setNota]=useState([]);
   const [etapa,setEtapa]=useState([]);
   //#########################
-  const getAllNotas=async()=>{
-    await axios.post(baseUrlNota,{
-        _metod:         'getAllporGrupo',
-        idGrupo:         props.idGrupo
-    },header()
-  ).then(
-    response => {
-      if(response.data.estado===1){
-        setNota(response.data.val);
-        
+  const getAllNotas= useCallback(async()=>{
+      await axios.post(baseUrlNota,{
+          _metod:         'getAllporGrupo',
+          idGrupo:         props.idGrupo
+      },header()
+      ).then(
+      response => {
+        if(response.data.estado===1){
+          setNota(response.data.val);
+          
+        }
+        getAllEtapas();
       }
-      getAllEtapas();
-    }
-  ).catch(
-    error=>{
-      alert(error+"");
-    }
-  )
-  };
+    ).catch(
+      error=>{
+        //alert(error+"");
+        console.log(error);
+      }
+    )
+  },[props]);
   const buscarNota = id => {
-  
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).toLowerCase().includes(id));
     if(resp.length>=1)
       return (resp[0].puesto);
     else
@@ -76,11 +76,10 @@ export default function Grafico(props) {
   }
   const buscarObservaciones = id => {
   
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
-
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).toLowerCase().includes(id));
     if(resp.length>=1)
       return (resp[0].observaciones);
     else
@@ -88,11 +87,10 @@ export default function Grafico(props) {
   }
   const buscarEstado = id => {
   
-    var resp = nota.filter(item=>{
-      if(item.idetapa===id)
-        return item;
-    });
-
+    var resp = nota
+    .filter(c => (
+      c.idetapa+""
+    ).toLowerCase().includes(id));
     if(resp.length>=1)
       return (resp[0].estado);
     else
@@ -114,15 +112,17 @@ export default function Grafico(props) {
     }
   ).catch(
     error=>{
-      alert(error+"");
+      //alert(error+"");
+      console.log(error);
     }
   )
   };
   //####################
-  useEffect(async()=>{
+  useEffect(()=>{
     //llamamos todas las etapas
     getAllNotas();
-    },[]);
+    
+    },[getAllNotas, props]);
   return (
     <div>
       

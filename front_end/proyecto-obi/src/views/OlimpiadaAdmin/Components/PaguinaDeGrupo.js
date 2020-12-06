@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactExport from "react-export-excel";
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Button} from '@material-ui/core';
 
 // wiservise y coneecciones
-import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import ListarEstudiantes from './ListarEstudiantes.js';
@@ -12,7 +11,6 @@ import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert } from '@material-ui/lab';
 const baseUrl_Grupos=HOST.Url+'Grupo.php';
 //"../../variables/general.js";
-const cookies = new Cookies();
 //componentes de exel
 
 
@@ -62,7 +60,7 @@ function PaguinaResultados(props) {
     const [data,setData]=useState([]);
 
     //**      UPDATE  */
-const getAll=async()=>{
+const getAll=useCallback(async()=>{
     //consoleSeleccionada.mensaje='';
     await axios.post(baseUrl_Grupos,{
         _metod: 'getAllAdmin',
@@ -88,8 +86,8 @@ const getAll=async()=>{
       alert(error+"");
     }
   )
-};
-const getAprobadosPorEtapa = async()=>{
+},[props]);
+const getAprobadosPorEtapa = useCallback(async()=>{
   await axios.post(baseUrl_Grupos,{
     _metod: 'getAprobadosPorEtapa',
     idNivel:        props.idnivel,
@@ -108,8 +106,8 @@ const getAprobadosPorEtapa = async()=>{
       alert(error+"");
     }
   )
-}
-    useEffect(async()=>{
+},[props]);
+    useEffect(()=>{
         
         console.log("props de paguina de Grupo");
         console.log(props);
@@ -124,7 +122,7 @@ const getAprobadosPorEtapa = async()=>{
         Nivel = {props.idnivel}<br/>
         etapa = {props.idetapa}
          */
-      },[]);
+      },[getAll,getAprobadosPorEtapa,props]);
     return (
     <div>
 

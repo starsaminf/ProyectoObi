@@ -1,4 +1,4 @@
-import React , { useEffect, useState }from "react";
+import React , { useEffect, useState,useCallback }from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -19,7 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import CardFooter from "../../components/Card/CardFooter.js";
+
 ///para la tablaaaaa
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -137,11 +137,11 @@ export default function UserProfile() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+
+
+  
     //**      getByOLimpiadas  */
-    const getByIdOlimpiada=async()=>{
+    const getByIdOlimpiada=useCallback(async()=>{
       await axios.post(baseUrl_Olimpiada,{
             _metod: 'getById',
             idOlimpiada: cookies.get('idolimpiada')
@@ -158,9 +158,9 @@ export default function UserProfile() {
         alert(error+"");
       }
     )
-  };
+  },[setConsolaSeleccionada]);
     //**      getNiveles  */
-    const getAllNiveles=async()=>{
+    const getAllNiveles=useCallback(async()=>{
         await axios.post(baseUrl_Nivel,{
               _metod: 'getAll',
               idOlimpiada: cookies.get('idolimpiada')
@@ -177,9 +177,9 @@ export default function UserProfile() {
           alert(error+"");
         }
       )
-    };
+    },[setNivel]);
     //**      getNiveles  */
-    const getAllEtapa=async()=>{
+    const getAllEtapa=useCallback(async()=>{
         await axios.post(baseUrl_Etapa,{
               _metod: 'getAll',
               idOlimpiada: cookies.get('idolimpiada')
@@ -196,7 +196,7 @@ export default function UserProfile() {
           alert(error+"");
         }
       )
-    };
+    },[setEtapa]);
     const Buscar = (e)=>{
       for (let index = 0; index < nivel.length; index++) {
         const element = nivel[index];
@@ -204,11 +204,11 @@ export default function UserProfile() {
           return index;
       }
     }
-  useEffect(async()=>{
+  useEffect(()=>{
     getByIdOlimpiada();
     getAllNiveles();
     getAllEtapa();
-  },[]);
+  },[getByIdOlimpiada, getAllNiveles, getAllEtapa]);
   return (
     <div>
         <div className={classes.content}>

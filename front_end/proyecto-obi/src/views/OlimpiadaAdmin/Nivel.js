@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Modal, TextField, Divider} from '@material-ui/core';
+import { Modal, TextField} from '@material-ui/core';
 import {Edit,Delete} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
+
 // core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
@@ -16,9 +16,9 @@ import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from '../../components/Card/CardFooter.js';
-import { cardHeader } from '../../assets/jss/material-dashboard-react.js';
+
 import MaterialDeNivel from "./Components/MaterialDeNivel.js";
-import { propTypes } from 'react-bootstrap/esm/Image';
+
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 // host components
 const baseUrl=HOST.Url+'Nivel.php';
@@ -69,11 +69,8 @@ export default function Nivel() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
   const classes = useStyles();
-  const [value, setValue] = useState('individual');
 
-  const handleChangeRadio = (event) => {
-    setValue(event.target.value);
-  };
+
   const [modalStyle] = useState(getModalStyle);
   const [openModalInsert, setOpenInsert] = useState(false);
   const [openModalUpdate, setOpenUpdate] = useState(false);
@@ -97,15 +94,19 @@ export default function Nivel() {
     }))
   }
   const handleChangleBuscador = e => {
-    
-    //console.log(e.target.value);
-    var search = data.filter(item=>{
-      var cad= item.idnivel+item.nombre+item.descripcion; 
-      if(cad.includes(e.target.value))
-        return item;
-    });
-    //console.log(search);
-    setData2(search);
+    /*************** */
+    if(e.target.value==='')
+    setData2(data);
+    else{
+      var val=e.target.value.toLowerCase();
+      var relevantCompanyMeasures = data
+      .filter(c => (
+        c.idnivel+
+        c.nombre+
+        c.descripcion
+      ).toLowerCase().includes(val));
+      setData2(relevantCompanyMeasures);
+    }
   }
   const handleModalInsert = () => {
     setOpenInsert(!openModalInsert);
@@ -152,8 +153,8 @@ const seleccionarConsola =(consola,caso)=>{
       }
     ).catch(
       error=>{
-        setData2(data);
-        //console.log(error);
+        //setData2(data);
+        console.log(error);
       }
     )
   };
@@ -254,7 +255,7 @@ const Aleatorio= ()=>{
 }
 
 //******  se ejecuta cuando inicia el Componente
-  useEffect(async()=>{
+  useEffect(()=>{
     getAll();
   },[]);
 
@@ -286,7 +287,6 @@ const Aleatorio= ()=>{
                   <Card>
                   <CreateNewFolderIcon />
                     <CardHeader color={Aleatorio()} >
-                      
                       <h3 ><CreateNewFolderIcon/>{console.nombre}</h3>
                     </CardHeader>
                     <CardBody>
