@@ -10,20 +10,12 @@ import axios from 'axios';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 
-const baseUrl_Grupos=HOST.Url+'Grupo.php';
+const baseUrl_Grupos=HOST.Url_Tutor+'Grupo.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //componentes de exel
 
-function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
-
+const header = HOST.header(cookies.get('token'));
 
 function PaguinaResultados(props) {
     
@@ -36,7 +28,7 @@ const getGrupoConNotas=useCallback(async()=>{
         _metod: 'getGrupoConNotas',
         idNivel:        props.idnivel,     
         idEtapa:        props.idetapa
-    },header()
+    },header
   ).then(
     response => {
         console.log(response);
@@ -64,7 +56,7 @@ const getGrupoConNotasCondicionado = useCallback(async()=>{
     idNivel:        props.idnivel,     
     idEtapa:        props.idetapa,
     idTutor:        cookies.get('idusuario')
-  },header()
+  },header
   ).then(
   response => {
       console.log(response);

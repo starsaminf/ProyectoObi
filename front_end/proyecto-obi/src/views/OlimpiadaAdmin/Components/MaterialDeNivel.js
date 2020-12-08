@@ -18,8 +18,8 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-const baseUrlMaterial=HOST.Url+'MaterialdeApoyo.php';
-const baseUrlSugerencia_para=HOST.Url+'Sugerencia_para.php';
+const baseUrlMaterial=HOST.Url_Admin+'MaterialdeApoyo.php';
+const baseUrlSugerencia_para=HOST.Url_Admin+'Sugerencia_para.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -78,14 +78,7 @@ const useStyles = makeStyles((theme) => ({
       },
     
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+  const header = HOST.header(cookies.get('token'));
 
 function MaterialDeNivel(props) {
     const classes = useStyles();
@@ -128,7 +121,7 @@ function MaterialDeNivel(props) {
             _metod:     'getAllNivelAdmin',
             idAdmin:    cookies.get('idusuario'),
             idNivel:    props.idNivel 
-        }, header()
+        }, header
         ).then(
             response => {
               console.log("***************material");
@@ -153,7 +146,7 @@ function MaterialDeNivel(props) {
           _metod:         'Insert',
           idMaterial:     consoleSeleccionada.idmaterial,
           idNivel:        props.idNivel 
-      }, header()
+      }, header
       ).then(
           response => {
             if(response.data.estado===1){
@@ -171,7 +164,7 @@ function MaterialDeNivel(props) {
         _metod:         'Delete',
         idMaterial:     consoleSeleccionada.idmaterial,
         idNivel:        props.idNivel 
-    }, header()
+    }, header
     ).then(
         response => {
           console.log(response);

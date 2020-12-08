@@ -23,17 +23,10 @@ import GrupoEtapa from './Components/GrupoEtapa.js';
 import NotasYObserbaciones from './Components/Notas_Y_Obserbaciones.js';
 import TablaDePosiciones from './Components/TablaDePosiciones.js';
 import { Divider } from '@material-ui/core';
-const baseUrl=HOST.Url+'Etapa.php';
+const baseUrl=HOST.Url_Admin+'Etapa.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 function TabPanel(props) {
   const { children, value,idetapa, index, ...other } = props;
 
@@ -89,7 +82,7 @@ export default function SimpleTabs() {
       await axios.post(baseUrl,{
           _metod:         'getAll',
           idOlimpiada:    cookies.get('idolimpiada')
-      },header()
+      },header
     ).then(
       response => {
         if(response.data.estado===1){

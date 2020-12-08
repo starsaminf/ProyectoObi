@@ -24,15 +24,16 @@ import Link from '@material-ui/core/Link';
 import Slider from 'react-animated-slider';
 import 'react-animated-slider/build/horizontal.css';
 
-
+import Cookies from "universal-cookie";
 import HOST from "../variables/general.js";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(styles);
-const baseUrl=HOST.Url+'Noticia.php';
+const baseUrl=HOST.Url_Admin+'Noticia.php';
 //"../../variables/general.js";
-
+const cookies = new Cookies();
+const header = HOST.header(cookies.get('token'));
 const content = [
     {
 		title: 'Vulputate Mollis Ultricies',
@@ -89,14 +90,7 @@ const content = [
 		userProfile: 'https://s7.postimg.cc/hsk2th5tn/6_3x.png',
 	},
   ];
-  function header(){
-	return {
-	  headers: {
-		"Accept": "application/json, text/plain, */*",
-		"Content-Type": "application/json;charset=utf-8"
-	  }
-	}
-  };
+
   
 export default function Noticias(){
 	const classes = useStyles();
@@ -104,9 +98,10 @@ export default function Noticias(){
 
 	//******  getAll
 	const getAll=async()=>{
-		await axios.post(baseUrl,{_metod: 'getAllPublic'},header()
+		await axios.post(baseUrl,{_metod: 'getAllPublic'},header
 	  ).then(
 		response => {
+			console.log(response);
 		  if(response.data.estado===1){
 			setData(response.data.val);
 			//setData2(response.data.val);
@@ -123,7 +118,7 @@ export default function Noticias(){
 
 	useEffect(()=>{
 		getAll();
-		console.log(process.env);
+		//console.log(process.env);
 	  },[]);
 	
     return(

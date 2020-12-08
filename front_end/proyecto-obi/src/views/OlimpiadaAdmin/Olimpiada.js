@@ -17,7 +17,7 @@ import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
 
-const baseUrl=HOST.Url+'Olimpiada.php';
+const baseUrl=HOST.Url_Admin+'Olimpiada.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 
@@ -28,14 +28,7 @@ function getModalStyle() {
     transform: `translate(-50%, -50%)`,
   };
 }
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -104,7 +97,7 @@ const Update=async()=>{
         FechaLimiteEdad:consoleSeleccionada.fechalimiteedad,
         Estado:         consoleSeleccionada.estado,       
         idAdmin:        cookies.get('idusuario')
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);
@@ -131,7 +124,7 @@ useEffect(() => {
      await axios.post(baseUrl,{
       _metod: 'getById',
       idOlimpiada:    cookies.get('idolimpiada')
-    },header()).then(
+    },header).then(
       response => {
         console.log(response);
         if(response.data.estado===1){
@@ -140,7 +133,7 @@ useEffect(() => {
             axios.post(baseUrl,{
              _metod: 'CrearEtapas',
              idOlimpiada:    cookies.get('idolimpiada')
-             },header()
+             },header
            ).then(
              response => {
                console.log(response);

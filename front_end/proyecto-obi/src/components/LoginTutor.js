@@ -16,7 +16,7 @@ import axios from 'axios';
 import md5 from "md5";
 import Cookies from "universal-cookie";
 import HOST from "../variables/general.js";
-const baseUrl = HOST.Url+"Tutor.php";
+const baseUrl = HOST.Url_Tutor+"Tutor.php";
 
 const cookies = new Cookies();
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
@@ -27,7 +27,7 @@ function getModalStyle() {
     transform: `translate(-50%, -50%)`,
   };
 }
-
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -119,13 +119,7 @@ export default   function LoginUsuario(){
           _metod:     'Login',
           Correo:     consoleSeleccionada.correo,
           Password:   md5(consoleSeleccionada.password)
-      },
-      {
-          headers: {
-              "Accept": "application/json, text/plain, */*",
-              "Content-Type": "application/json;charset=utf-8"
-          }
-      }
+      },header
   )
   .then(
       response => {
@@ -177,13 +171,7 @@ export default   function LoginUsuario(){
             Correo:     consoleSeleccionada.correo,
             Celular:    consoleSeleccionada.celular,
             Password:   md5(consoleSeleccionada.password)
-        },
-        {
-            headers: {
-                "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json;charset=utf-8"
-            }
-        }
+        },header
     )
     .then(
         response => {

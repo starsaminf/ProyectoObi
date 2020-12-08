@@ -3,14 +3,14 @@ import React, {  useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
-
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
 //**  EXPANDIBLE */
-const baseUrl_nota   = HOST.Url+'Nota.php';
-
+const baseUrl_nota   = HOST.Url_Admin+'Nota.php';
+const cookies = new Cookies();
 function getModalStyle() {
     return {
       top: `50%`,
@@ -66,14 +66,9 @@ function getModalStyle() {
       },
     
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+
+  
+  const header = HOST.header(cookies.get('token'));
   
 function NotaDeGrupo(props) {
     const classes = useStyles();
@@ -95,7 +90,7 @@ const getAllNotaDeGrupo=async()=>{
         _metod:         'getById',
         idGrupo:        props.idGrupo,
         idEtapa:        props.idEtapa
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);

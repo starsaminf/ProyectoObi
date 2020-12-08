@@ -31,9 +31,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 // core components
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
-const baseUrl_grupo   = HOST.Url+'Grupo.php';
-const baseUrl_estudiante   = HOST.Url+'Estudiante.php';
-const baseUrl_Integrante_de   = HOST.Url+'Integrante_de.php';
+const baseUrl_grupo   = HOST.Url_Tutor+'Grupo.php';
+const baseUrl_estudiante   = HOST.Url_Tutor+'Estudiante.php';
+const baseUrl_Integrante_de   = HOST.Url_Tutor+'Integrante_de.php';
 const cookies = new Cookies();
 function getModalStyle() {
     return {
@@ -90,14 +90,7 @@ function getModalStyle() {
       },
     
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+const header = HOST.header(cookies.get('token'));
   
 function GestionDeIntegrante(props) {
     const classes = useStyles();
@@ -175,7 +168,7 @@ const getAllEstudiantesDeGrupo=async()=>{
       await axios.post(baseUrl_grupo,{
         _metod:         'getAllEstudiantesDeGrupo',
         idGrupo:        props.idGrupo
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);
@@ -204,7 +197,7 @@ const BorrarParticipacion=async()=>{
     _metod:           'Delete',
     Rude:             consoleSeleccionada.rude,
     idGrupo:          props.idGrupo
-  },header()
+  },header
 ).then(
   response => {
     console.log(response);
@@ -229,7 +222,7 @@ const InsertarParticipacion=async()=>{
     _metod:           'Insert',
     Rude:             consoleSeleccionada.rude,
     idGrupo:          props.idGrupo
-  },header()
+  },header
 ).then(
   response => {
     console.log(response);
@@ -261,7 +254,7 @@ const InsertEstudiante=async(event)=>{
       Genero:         value,
       Ci:             consoleSeleccionada.ci,
       Correo:         consoleSeleccionada.correo
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);
@@ -295,7 +288,7 @@ const UpdateEstudiante=async()=>{
       Genero:         value,
       Ci:             consoleSeleccionada.ci,
       Correo:         consoleSeleccionada.correo
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);
@@ -316,7 +309,7 @@ const getByIdEstudiante=async(event)=>{
         _metod: 'getById',   
         idOlimpiada:    cookies.get('idolimpiada'),
         Rude:           consoleSeleccionada.rude
-      },header()
+      },header
     ).then(
       response => {
         

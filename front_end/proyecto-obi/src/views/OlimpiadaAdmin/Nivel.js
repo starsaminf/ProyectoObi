@@ -21,7 +21,7 @@ import MaterialDeNivel from "./Components/MaterialDeNivel.js";
 
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 // host components
-const baseUrl=HOST.Url+'Nivel.php';
+const baseUrl=HOST.Url_Admin+'Nivel.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -56,15 +56,7 @@ const useStyles = makeStyles((theme) => ({
     width:'100%'
   }
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
-
+const header = HOST.header(cookies.get('token'));
 export default function Nivel() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
@@ -139,7 +131,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idOlimpiada :cookies.get('idolimpiada')},header()
+      await axios.post(baseUrl,{_metod: 'getAll',idOlimpiada :cookies.get('idolimpiada')},header
     ).then(
       response => {
         //console.log(response);
@@ -168,7 +160,7 @@ const seleccionarConsola =(consola,caso)=>{
         LimiteEdad:       consoleSeleccionada.limiteedad,
         LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
         idOlimpiada:      cookies.get('idolimpiada')
-      },header()
+      },header
     ).then(
       response => {
         //console.log(response);
@@ -196,7 +188,7 @@ const Update=async()=>{
       LimiteEdad:       consoleSeleccionada.limiteedad,
       LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
       idOlimpiada:      cookies.get('idolimpiada')
-    },header()
+    },header
   ).then(
     response => {
       consoleSeleccionada.mensaje = response.data.mensaje;
@@ -220,7 +212,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idOlimpiada:    cookies.get('idolimpiada'),
         idNivel: consoleSeleccionada.idnivel
-    },header()
+    },header
   ).then(
     response => {
       

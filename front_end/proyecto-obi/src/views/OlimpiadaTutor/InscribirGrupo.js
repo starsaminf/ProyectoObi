@@ -19,8 +19,8 @@ import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import GestionDeIntegrantes from './components/GestionDeIntegrante.js';
 // host variables
-const baseUrl_Grupo      = HOST.Url+'Grupo.php';
-const baseUrl_colegio      = HOST.Url+'Colegio.php';
+const baseUrl_Grupo      = HOST.Url_Tutor+'Grupo.php';
+const baseUrl_colegio      = HOST.Url_Tutor+'Colegio.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -71,15 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
-
+const header = HOST.header(cookies.get('token'));
 export default function IncribirParticipanteIndividual(props) {
   const classes = useStyles();
 
@@ -156,7 +148,7 @@ const getAllGrupo=useCallback(async()=>{
       idOlimpiada:  cookies.get('idolimpiada'),
       idNivel:      props.idnivel,
       idTutor:      cookies.get('idusuario'),
-    },header()
+    },header
   ).then(
     response => {
       //console.log("VALLLLLLSSDKJBKJJH");
@@ -185,7 +177,7 @@ const InsertGrupo=async(event)=>{
       idOlimpiada:  cookies.get('idolimpiada'),
       Sie:          consoleSeleccionada.sie,
       Nombre:       consoleSeleccionada.nombre
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);
@@ -214,7 +206,7 @@ const UpdateGrupo=async(event)=>{
       _metod: 'Update',
       idGrupo: consoleSeleccionada.idgrupo,
       Nombre:consoleSeleccionada.nombre
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);
@@ -237,7 +229,7 @@ const Eliminar=async()=>{
     await axios.post(baseUrl_Grupo,{
       _metod: 'Delete',
         idGrupo: consoleSeleccionada.idgrupo
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);
@@ -284,7 +276,7 @@ const getAllColegios=useCallback(async()=>{
   //console.log("getAll Colegio");
     await axios.post(baseUrl_colegio,{
       _metod: 'getAllSimple'
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);

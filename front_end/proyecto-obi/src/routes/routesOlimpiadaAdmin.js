@@ -25,7 +25,7 @@ import Olimpiada from "../views/OlimpiadaAdmin/Olimpiada.js";
 import Niveles from "../views/OlimpiadaAdmin/Nivel.js";
 import Etapa from "../views/OlimpiadaAdmin/Etapa.js";
 import Grupos from "../views/OlimpiadaAdmin/Grupos y Estudiantes.js";
-import Convocatoria from "../views/OlimpiadaTutor/Convocatoria.js";
+import Convocatoria from "../views/OlimpiadaAdmin/Convocatoria.js";
 import Tutores from "../views/OlimpiadaAdmin/Tutor.js";
 import Estudiantes from "../views/OlimpiadaAdmin/Estudiante.js";
 // core components/views for RTL layout

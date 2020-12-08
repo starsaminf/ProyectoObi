@@ -20,8 +20,8 @@ import Cookies from "universal-cookie";
 import HOST from "../variables/general.js";
 import axios from 'axios';
 // host variables
-const baseUrl=HOST.Url+'Tutor.php';
-const baseUrl2=HOST.Url+'Olimpiada.php';
+const baseUrl=HOST.Url_Tutor+'Tutor.php';
+const baseUrl2=HOST.Url_Tutor+'Olimpiada.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 function getModalStyle() {
@@ -31,14 +31,7 @@ function getModalStyle() {
       transform: `translate(-50%, -50%)`,
     };
   }
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+  const header = HOST.header(cookies.get('token'));
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -91,7 +84,7 @@ const getbyId=useCallback(async()=>{
     await axios.post(baseUrl,{
         _metod:     'getById',
         idTutor:    cookies.get('idusuario')
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);
@@ -109,7 +102,7 @@ const getbyId=useCallback(async()=>{
     const getAllPublic=async()=>{
       await axios.post(baseUrl2,{
           _metod: 'getAllPublic'
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);
@@ -138,7 +131,7 @@ const Update=async()=>{
         Correo:         consoleSeleccionada.correo,
         Ci:             consoleSeleccionada.ci,
         Celular:        consoleSeleccionada.celular
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);

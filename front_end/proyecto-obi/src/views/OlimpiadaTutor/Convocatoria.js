@@ -27,9 +27,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 // host variables
-const baseUrl_Olimpiada=HOST.Url+'Olimpiada.php';
-const baseUrl_Nivel=HOST.Url+'Nivel.php';
-const baseUrl_Etapa=HOST.Url+'Etapa.php';
+const baseUrl_Olimpiada=HOST.Url_Tutor+'Olimpiada.php';
+const baseUrl_Nivel=HOST.Url_Tutor+'Nivel.php';
+const baseUrl_Etapa=HOST.Url_Tutor+'Etapa.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 function TabPanel(props) {
@@ -104,6 +104,7 @@ function a11yProps(index) {
       backgroundColor: theme.palette.background.paper,
     },
   }));
+const header = HOST.header(cookies.get('token'));
 export default function UserProfile() {
   const classes = useStyles();
   
@@ -121,14 +122,6 @@ export default function UserProfile() {
     fechafin:'',
     descripcion:''
   })
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -145,7 +138,7 @@ export default function UserProfile() {
       await axios.post(baseUrl_Olimpiada,{
             _metod: 'getById',
             idOlimpiada: cookies.get('idolimpiada')
-      },header()
+      },header
     ).then(
       response => {
         //console.log(response);
@@ -164,7 +157,7 @@ export default function UserProfile() {
         await axios.post(baseUrl_Nivel,{
               _metod: 'getAll',
               idOlimpiada: cookies.get('idolimpiada')
-        },header()
+        },header
       ).then(
         response => {
           //console.log(response);
@@ -183,7 +176,7 @@ export default function UserProfile() {
         await axios.post(baseUrl_Etapa,{
               _metod: 'getAll',
               idOlimpiada: cookies.get('idolimpiada')
-        },header()
+        },header
       ).then(
         response => {
           //console.log(response);

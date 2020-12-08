@@ -12,7 +12,7 @@ import axios from 'axios';
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 // host variables
-const baseUrl=HOST.Url+'Olimpiada.php';
+const baseUrl=HOST.Url_Admin+'Olimpiada.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -50,15 +50,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0.1),
   }
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
-
+const header = HOST.header(cookies.get('token'));
 export default function SimpleModal() {
   //const baseUrl = HOST.Url+"Noticia.php";
   //const idAdmin='1';
@@ -143,7 +135,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
+      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header
     ).then(
       response => {
         if(response.data.estado===1){
@@ -166,7 +158,7 @@ const seleccionarConsola =(consola,caso)=>{
         Nombre:         consoleSeleccionada.nombre,
         Descripcion:    consoleSeleccionada.descripcion,       
         idAdmin:        cookies.get('idusuario')
-      },header()
+      },header
     ).then(
       response => {
         
@@ -192,7 +184,7 @@ const Update=async()=>{
         Nombre:         consoleSeleccionada.nombre,
         Descripcion:    consoleSeleccionada.descripcion,      
         idAdmin:        cookies.get('idusuario')
-    },header()
+    },header
   ).then(
     response => {
       consoleSeleccionada.mensaje = response.data.mensaje;
@@ -216,7 +208,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idAdmin:    cookies.get('idusuario'),
         idOlimpiada: consoleSeleccionada.idolimpiada
-    },header()
+    },header
   ).then(
     response => {
       consoleSeleccionada.mensaje = response.data.mensaje;
@@ -311,7 +303,7 @@ const Eliminar=async()=>{
                       <GridItem xs={12} sm={12} md={3}>
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
-                          <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                          <Button  variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
                       </GridItem>
                       <GridItem xs={12} sm={12} md={5}>
                           <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>

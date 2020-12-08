@@ -18,17 +18,10 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const baseUrl=HOST.Url+'Nivel.php';
+const baseUrl=HOST.Url_Admin+'Nivel.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 function TabPanel(props) {
   const { children, value,idnivel,idetapa,tipo, index, ...other } = props;
   return (
@@ -88,7 +81,7 @@ const getAllEtapa=async()=>{
   await axios.post(baseUrl,{
       _metod:         'getAll',
       idOlimpiada:    cookies.get('idolimpiada')
-  },header()
+  },header
 ).then(
   response => {
     

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import {Table,  TableCell, TableRow, TableHead} from '@material-ui/core';
@@ -17,8 +18,8 @@ import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';
 import ListIcon from '@material-ui/icons/List';
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
-const baseUrl_grupo   = HOST.Url+'Grupo.php';
-
+const baseUrl_grupo   = HOST.Url_Tutor+'Grupo.php';
+const cookies = new Cookies();
   
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -67,14 +68,7 @@ const baseUrl_grupo   = HOST.Url+'Grupo.php';
       },
     
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+  const header = HOST.header(cookies.get('token'));
   
 function GestionDeIntegrante(props) {
     const classes = useStyles();
@@ -98,7 +92,7 @@ const getAllEstudiantesDeGrupo=async()=>{
       await axios.post(baseUrl_grupo,{
         _metod:         'getAllEstudiantesDeGrupo',
         idGrupo:        props.idGrupo
-      },header()
+      },header
     ).then(
       response => {
         //console.log("datos*******************************");

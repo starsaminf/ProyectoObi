@@ -17,7 +17,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardIcon from "../../components/Card/CardIcon.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-
+import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
 
@@ -30,16 +30,10 @@ import {
 
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
-const baseUrl=HOST.Url+'Olimpiada.php';
+const baseUrl=HOST.Url_Admin+'Olimpiada.php';
+const cookies = new Cookies();
 const useStyles = makeStyles(styles);
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 export default function Dashboard() {
   const classes = useStyles();
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
@@ -50,7 +44,7 @@ export default function Dashboard() {
   })
   //******  getAll colegios
       const getAll=async()=>{
-        await axios.post(baseUrl,{_metod: 'getAllCount'},header()
+        await axios.post(baseUrl,{_metod: 'getAllCount'},header
       ).then(
         response => {
           if(response.data.estado===1){

@@ -12,8 +12,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-const baseUrl=HOST.Url+'Colegio.php';
-const baseUrlDist=HOST.Url+'Distrito.php';
+const baseUrl=HOST.Url_Admin+'Colegio.php';
+const baseUrlDist=HOST.Url_Admin+'Distrito.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -55,14 +55,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function Colegio() {
   //const baseUrl = HOST.Url+"Noticia.php";
@@ -128,7 +121,7 @@ const seleccionarConsola =(consola,caso)=>{
 
     //******  getAll colegios
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :'1'},header()
+      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :'1'},header
     ).then(
       response => {
         if(response.data.estado===1){
@@ -144,7 +137,7 @@ const seleccionarConsola =(consola,caso)=>{
   };
   //***** get ALl Distritos */
   const getAllDistritos=async()=>{
-    await axios.post(baseUrlDist,{_metod: 'getAll',idAdmin :'1'},header()
+    await axios.post(baseUrlDist,{_metod: 'getAll',idAdmin :'1'},header
   ).then(
     response => {
 
@@ -170,7 +163,7 @@ const seleccionarConsola =(consola,caso)=>{
         Latitud:    consoleSeleccionada.latitud,
         Longitud:   consoleSeleccionada.longitud,
         idDistrito:  consoleSeleccionada.iddistrito
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);
@@ -201,7 +194,7 @@ const Update=async()=>{
       Zona:         consoleSeleccionada.zona,
       Direccion:    consoleSeleccionada.direccion,
       idDistrito:   consoleSeleccionada.iddistrito
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);
@@ -230,7 +223,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idAdmin:    cookies.get('idusuario'),
         idNoticia: consoleSeleccionada.idnoticia
-    },header()
+    },header
   ).then(
     response => {
       console.log(response);

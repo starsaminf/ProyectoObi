@@ -15,7 +15,7 @@ import ListaDeIntegrantes from './Components/ListaDeIntegrantes.js';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Grafico from './Components/Grafico.js';
 // host variables
-const baseUrl_Grupo      = HOST.Url+'Grupo.php';
+const baseUrl_Grupo      = HOST.Url_Admin+'Grupo.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -84,14 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
   
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function IncribirParticipanteIndividual(props) {
   const classes = useStyles();
@@ -157,7 +150,7 @@ const seleccionarConsola =(consola,caso)=>{
         idOlimpiada:  cookies.get('idolimpiada'),
         idNivel:      props.idnivel,
         idTutor:      cookies.get('idusuario'),
-      },header()
+      },header
     ).then(
       response => {
         console.log("VALLLLLLSSDKJBKJJH");

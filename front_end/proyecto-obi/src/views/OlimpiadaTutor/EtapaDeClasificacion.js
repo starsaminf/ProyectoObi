@@ -12,17 +12,10 @@ import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
 import axios from 'axios';
 import PaguinaResultados from './PaguinaResultados.js';
-const baseUrl=HOST.Url+'Nivel.php';
+const baseUrl=HOST.Url_Tutor+'Nivel.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 function TabPanel(props) {
   const { children, value,idnivel,idetapa,tipo, index, ...other } = props;
   return (
@@ -80,7 +73,7 @@ const getAllEtapa=useCallback(async()=>{
   await axios.post(baseUrl,{
       _metod:         'getAll',
       idOlimpiada:    cookies.get('idolimpiada')
-  },header()
+  },header
 ).then(
   response => {
     //console.log(response);

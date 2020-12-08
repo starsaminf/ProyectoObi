@@ -3,25 +3,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow} from '@material-ui/core';
 
 // wiservise y coneecciones
-
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const baseUrl_Grupos=HOST.Url+'Grupo.php';
+const baseUrl_Grupos=HOST.Url_Admin+'Grupo.php';
+const cookies = new Cookies();
 //"../../variables/general.js";
 
 //componentes de exel
 
-
-function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -62,7 +55,7 @@ const getGrupoConNotas=useCallback(async()=>{
         _metod: 'getGrupoConNotas',
         idNivel:        props.idnivel,     
         idEtapa:        props.idetapa
-    },header()
+    },header
   ).then(
     response => {
         console.log(response);
@@ -88,7 +81,7 @@ const getGrupoConNotasCondicionado = useCallback(async()=>{
     _metod: 'getGrupoConNotasCondicionado',
     idNivel:        props.idnivel,     
     idEtapa:        props.idetapa
-  },header()
+  },header
   ).then(
   response => {
       console.log(response);

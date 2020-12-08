@@ -15,7 +15,7 @@ import axios from 'axios';
 import md5 from "md5";
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
-const baseUrl = HOST.Url+"Admin.php";
+const baseUrl = HOST.Url_Admin+"Admin.php";
 
 
 const cookies = new Cookies();

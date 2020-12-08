@@ -28,18 +28,11 @@ const useStyles = makeStyles(styles);
 // ##############################
 // // // variables used to create animation on charts
 // #############################
-const baseUrlNota=HOST.Url+'Nota.php';
-const baseUrlEtapa=HOST.Url+'Etapa.php';
+const baseUrlNota=HOST.Url_Tutor+'Nota.php';
+const baseUrlEtapa=HOST.Url_Tutor+'Etapa.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 export default function Grafico(props) {
   const classes = useStyles();
   const [nota,setNota]=useState([]);
@@ -49,7 +42,7 @@ export default function Grafico(props) {
     await axios.post(baseUrlNota,{
         _metod:         'getAllporGrupo',
         idGrupo:         props.idGrupo
-    },header()
+    },header
   ).then(
     response => {
       if(response.data.estado===1){
@@ -100,7 +93,7 @@ export default function Grafico(props) {
     await axios.post(baseUrlEtapa,{
         _metod:         'getAll',
         idOlimpiada:    cookies.get('idolimpiada')
-    },header()
+    },header
   ).then(
     response => {
       if(response.data.estado===1){

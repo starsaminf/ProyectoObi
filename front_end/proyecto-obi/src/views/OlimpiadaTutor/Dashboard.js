@@ -28,16 +28,9 @@ import {
 
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 const cookies = new Cookies();
-const baseUrl=HOST.Url+'Olimpiada.php';
+const baseUrl=HOST.Url_Tutor+'Olimpiada.php';
 const useStyles = makeStyles(styles);
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -52,7 +45,7 @@ export default function Dashboard() {
         await axios.post(baseUrl,{
           _metod:       'getAllCountTutor',
           idOlimpiada:  cookies.get('idolimpiada')
-        },header()
+        },header
       ).then(
         response => {
           console.log(response);

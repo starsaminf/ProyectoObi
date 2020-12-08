@@ -4,12 +4,14 @@ import ReactExport from "react-export-excel";
 import {Table, TableContainer, TableHead, TableCell, TableBody, TableRow, Button} from '@material-ui/core';
 
 // wiservise y coneecciones
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import ListarEstudiantes from './ListarEstudiantes.js';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert } from '@material-ui/lab';
-const baseUrl_Grupos=HOST.Url+'Grupo.php';
+const baseUrl_Grupos=HOST.Url_Admin+'Grupo.php';
+const cookies = new Cookies();
 //"../../variables/general.js";
 //componentes de exel
 
@@ -19,14 +21,7 @@ const baseUrl_Grupos=HOST.Url+'Grupo.php';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -66,7 +61,7 @@ const getAll=useCallback(async()=>{
         _metod: 'getAllAdmin',
         idNivel:        props.idnivel     
         
-    },header()
+    },header
   ).then(
     response => {
       console.log("****************");
@@ -92,7 +87,7 @@ const getAprobadosPorEtapa = useCallback(async()=>{
     _metod: 'getAprobadosPorEtapa',
     idNivel:        props.idnivel,
     idEtapa:        props.idetapa-1   
-  },header()
+  },header
   ).then(
     response => {
         console.log(response);

@@ -11,7 +11,7 @@ import axios from 'axios';
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import ReactMarkdown from 'react-markdown';
-const baseUrl=HOST.Url+'MaterialdeApoyo.php';
+const baseUrl=HOST.Url_Admin+'MaterialdeApoyo.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -54,14 +54,7 @@ const useStyles = makeStyles((theme) => ({
     width:'100%'
   }
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function MaterialdeApoyo() {
   //const baseUrl = HOST.Url+"Noticia.php";
@@ -130,7 +123,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
+      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header
     ).then(
       response => {
         if(response.data.estado===1){
@@ -155,7 +148,7 @@ const seleccionarConsola =(consola,caso)=>{
         Tipo:           consoleSeleccionada.tipo,
         Archivo:        consoleSeleccionada.archivo,
         idAdmin:        cookies.get('idusuario')
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);
@@ -187,7 +180,7 @@ const Update=async()=>{
         Tipo:           consoleSeleccionada.tipo,
         Archivo:        consoleSeleccionada.archivo,
         idAdmin:        cookies.get('idusuario')
-    },header()
+    },header
   ).then(
     response => {
       console.log("********************");
@@ -217,7 +210,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idAdmin:    cookies.get('idusuario'),
         idMaterialDeApoyo: consoleSeleccionada.idmaterial
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);

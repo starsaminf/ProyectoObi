@@ -17,7 +17,7 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import { Divider } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-const baseUrl=HOST.Url+'Noticia.php';
+const baseUrl=HOST.Url_Admin+'Noticia.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -64,14 +64,7 @@ const useStyles = makeStyles((theme) => ({
     width: '50px' 
   }
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function SimpleModal() {
   //const baseUrl = HOST.Url+"Noticia.php";
@@ -138,7 +131,7 @@ const seleccionarConsola =(consola,caso)=>{
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header()
+      await axios.post(baseUrl,{_metod: 'getAll',idAdmin :cookies.get('idusuario')},header
     ).then(
       response => {
 
@@ -195,7 +188,7 @@ const Update=async()=>{
         Contenido:   consoleSeleccionada.contenido,
         idAdmin:    cookies.get('idusuario'),
         idNoticia: consoleSeleccionada.idnoticia
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);
@@ -224,7 +217,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idAdmin:    cookies.get('idusuario'),
         idNoticia: consoleSeleccionada.idnoticia
-    },header()
+    },header
   ).then(
     response => {
       //console.log(response);

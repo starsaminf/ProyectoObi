@@ -3,13 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import ReactExport from "react-export-excel";
 import { TableContainer, Button} from '@material-ui/core';
 // wiservise y coneecciones
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import AccordionActions from '@material-ui/core/AccordionActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import PublicarNota from './PublicarNota.js';
 
-const baseUrl_Grupos=HOST.Url+'Grupo.php';
+const baseUrl_Grupos=HOST.Url_Admin+'Grupo.php';
+const cookies = new Cookies();
 //"../../variables/general.js";
 
 //componentes de exel
@@ -17,14 +19,7 @@ const baseUrl_Grupos=HOST.Url+'Grupo.php';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -64,7 +59,7 @@ const getAll=useCallback(async()=>{
         _metod: 'getGrupoConNotas',
         idNivel:        props.idnivel,     
         idEtapa:        props.idetapa
-    },header()
+    },header
   ).then(
     response => {
       console.log("GetAll");
@@ -91,7 +86,7 @@ const getAprobadosPorEtapa = useCallback(async()=>{
     idNivel:        props.idnivel,
     idEtapaAnt:     props.idetapa-1,
     idEtapa:        props.idetapa,   
-  },header()
+  },header
   ).then(
     response => {
       console.log("AGREGADOS POR ETAPA");

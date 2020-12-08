@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 //** WEB SERVISES */
-
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 import {Table,  TableCell, TableBody, TableRow, Modal} from '@material-ui/core';
@@ -13,8 +13,8 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-const baseUrl_grupo   = HOST.Url+'Grupo.php';
-
+const baseUrl_grupo   = HOST.Url_Admin+'Grupo.php';
+const cookies = new Cookies();
 function getModalStyle() {
     return {
       top: `50%`,
@@ -70,15 +70,7 @@ function getModalStyle() {
       },
     
   }));
-  function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
-  
+  const header = HOST.header(cookies.get('token'));
 function ListarEstudiantes(props) {
     const classes = useStyles();
 
@@ -102,7 +94,7 @@ const getAllEstudiantesDeGrupo=async()=>{
       await axios.post(baseUrl_grupo,{
         _metod:         'getAllEstudiantesDeGrupo',
         idGrupo:        props.idGrupo
-      },header()
+      },header
     ).then(
       response => {
         console.log(response);

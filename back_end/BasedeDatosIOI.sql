@@ -13,7 +13,8 @@ CREATE TABLE Admin (
 	idAdmin         SERIAL PRIMARY KEY,
 	UserName		VARCHAR(30) NOT NULL UNIQUE,
 	Password		VARCHAR(60) NOT NULL,
-	Correo			VARCHAR(64) NOT NULL
+	Correo			VARCHAR(64) NOT NULL,
+	Activo			TEXT
 );
 
 CREATE TABLE Distrito(
@@ -102,7 +103,8 @@ CREATE TABLE Tutor(
 	Ci 				VARCHAR(15),
 	Correo 			VARCHAR(50) UNIQUE,
 	Celular 		VARCHAR(10),
-	Password		VARCHAR(64)
+	Password		VARCHAR(64),
+	Activo			TEXT
 );
 
 CREATE TABLE Estudiante(
@@ -141,9 +143,8 @@ CREATE TABLE Nota(
 	idEtapa  	 	SERIAL NOT NULL,
 	idNivel			Serial NOT NULL,
 	idGrupo			SERIAL NOT NULL,
-	Puesto			INTEGER,
+	Puntos			INTEGER,
 	Estado  		VARCHAR(30),
-	Nota 			DOUBLE	PRECISION,
 	Observaciones	VARCHAR(30),
 	foreign   key   (idEtapa)   references  Etapa ,
 	foreign   key   (idNivel)   references  Nivel ,
@@ -160,19 +161,7 @@ CREATE TABLE Nota(
 -- 2encriptado:	e21adc4050ba60abbe67e168f31f994e
 
 /*
-INSERT INTO Admin(UserName, Password, Correo) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com');
-INSERT INTO Distrito(Nombre, Departamento, idAdmin) VALUES ('Distrito 1','lpz',1);
-INSERT INTO Colegio(Sie, Nombre, Zona, Direccion, Latitud, Longitud, idDistrito) 
-VALUES ('SIe valor', 'Bolvia Mar', 'Z.Unificada Potosi','Atraz de la Planta', 16.232,18.434,1);
-INSERT INTO TUTOR(Nombre, ApPaterno, ApMaterno, Ci, Correo, Celular, Password) 
-VALUES ('juan','mamani','Quispe','9110020lp','juanhotmail.com','75121325','e10adc3949ba59abbe56e057f20f883e');
-INSERT INTO Estudiante(Rude, Nombre, ApPaterno, ApMaterno, Genero, FechaNac, Ci, Correo)
-VALUES ('123456567890','Maria','zegarra','Alvarado','F','12-12-12','123456','mariahotmail.com');
-INSERT INTO Olimpiada (Nombre,Descripcion,Baner,Convocatoria,FechaIni,FechaFin,Estado,idAdmin)
-VALUES ('Primera OLimpiada','Prueba','BAner','Cnasas','12-12-12','12-12-12','Iniciado',1);
-INSERT (idTutor, idColegio, idOlimpiada, Rude, Fecha)
-VALUES ('1','1','1','123456567890','12-12-12');
-INSERT INTO Nivel (Nombre, Descripcion, idOlimpiada)
-VALUES ('Nivel 0','Descripcion',1);
+INSERT INTO Admin(UserName, Password, Correo,Activo) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com','');
+
 
 */

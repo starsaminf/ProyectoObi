@@ -11,7 +11,7 @@ import axios from 'axios';
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 // host components
-const baseUrl=HOST.Url+'Estudiante.php';
+const baseUrl=HOST.Url_Admin+'Estudiante.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 //************************** */
@@ -46,14 +46,7 @@ const useStyles = makeStyles((theme) => ({
     width:'100%'
   }
 }));
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 
 export default function Estudiante() {
   //const baseUrl = HOST.Url+"Noticia.php";
@@ -129,7 +122,7 @@ export default function Estudiante() {
 
 //******  getAll
   const getAll=async()=>{
-      await axios.post(baseUrl,{_metod: 'getAllEstudiantesDeOlimpiada',idOlimpiada :cookies.get('idolimpiada')},header()
+      await axios.post(baseUrl,{_metod: 'getAllEstudiantesDeOlimpiada',idOlimpiada :cookies.get('idolimpiada')},header
     ).then(
       response => {
         console.log(response);
@@ -168,7 +161,7 @@ export default function Estudiante() {
         LimiteEdad:       consoleSeleccionada.limiteedad,
         LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
         idOlimpiada:      cookies.get('idolimpiada')
-      },header()
+      },header
     ).then(
       response => {
         //console.log(response);
@@ -196,7 +189,7 @@ const Update=async()=>{
       LimiteEdad:       consoleSeleccionada.limiteedad,
       LimitePorGrupo:   consoleSeleccionada.limiteporgrupo,
       idOlimpiada:      cookies.get('idolimpiada')
-    },header()
+    },header
   ).then(
     response => {
       consoleSeleccionada.mensaje = response.data.mensaje;
@@ -220,7 +213,7 @@ const Eliminar=async()=>{
       _metod: 'Delete',
         idOlimpiada:    cookies.get('idolimpiada'),
         idNivel: consoleSeleccionada.idnivel
-    },header()
+    },header
   ).then(
     response => {
       

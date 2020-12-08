@@ -8,21 +8,15 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import { Modal, Divider} from '@material-ui/core';
 
 // wiservise y coneecciones
-
+import Cookies from "universal-cookie";
 import HOST from "../../../variables/general.js";
 import axios from 'axios';
 
-const baseUrl_Grupos=HOST.Url+'Nota.php';
+const baseUrl_Grupos=HOST.Url_Admin+'Nota.php';
+const cookies = new Cookies();
 //"../../variables/general.js";
 
-function header(){
-    return {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    }
-  };
+const header = HOST.header(cookies.get('token'));
 const useStyles = makeStyles((theme) => ({
     root: {
       '& > *': {
@@ -169,7 +163,7 @@ function PublicarNota(props) {
         idNivel:        props.idNivel,     
         idEtapa:        props.idEtapa,
         Datos:          code
-    },header()
+    },header
   ).then(
     response => {
         handleModalInsert();

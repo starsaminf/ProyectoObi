@@ -11,7 +11,7 @@ import HOST from "../../variables/general.js";
 import axios from 'axios';
 import EtapaDeInscripcion from '../OlimpiadaTutor/EtapaDeIncripcion';
 import EtapaDeClasificacion from '../OlimpiadaTutor/EtapaDeClasificacion';
-const baseUrl_Etapas      = HOST.Url+'Etapa.php';
+const baseUrl_Etapas      = HOST.Url_Tutor+'Etapa.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 const useStyles = makeStyles((theme) => ({
@@ -30,14 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function header(){
-  return {
-    headers: {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json;charset=utf-8"
-    }
-  }
-};
+const header = HOST.header(cookies.get('token'));
 export default function VerticalLinearStepper() {
   const classes = useStyles();
   const [etapa,      setEtapa]  =useState([]);
@@ -53,7 +46,7 @@ useEffect(()=>{
       await axios.post(baseUrl_Etapas,{
         _metod: 'getAllTutor',
         idOlimpiada: cookies.get('idolimpiada')
-      },header()
+      },header
     ).then(
       response => {
         if(response.data.estado===1){
