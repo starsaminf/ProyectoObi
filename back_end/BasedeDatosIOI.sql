@@ -14,7 +14,7 @@ CREATE TABLE Admin (
 	UserName		VARCHAR(30) NOT NULL UNIQUE,
 	Password		VARCHAR(60) NOT NULL,
 	Correo			VARCHAR(64) NOT NULL,
-	Activo			TEXT
+	Token			TEXT
 );
 
 CREATE TABLE Distrito(
@@ -104,7 +104,7 @@ CREATE TABLE Tutor(
 	Correo 			VARCHAR(50) UNIQUE,
 	Celular 		VARCHAR(10),
 	Password		VARCHAR(64),
-	Activo			TEXT
+	token			TEXT
 );
 
 CREATE TABLE Estudiante(
@@ -161,7 +161,7 @@ CREATE TABLE Nota(
 -- 2encriptado:	e21adc4050ba60abbe67e168f31f994e
 
 /*
-INSERT INTO Admin(UserName, Password, Correo,Activo) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com','');
+INSERT INTO Admin(UserName, Password, Correo,Token) VALUES ('vico','e21adc4050ba60abbe67e168f31f994e','vicovillca@hotmail.com','');
 
 
 */

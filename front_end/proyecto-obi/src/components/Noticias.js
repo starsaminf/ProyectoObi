@@ -23,17 +23,19 @@ import Link from '@material-ui/core/Link';
 
 import Slider from 'react-animated-slider';
 import 'react-animated-slider/build/horizontal.css';
-
+import '../assets/css/horizontal.css';
 import Cookies from "universal-cookie";
 import HOST from "../variables/general.js";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
-const baseUrl=HOST.Url_Admin+'Noticia.php';
+const baseUrl=HOST.Url_Public+'Noticia.php';
 //"../../variables/general.js";
 const cookies = new Cookies();
 const header = HOST.header(cookies.get('token'));
+
 const content = [
     {
 		title: 'Vulputate Mollis Ultricies',
@@ -93,9 +95,8 @@ const content = [
 
   
 export default function Noticias(){
-	const classes = useStyles();
 	const [data,setData]=useState([]);
-
+	const classes = useStyles();
 	//******  getAll
 	const getAll=async()=>{
 		await axios.post(baseUrl,{_metod: 'getAllPublic'},header
@@ -124,14 +125,25 @@ export default function Noticias(){
     return(
         <div>
             <GridContainer>
-                <GridItem xs={12} sm={9} md={9}>
-					<Slider  autoplay={3000}>
+                <GridItem xs={12} sm={9} md={9} >
+					<Slider  autoplay={3000} >
 						{content.map((item, index) => (
 							<div
 								key={index}
-								style={{ background: `url('${item.image}') no-repeat center center` }}
+								style={{ background: `url('${item.image}') no-repeat center center`}}
 							>
-								
+								<center>
+								<div style={{
+									position: 'absolute', left: '50%', top: '50%',
+									transform: 'translate(-50%, -50%)'
+								}}>
+									<h5>{item.description}</h5>
+									
+									<Button color="primary" variant='contained'>
+										{item.button}
+									</Button>
+								</div>
+								</center>
 							</div>
 						))}
 					</Slider>

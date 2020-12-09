@@ -157,7 +157,7 @@ const seleccionarConsola =(consola,caso)=>{
         SubTitulo:  consoleSeleccionada.subtitulo,
         Contenido:   consoleSeleccionada.contenido,
         idAdmin:    cookies.get('idusuario')
-      },header()
+      },header
     ).then(
       response => {
         //console.log(response);

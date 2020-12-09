@@ -122,10 +122,11 @@ function GestionDeIntegrante(props) {
         m:0
       })
 
-      const [value, setValue] = useState('femenino');
+      const [genero, setGenero] = useState('Femenino');
 
       const handleChangeRadio = (event) => {
-        setValue(event.target.value);
+        
+        setGenero(event.target.value);
       };
       const handleChangle = e => {
         const {name, value}= e.target;
@@ -154,7 +155,7 @@ function GestionDeIntegrante(props) {
     
       //*** seleccionar consola */
     const seleccionarConsola =(consola,caso)=>{
-      console.log("Sleccionamos consola");
+
       consoleSeleccionada.rude=consola.rude;
         if(caso==='Borrar'){
           BorrarParticipacion();
@@ -171,7 +172,7 @@ const getAllEstudiantesDeGrupo=async()=>{
       },header
     ).then(
       response => {
-        console.log(response);
+
         if(response.data.estado===1){
           setData(response.data.val);
           //setConsolaSeleccionada(response.data.val);
@@ -191,8 +192,7 @@ const getAllEstudiantesDeGrupo=async()=>{
 
 //**Borrar Integrante */
 const BorrarParticipacion=async()=>{
-  console.log("Borrar PArticipacion");
-  console.log(consoleSeleccionada);
+
   await axios.post(baseUrl_Integrante_de,{
     _metod:           'Delete',
     Rude:             consoleSeleccionada.rude,
@@ -200,7 +200,7 @@ const BorrarParticipacion=async()=>{
   },header
 ).then(
   response => {
-    console.log(response);
+
     if(response.data.estado===1){
       getAllEstudiantesDeGrupo();
       //setData(response.data.val);
@@ -217,7 +217,7 @@ const BorrarParticipacion=async()=>{
 //**Insert  Integrante */
 const InsertarParticipacion=async()=>{
   //handleModalInsert();
-  console.log(consoleSeleccionada);
+
   await axios.post(baseUrl_Integrante_de,{
     _metod:           'Insert',
     Rude:             consoleSeleccionada.rude,
@@ -225,7 +225,7 @@ const InsertarParticipacion=async()=>{
   },header
 ).then(
   response => {
-    console.log(response);
+
     if(response.data.estado===1){
       getAllEstudiantesDeGrupo();
       //setData(response.data.val);
@@ -251,13 +251,12 @@ const InsertEstudiante=async(event)=>{
       ApMaterno:      consoleSeleccionada.apmaterno,
       Celular:        consoleSeleccionada.celular,
       FechaNac:       consoleSeleccionada.fechanac,
-      Genero:         value,
+      Genero:         genero,
       Ci:             consoleSeleccionada.ci,
       Correo:         consoleSeleccionada.correo
     },header
   ).then(
     response => {
-      console.log(response);
       //consoleSeleccionada.mensaje = response.data.mensaje;
       //handleModalMensaje();
       if(response.data.estado===1)
@@ -285,13 +284,12 @@ const UpdateEstudiante=async()=>{
       ApMaterno:      consoleSeleccionada.apmaterno,
       Celular:        consoleSeleccionada.celular,
       FechaNac:       consoleSeleccionada.fechanac,
-      Genero:         value,
+      Genero:         genero,
       Ci:             consoleSeleccionada.ci,
       Correo:         consoleSeleccionada.correo
     },header
   ).then(
     response => {
-      console.log(response);
       InsertarParticipacion();
     }
   ).catch(
@@ -325,7 +323,7 @@ const getByIdEstudiante=async(event)=>{
             
             console.log("responseee5")
             console.log("genro = "+response.data.val.genero);
-            setValue(response.data.val.genero);
+            setGenero(response.data.val.genero);
             console.log("******************************");
             console.log(consoleSeleccionada);
             console.log(response.data.val);
@@ -458,17 +456,18 @@ useEffect(()=>{
                       <GridItem xs={6} sm={6} md={6}>
                         <FormControl component="fieldset">
                           <FormLabel component="legend">genero</FormLabel>
-                          <RadioGroup row aria-label="position" name="genero" value={'femenino'} onChange={handleChangeRadio}>
-                            <FormControlLabel value="femenino" control={<Radio color="primary"/>} label="Femenino" labelPlacement="start" />
-                            <FormControlLabel value="masculino" control={<Radio color="primary"/>} label="Masculino" labelPlacement="start"/>
+                          <RadioGroup row aria-label="position" name="genero" defaultValue={'Femenino'} onChange={handleChangeRadio}>
+                            <FormControlLabel value="Femenino" control={<Radio color="primary"/>} label="Femenino" labelPlacement="start" />
+                            <FormControlLabel value="Masculino" control={<Radio color="primary"/>} label="Masculino" labelPlacement="start"/>
                           </RadioGroup>
                         </FormControl>
                       </GridItem>
                   </GridContainer>
       {(consoleSeleccionada&&(calcularEdad(consoleSeleccionada.fechanac)>props.limiteporedad))?<Alert severity="error">El estudiante no esta en los limites de edad permitida para este nivel, las condiciones necesarias son que el estudiante tenga menor o igual a <strong>{props.limiteporedad}</strong> años hasta el <strong>{cookies.get('fechalimiteedad')}</strong>!</Alert>:''}
                   <Divider/>
+                  
                 <AccordionActions>
-                  <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                  <Button  variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
                   <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
                 </AccordionActions>
               </form>
@@ -523,9 +522,9 @@ useEffect(()=>{
                       <GridItem xs={6} sm={6} md={6}>
                         <FormControl component="fieldset">
                           <FormLabel component="legend">genero</FormLabel>
-                          <RadioGroup row aria-label="position" name="genero"  value={value} onChange={handleChangeRadio}>
-                            <FormControlLabel value="femenino" control={<Radio color="primary"/>} label="Femenino" labelPlacement="start" />
-                            <FormControlLabel value="masculino" control={<Radio color="primary"/>} label="Masculino" labelPlacement="start"/>
+                          <RadioGroup row aria-label="position" name="genero"  value={genero} onChange={handleChangeRadio}>
+                            <FormControlLabel value="Femenino" control={<Radio color="primary"/>} label="Femenino" labelPlacement="start" />
+                            <FormControlLabel value="Masculino" control={<Radio color="primary"/>} label="Masculino" labelPlacement="start"/>
                           </RadioGroup>
                         </FormControl>
                       </GridItem>
@@ -533,7 +532,7 @@ useEffect(()=>{
       {(consoleSeleccionada&&(calcularEdad(consoleSeleccionada.fechanac)>props.limiteporedad))?<Alert severity="error">El estudiante no esta en los limites de edad permitida para este nivel, las condiciones necesarias son que el estudiante tenga menor o igual a <strong>{props.limiteporedad}</strong> años hasta el <strong>{cookies.get('fechalimiteedad')}</strong>!</Alert>:''}
                   <Divider/>
                 <AccordionActions>
-                  <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                  <Button  variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
                   <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
                 </AccordionActions>
               </form>
@@ -568,7 +567,7 @@ useEffect(()=>{
                   </Alert>
                   <Divider/>
                   <AccordionActions>
-                    <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsertRude} >Cancelar</Button>
+                    <Button  variant="outlined" color="primary" onClick={handleModalInsertRude} >Cancelar</Button>
                     <Button type="submit"  variant="contained" color="primary"  >Siguiente</Button>
                   </AccordionActions>
                   </form>  

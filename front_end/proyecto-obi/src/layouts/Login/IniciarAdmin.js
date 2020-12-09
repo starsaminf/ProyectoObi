@@ -15,10 +15,11 @@ import axios from 'axios';
 import md5 from "md5";
 import Cookies from "universal-cookie";
 import HOST from "../../variables/general.js";
-const baseUrl = HOST.Url_Admin+"Admin.php";
+const baseUrl = HOST.Url_Admin+"Login.php";
 
 
 const cookies = new Cookies();
+const header = HOST.headerPublic();
 class IniciarAdmin extends Component {
   state ={
     form:{
@@ -48,26 +49,25 @@ class IniciarAdmin extends Component {
             _metod:     'Login',
             UserName:   this.state.form.username,
             Password:   md5(this.state.form.password)
-        },
-        {
-            headers: {
-                "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json;charset=utf-8"
-            }
-        }
+        },header
     )
     .then(
         response => {
+          console.log(response);
             if(response.data.estado===1){
-                var respuesta = response.data.usuario[0];
+                var respuesta = response.data.val;
                 cookies.set('idusuario', respuesta.idadmin, {path:"/"});
                 cookies.set('username', respuesta.username, {path:"/"});
                 cookies.set('correo', respuesta.correo, {path:"/"});
                 cookies.set('tipo', 'admin', {path:"/"});
+                cookies.set('token', response.data.Token, {path:"/"});
                 console.log("Usuario guardadooo weee");
                 window.location.href="./Admin";
-            }else
+            }else{
               this.setState({alertShow:true});
+              console.log("Usuario  noooo  guardadooo weee");
+            }
+              
         }
     )
     .catch(

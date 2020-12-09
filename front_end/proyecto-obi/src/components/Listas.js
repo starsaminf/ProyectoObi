@@ -8,6 +8,8 @@ import {
 }from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
 class Listas extends Component{
     render(){
         return(
@@ -28,7 +30,16 @@ class Listas extends Component{
                     <ListItemText primary={text} />
                   </ListItem>
                 ))}
+                  <ListItem button >
+                    <ListItemIcon><FacebookIcon /></ListItemIcon>
+                    <ListItemText primary='Facebook' />
+                  </ListItem>
+                  <ListItem button >
+                    <ListItemIcon><InstagramIcon /></ListItemIcon>
+                    <ListItemText primary='Instagram' />
+                  </ListItem>
               </List>
+              
             </div>
         );
     }

@@ -10,7 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Hidden from '@material-ui/core/Hidden';
 //*******componentes */
 import Listas from '../components/Listas';
@@ -155,7 +154,7 @@ export default function MiniDrawer() {
         >
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />

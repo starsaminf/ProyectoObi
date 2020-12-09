@@ -82,14 +82,16 @@ export default function IncribirParticipanteIndividual(props) {
   const [openModalMensaje,  setOpenMensaje]   = useState(false);
   const [grupos,  setGrupos]   = useState([]);
   const [grupos2,  setGrupos2]   = useState([]);
+  const [col,  setCol]   = useState({
+    colegio:'Indefinido',
+    colegiovalido:false
+  });
   const [colegios,      setColegio]  =useState([]);
   const [consoleSeleccionada, setConsolaSeleccionada]= useState({
     idGrupo:'',
     nombre:'',
     mensaje:'',
     sie:'',
-    colegio:'Indefinido',
-    colegiovalido:false
   })
   const handleChangle = e => {
     const {name, value}= e.target;
@@ -97,6 +99,8 @@ export default function IncribirParticipanteIndividual(props) {
       ...prevState,
       [name]:value
     }))
+    if(e.target.name ==='sie')
+    buscarColegio(e); 
   }
 
   const handleChangleBuscador = e => {
@@ -189,6 +193,10 @@ const InsertGrupo=async(event)=>{
         //setData(response.data.admin);
         //getAll();
       }
+      setCol({
+        colegio:"",
+        colegiovalido:false
+      });
     }
   ).catch(
     error=>{
@@ -248,26 +256,26 @@ const Eliminar=async()=>{
 };
 //** Buscamos elcolegio */
 const buscarColegio = e => {
-
+//console.log(e.target.value);
 //********************* */
-  var val=e.target.value.toLowerCase();
+  var val=e.target.value;
   var search = colegios
   .filter(c => (
     c.sie
-  ).toLowerCase()===(val));
+  )===(val));
+  //console.log(search);
   /********* */
   var estado="Indefinido";
-  var idcol='';
   var b=false;
   if(search.length===1){
     estado = search[0].nombre;
-    idcol = search[0].sie;
     b=true;
   }
-  setConsolaSeleccionada({colegio:""+estado});
-  setConsolaSeleccionada({sie:idcol});
-  setConsolaSeleccionada({colegiovalido:b});
-
+  //console.log(consoleSeleccionada);
+  setCol({
+    colegio:""+estado,
+    colegiovalido:b
+  });
   //if(search)
   //setParticipante2(search);
 }
@@ -279,6 +287,8 @@ const getAllColegios=useCallback(async()=>{
     },header
   ).then(
     response => {
+      //######Colegios
+      //console.log("Colegios");
       //console.log(response);
       if(response.data.estado===1){
         setColegio(response.data.val);
@@ -294,7 +304,7 @@ const getAllColegios=useCallback(async()=>{
 /*** Buscamos el colegio por el sie */
 const ValidarGrupo = event => {
   event.preventDefault();//cancelamos los eventos 
-  if(consoleSeleccionada.colegiovalido){
+  if(col.colegiovalido){
     //console.log("Colegio vALIDO");
     InsertGrupo();
     //Buscamos si yaes participante devolvemos si esta registrado y si esta participando
@@ -393,14 +403,14 @@ const ValidarGrupo = event => {
                       />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={12}>
-                        Colegio:{consoleSeleccionada.colegio}
-                        <TextField variant="outlined" margin="normal"   fullWidth name='sie' required  label="Codigo SIE del Colegio" type="number" onChange={buscarColegio }  />
+                        Colegio:{col.colegio}
+                        <TextField variant="outlined" margin="normal"   fullWidth name='sie' required  label="Codigo SIE del Colegio" type="number" onChange={ handleChangle }  />
                       </GridItem>
                   </GridContainer>
                   <Alert severity="info"><strong>Nota:</strong> Si el grupo contiene solo un integrante coloque el nombre de grupo como apPaterno-apMaterno-Nombres del estudiante!</Alert>
                   <Divider/>
                 <AccordionActions>
-                  <Button type="submit" variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
+                  <Button  variant="outlined" color="primary" onClick={handleModalInsert} >Cancelar</Button>
                          
                   <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
                 </AccordionActions>
@@ -433,11 +443,25 @@ const ValidarGrupo = event => {
                           onChange={handleChangle}
                         />
                       </GridItem>
+                      <GridItem xs={12} sm={12} md={12}>
+                        <TextField
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          fullWidth
+                          disabled
+                          id="sie"
+                          label="sie de colegio"
+                          name="sie"
+                          value={consoleSeleccionada&&consoleSeleccionada.sie}
+                          onChange={handleChangle}
+                        />
+                      </GridItem>
                   </GridContainer>
                   <Alert severity="info"><strong>Nota:</strong> Si el grupo contiene solo un integrante coloque el nombre de grupo como apPaterno-apMaterno-Nombres del estudiante!</Alert>
                   <Divider/>
                   <AccordionActions>
-                    <Button type="submit" variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
+                    <Button variant="outlined" color="primary" onClick={handleModalUpdate} >Cancelar</Button>
                     <Button type="submit"  variant="contained" color="primary"  >Guardar</Button>
                   </AccordionActions>
               
@@ -458,7 +482,7 @@ const ValidarGrupo = event => {
                 <Alert severity="warning">En realidad desea eliminar el grupo con nombre:<strong>{consoleSeleccionada.nombre}</strong>?</Alert>
                 <Divider/>
                   <AccordionActions>
-                    <Button type="submit" variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
+                    <Button  variant="outlined" color="primary" onClick={handleModalDelete} >Cancelar</Button>
                             
                     <Button type="submit" variant="contained" color="primary"  onClick={Eliminar}>Eliminar</Button>
                   </AccordionActions>

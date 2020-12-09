@@ -31,6 +31,8 @@ export default function AdminNavbarLinks() {
     cookies.remove('correo',{path:"/"});
     cookies.remove('tipo',{path:"/"});
     cookies.remove('idolimpiada',{path:"/"});
+    cookies.remove('token',{path:"/"});
+    cookies.remove('fechalimiteedad',{path:"/"});
     window.location.href="../";
   }
   return (
@@ -46,12 +48,13 @@ export default function AdminNavbarLinks() {
           onClick={handleClickProfile}
           className={classes.buttonLink}
         >
-          <Person className={classes.icons} />
+         
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Profile</p>
           </Hidden>
         </Button>
         <Button color="danger" onClick={salir}>
+        <Person className={classes.icons} />
           Salir
         </Button>
       </div>

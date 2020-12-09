@@ -2,7 +2,7 @@
 	error_reporting(E_ALL);
   	ini_set('display_errors', true);
 
-require 'DB/DB_Admin.php';
+
 require 'Auth.php';
 
 header("Access-Control-Allow-Origin: *");
@@ -44,8 +44,6 @@ if( $_SERVER['REQUEST_METHOD']==='POST' && empty($_POST) ) {
 		} catch(Firebase\JWT\SignatureInvalidException $e){
 			echo "el token no existe";// estado 4
 		}catch(Firebase\JWT\BeforeValidException $e){
-			echo "el token no existe2";// estado 4
-		}catch(Firebase\JWT\DomainException $e){
 			echo "el token no existe2";// estado 4
 		}catch(Exception $e){
 			echo $e;//estado 4

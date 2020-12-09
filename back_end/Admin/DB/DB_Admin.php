@@ -8,19 +8,6 @@ require 'Coneccion/cripto.php';
 class DB_Admin      
 {
 
-    public static function getAll()
-    {
-        $consulta = "SELECT * from Admin";
-        try {
-            // Preparar sentencia
-            $comando = Database::getInstance()->getDb()->prepare($consulta);
-            // Ejecutar sentencia preparada
-            $comando->execute();
-            return $comando->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return $e;
-        }
-    }
 
 
     /**
@@ -29,16 +16,16 @@ class DB_Admin
      * @param $idUsuario identificador del Usuario
      * @return Usuario al que le pertenece el $IdUsuario
      */
-    public static function getById($idAdmin)
+    public static function getById($Token)
     {
         // Consulta de la meta
         $consulta = "SELECT *
                              FROM Admin
-                             WHERE idAdmin = ?";
+                             WHERE Token = ?";
 
         try {
             $comando = Database::getInstance()->getDb()->prepare($consulta);
-            $comando->execute(array($idAdmin));
+            $comando->execute(array($Token));
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
@@ -78,57 +65,23 @@ class DB_Admin
         
     }
 
-    /**
-     * Inserta un nuevo usuario
-     *
-     * @param $UserName identificador del nombre de usuario
-     * @param $Pasword identificador de la ontraseña del usuario
-     * @param $Correo identificador del correo del usuario
-     * @return bool Respuesta de la eliminación
-     */
-    public static function insert(
-        $UserName,
-        $Password,
-        $Correo
+    public static function updateToken(
+        $idAdmin,
+        $Token
     )
     {
-        //encriptamos la contraseña para guardar en la base de datos
-        //$pasword = substr( md5(microtime()), 1, 20);
-        $P = encriptar($Password);
-        // Sentencia INSERT
-        $comando = "INSERT INTO Admin ( " .
-            " UserName," .
-            " Password," .
-            " Correo)" .
-            " VALUES( ?,?,?)";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        try{
-            $sentencia->execute(
-                array(
-                    $UserName,
-                    $P,
-                    $Correo
-                )
-            );
-            
-            return $sentencia;
-        }catch (PDOException $e) {
-            return false;
-        }
+        $consulta = "UPDATE Admin SET Token = ? WHERE idAdmin = ?;";
+            $cmd = Database::getInstance()->getDb()->prepare($consulta);
+            try {
+                $cmd->execute(array($Token, $idAdmin));
+                return $cmd;
+            } catch (PDOException $e) {
+                return false;
+            }
+        
     }
 
-    /**
-     * Eliminar el punto con el identificador especificado
-     *
-     * @param $idPunto identificador del Punto
-     * @return bool Respuesta de la eliminación
-     */
-    public static function delete($idAdmin)
-    {
-        $comando = "DELETE FROM Admin WHERE idAdmin=?";
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-        return $sentencia->execute(array($idAdmin));
-    }
+
 
     /**
      * Verifica si el usuario y la contraseña para el inicio de sesion

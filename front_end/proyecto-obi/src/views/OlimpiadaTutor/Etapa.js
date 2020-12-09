@@ -34,7 +34,7 @@ const header = HOST.header(cookies.get('token'));
 export default function VerticalLinearStepper() {
   const classes = useStyles();
   const [etapa,      setEtapa]  =useState([]);
-  const [value, setValue] = useState({tipo:1});
+  const [value, setValue] = useState({tipo:-1});
   // handleee
 
 //******  getAll Colegio
@@ -49,6 +49,7 @@ useEffect(()=>{
       },header
     ).then(
       response => {
+        //console.log(response);
         if(response.data.estado===1){
           setEtapa(response.data.val);
           
@@ -57,9 +58,10 @@ useEffect(()=>{
         .filter(c => (
           c.es
         ).toLowerCase().includes('2'));
+        //console.log(search);
           ///fin
           if(search!==null){
-            setValue({tipo:(search[0].tipo-1)});//con esta varaible manejamos la pocicion del que se mostrara 0 = inscripcion, 1= etapa 2
+            if(search.length>0)setValue({tipo:(search[0].tipo-1)});//con esta varaible manejamos la pocicion del que se mostrara 0 = inscripcion, 1= etapa 2
             /*if(value===1){
               console.log("Etapa de incripcion");
             }else{
@@ -71,7 +73,7 @@ useEffect(()=>{
     ).catch(
       error=>{
         //alert(error);
-        console.log(error);
+        //console.log(error);
       }
     )
   };

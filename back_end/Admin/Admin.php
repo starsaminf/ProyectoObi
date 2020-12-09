@@ -14,61 +14,11 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
 require 'DB/DB_Admin.php';
+require 'Auth.php';
 //SIEMPRE SERA POST
-if (!empty($_POST['_metod'])) {
-	if($_POST['_metod']=='getAll'){
-			$retorno = DB_Admin::getAll();
-			if ($retorno) {
-		            $datos["estado"] = 1;
-					$datos["val"] = $retorno;
-					print json_encode($datos);
-				} else {
-					print json_encode(
-						array(
-							'estado' => 2,
-							'retorno' => $retorno,
-							'mensaje' => 'Error al encontrar el administrador')
-					);
-				}
-	}
-	if($_POST['_metod']=='Login'){
-			$retorno = DB_Admin::Login(
-				$_POST['UserName'],
-				$_POST['Password']
-			);
-			if($retorno) {
-		        $datos["estado"] = 1;
-				$datos["usuario"] = $retorno;
-				print json_encode($datos);
-			} else {
-				print json_encode(
-					array(
-						'estado' => 2,
-						'mensaje' => 'Nombre de usuario o contraseña incorectos')
-				);
-			}
-	}
-	if($_POST['_metod']=='Insert'){
-			$retorno = DB_Admin::Insert(
-				$_POST['UserName'],
-				$_POST['Password'],
-				$_POST['Correo']
-			);
-			if ($retorno) {
-		            print json_encode(
-						array(
-							'estado' => 1,
-							'mensaje' => 'El usuario se Agrego correctamente')
-					);
-				} else {
-					print json_encode(
-						array(
-							'estado' => 2,
-							'mensaje' => 'No se pudo agregar el nuevo usuario')
-					);
-				}
-	}
-	if($_POST['_metod']=='Update'){
+if (!empty($_POST['_metod'])$$!!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+	try {
+		if($_POST['_metod']=='Update'){
 			$retorno = DB_Admin::Update(
 				$_POST['idAdmin'],
 				$_POST['UserName'],
@@ -76,17 +26,26 @@ if (!empty($_POST['_metod'])) {
 				$_POST['Correo']
 			);
 			if ($retorno) {
-		            print json_encode(
-						array(
-							'estado' => 1,
-							'mensaje' => 'Los cambios se guardaron correctamente')
-					);
-				} else {
-					print json_encode(
-						array(
-							'estado' => 2,
-							'mensaje' => 'No se pudo guardar los cambios')
-					);
-				}
+	            print json_encode(
+					array(
+						'estado' => 1,
+						'mensaje' => 'Los cambios se guardaron correctamente')
+				);
+			} else {
+				print json_encode(
+					array(
+						'estado' => 2,
+						'mensaje' => 'No se pudo guardar los cambios')
+				);
+			}
+		}
+	} catch (Firebase\JWT\ExpiredException $e) {
+		echo "Expiro el token";// estado 3
+	} catch(Firebase\JWT\SignatureInvalidException $e){
+		echo "el token no existe";// estado 4
+	}catch(Firebase\JWT\BeforeValidException $e){
+		echo "el token no existe2";// estado 4
+	}catch(Exception $e){
+		echo $e;//estado 4
 	}
 }
