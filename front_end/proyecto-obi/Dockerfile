@@ -1,2 +1,2 @@
 FROM nginx
-COPY ./build/ /usr/share/nginx/html/
+COPY ./front_end/proyecto-obi/build/ /usr/share/nginx/html/
