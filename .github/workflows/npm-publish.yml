@@ -44,7 +44,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:       
           name: Artifact
-          path: build/
+          path: front_end/proyecto-obi/build/
       - name: Login to Registry
         uses: docker/login-action@v1
         with:
