@@ -12,7 +12,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: ./back_end/Admin/Dockerfile
-	  context: ./back_end/Admin/
+          context: ./back_end/Admin/
           registry: docker.pkg.github.com
-          repository: vicovillca/proyectoobi/backend-admin
+          repository: starsaminf/proyectoobi/backend-admin
           tag_with_ref: true
