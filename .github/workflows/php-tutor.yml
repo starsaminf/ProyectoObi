@@ -12,6 +12,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: ./back_end/Tutor/Dockerfile
+	  context: ./back_end/Tutor/
           registry: docker.pkg.github.com
           repository: vicovillca/proyectoobi/backend-tutor
           tag_with_ref: true
