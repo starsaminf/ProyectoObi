@@ -1,0 +1,57 @@
+name: CI/CD
+on:
+  push:
+    branches: '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install dependencies
+      run: (cd front_end/proyecto-obi && npm install)
+
+    - name: Build
+      run: (cd front_end/proyecto-obi && npm run build)
+    
+    - name: Uploading artifact 
+      uses: actions/upload-artifact@v2
+      with:
+        name: Artifact
+        path: front_end/proyecto-obi/build/ 
+  
+  github-package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@master
+      with:       
+        name: Artifact
+        path: front_end/proyecto-obi/build/
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: ./front_end/proyecto-obi/build/Dockefile
+          registry: docker.pkg.github.com
+          repository: vicovillca/proyectoobi/front-end
+          tag_with_ref: true

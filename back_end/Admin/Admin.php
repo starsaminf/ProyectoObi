@@ -16,7 +16,7 @@ header("Access-Control-Allow-Headers: *");
 require 'DB/DB_Admin.php';
 require 'Auth.php';
 //SIEMPRE SERA POST
-if (!empty($_POST['_metod'])$$!!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+if (!empty($_POST['_metod'])$$!empty($_SERVER['HTTP_AUTHORIZATION'])) {
 	try {
 		if($_POST['_metod']=='Update'){
 			$retorno = DB_Admin::Update(
