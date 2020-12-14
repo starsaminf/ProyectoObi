@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build Docker images
         run: |
-          docker build -t ghcr.io/starsaminf/$REPOSITORY_NAME:latest -file back_end/Admin/Dockerfile
+          docker build -t ghcr.io/starsaminf/proyectoobi:backend-admin -file back_end/Admin/Dockerfile
       - name: Push Docker images to registry
         run: |
-          docker push ghcr.io/starsaminf/$REPOSITORY_NAME:latest
+          docker push ghcr.io/starsaminf/proyectoobi backend-admin:latest
