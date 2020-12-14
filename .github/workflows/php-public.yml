@@ -1,0 +1,17 @@
+name: CI/CD
+on:
+  push:
+    branches: '**'
+jobs:
+  github-package:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Push to GitHub Packages Admin
+      uses: docker/build-push-action@v1
+      with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: ./back_end/Public/Dockefile
+          registry: docker.pkg.github.com
+          repository: vicovillca/proyectoobi/backend-public
+          tag_with_ref: true
