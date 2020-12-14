@@ -39,6 +39,7 @@ jobs:
         path: build/ 
   
   github-package:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download math result for job 1
