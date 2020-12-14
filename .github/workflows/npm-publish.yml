@@ -65,7 +65,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build Docker images
         run: |
-          docker build -t ghcr.io/starsaminf/proyectoobi/front_end -f ./front_end/proyecto-obi/Dockerfile front_end/proyecto-obi/
+          docker build -t ghcr.io/starsaminf/proyectoobi/front_end -f ./front_end/proyecto-obi/Dockerfile .
       - name: Push Docker images to registry
         run: |
           docker push ghcr.io/starsaminf/proyectoobi/front_end
