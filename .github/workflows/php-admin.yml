@@ -18,4 +18,4 @@ jobs:
           docker build -t ghcr.io/starsaminf/proyectoobi:backend-admin -f back_end/Admin/Dockerfile back_end/Admin/
       - name: Push Docker images to registry
         run: |
-          docker push ghcr.io/starsaminf/proyectoobi backend-admin:latest
+          docker push ghcr.io/starsaminf/proyectoobi/backend-admin:latest
