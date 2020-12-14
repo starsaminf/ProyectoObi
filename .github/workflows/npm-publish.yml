@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Artifact
-        path: build/ 
+        path: /front_end/proyecto-obi/build/
   
   github-package:
     needs: build
