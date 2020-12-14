@@ -51,7 +51,7 @@ jobs:
       with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          dockerfile: ./front_end/proyecto-obi/build/Dockefile
+          dockerfile: ./front_end/proyecto-obi/build/Dockerfile
           registry: docker.pkg.github.com
           repository: vicovillca/proyectoobi/front-end
           tag_with_ref: true
