@@ -1,2 +1,5 @@
 FROM nginx
-COPY ./ProyectoObi/build/ /usr/share/nginx/html/
+ADD . /tmp
+RUN ls -lha /tmp
+COPY ./build/ /usr/share/nginx/html/
+
