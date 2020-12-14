@@ -31,12 +31,14 @@ jobs:
 
     - name: Build
       run: (cd front_end/proyecto-obi && npm run build)
-    
+    - name: Build
+      run: pwd && ls -lha 
+      
     - name: Uploading artifact 
       uses: actions/upload-artifact@v2
       with:
         name: Artifact
-        path: /front_end/proyecto-obi/build/
+        path: ./front_end/proyecto-obi/build/
   
   github-package:
     needs: build
